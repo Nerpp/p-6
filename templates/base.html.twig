@@ -8,7 +8,25 @@
         {% endblock %}
     </head>
     <body>
+    <nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-1">
+                    <img src="{{ asset('Image/logo.jpg') }}" alt="logo">
+                </div>
+                <div class="col-3 ml-auto text-right d-flex  align-items-center">
+                    <p>
+                        <a href="{{ path('index') }}">Home </a>|
+                        <a href="#"> Tricks </a>|
+                        <a href="{{ path('app_login') }}"> Sign in </a>|
+                        <a href="#"> Sign Up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </nav>
         {% block body %}{% endblock %}
+
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
