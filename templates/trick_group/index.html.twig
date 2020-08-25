@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TrickGroup index{% endblock %}
+
+{% block body %}
+    <h1>TrickGroup index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for trick_group in trick_groups %}
+            <tr>
+                <td>{{ trick_group.id }}</td>
+                <td>{{ trick_group.name }}</td>
+                <td>
+                    <a href="{{ path('trick_group_show', {'id': trick_group.id}) }}">show</a>
+                    <a href="{{ path('trick_group_edit', {'id': trick_group.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('trick_group_new') }}">Create new</a>
+{% endblock %}

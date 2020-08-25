@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -35,6 +37,22 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="user_id", orphanRemoval=true)
+     */
+    private $comments_id;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Pictures::class, mappedBy="user_id", orphanRemoval=true)
+     */
+    private $pictures_id;
+
+    public function __construct()
+    {
+        $this->comments_id = new ArrayCollection();
+        $this->pictures_id = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -112,5 +130,67 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Comments[]
+     */
+    public function getCommentsId(): Collection
+    {
+        return $this->comments_id;
+    }
+
+    public function addCommentsId(Comments $commentsId): self
+    {
+        if (!$this->comments_id->contains($commentsId)) {
+            $this->comments_id[] = $commentsId;
+            $commentsId->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentsId(Comments $commentsId): self
+    {
+        if ($this->comments_id->contains($commentsId)) {
+            $this->comments_id->removeElement($commentsId);
+            // set the owning side to null (unless already changed)
+            if ($commentsId->getUserId() === $this) {
+                $commentsId->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Pictures[]
+     */
+    public function getPicturesId(): Collection
+    {
+        return $this->pictures_id;
+    }
+
+    public function addPicturesId(Pictures $picturesId): self
+    {
+        if (!$this->pictures_id->contains($picturesId)) {
+            $this->pictures_id[] = $picturesId;
+            $picturesId->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePicturesId(Pictures $picturesId): self
+    {
+        if ($this->pictures_id->contains($picturesId)) {
+            $this->pictures_id->removeElement($picturesId);
+            // set the owning side to null (unless already changed)
+            if ($picturesId->getUserId() === $this) {
+                $picturesId->setUserId(null);
+            }
+        }
+
+        return $this;
     }
 }
