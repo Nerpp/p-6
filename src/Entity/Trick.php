@@ -6,6 +6,7 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
@@ -31,6 +32,7 @@ class Trick
 
     /**
      * @ORM\Column(type="datetime")
+     *
      */
     private $create_date;
 
@@ -51,23 +53,28 @@ class Trick
      */
     private $comments_id;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Pictures::class, mappedBy="trick_id", orphanRemoval=true)
-     */
-    private $pictures_id;
+
 
     /**
      * @ORM\ManyToOne(targetEntity=TrickGroup::class, inversedBy="tricks")
      */
     private $groupe;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     */
+    private $images;
+
+
+
     public function __construct()
     {
         $this->videos = new ArrayCollection();
         $this->comments_id = new ArrayCollection();
-        $this->pictures_id = new ArrayCollection();
         $this->create_date= new \DateTime();
         $this->update_date= new \DateTime();
+        $this->images = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -187,36 +194,7 @@ class Trick
         return $this;
     }
 
-    /**
-     * @return Collection|Pictures[]
-     */
-    public function getPicturesId(): Collection
-    {
-        return $this->pictures_id;
-    }
 
-    public function addPicturesId(Pictures $picturesId): self
-    {
-        if (!$this->pictures_id->contains($picturesId)) {
-            $this->pictures_id[] = $picturesId;
-            $picturesId->setTrickId($this);
-        }
-
-        return $this;
-    }
-
-    public function removePicturesId(Pictures $picturesId): self
-    {
-        if ($this->pictures_id->contains($picturesId)) {
-            $this->pictures_id->removeElement($picturesId);
-            // set the owning side to null (unless already changed)
-            if ($picturesId->getTrickId() === $this) {
-                $picturesId->setTrickId(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getGroupe(): ?TrickGroup
     {
@@ -229,4 +207,37 @@ class Trick
 
         return $this;
     }
+
+    /**
+     * @return Collection|Images[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Images $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getTrick() === $this) {
+                $image->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

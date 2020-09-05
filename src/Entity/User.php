@@ -44,14 +44,16 @@ class User implements UserInterface
     private $comments_id;
 
     /**
-     * @ORM\OneToMany(targetEntity=Pictures::class, mappedBy="user_id", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity=Images::class, mappedBy="user", cascade={"persist", "remove"})
      */
-    private $pictures_id;
+    private $images;
+
+
 
     public function __construct()
     {
         $this->comments_id = new ArrayCollection();
-        $this->pictures_id = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -163,34 +165,22 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Pictures[]
-     */
-    public function getPicturesId(): Collection
+    public function getImages(): ?Images
     {
-        return $this->pictures_id;
+        return $this->images;
     }
 
-    public function addPicturesId(Pictures $picturesId): self
+    public function setImages(Images $images): self
     {
-        if (!$this->pictures_id->contains($picturesId)) {
-            $this->pictures_id[] = $picturesId;
-            $picturesId->setUserId($this);
+        $this->images = $images;
+
+        // set the owning side of the relation if necessary
+        if ($images->getUser() !== $this) {
+            $images->setUser($this);
         }
 
         return $this;
     }
 
-    public function removePicturesId(Pictures $picturesId): self
-    {
-        if ($this->pictures_id->contains($picturesId)) {
-            $this->pictures_id->removeElement($picturesId);
-            // set the owning side to null (unless already changed)
-            if ($picturesId->getUserId() === $this) {
-                $picturesId->setUserId(null);
-            }
-        }
 
-        return $this;
-    }
 }

@@ -11,3 +11,8 @@
 
     {{ include('trick/_delete_form.html.twig') }}
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/image.js') }}"></script>
+{% endblock %}
