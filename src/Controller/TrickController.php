@@ -6,6 +6,8 @@ use App\Entity\Images;
 use App\Entity\Trick;
 
 use App\Form\TrickType;
+use App\Form\VideosType;
+
 use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,6 +34,7 @@ class TrickController extends AbstractController
 
 
 
+
     /**
      * @Route("/new", name="trick_new", methods={"GET","POST"})
      */
@@ -42,9 +45,10 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //on récupere les images transmises
-            $images = $form->get('images')->getData();
 
+            //on récupere les images transmises
+            $entityManager = $this->getDoctrine()->getManager();
+            $images = $form->get('images')->getData();
             //on boucle sur les images pour traiter le array
             foreach ($images as $image){
                 //On génere un nouveau nom de fichier unique, guess extension repêre les extension .jpg etc..
@@ -60,9 +64,16 @@ class TrickController extends AbstractController
                 $img = new Images();
                 $img->setName($fichier);
                 $trick->addImage($img);
+
+                //Videos
+            }
+
+            foreach ($trick->getVideos() as $video)
+            {
+                $entityManager->persist($video);
             }
             $trick->setCreateDate(new \DateTime());
-            $entityManager = $this->getDoctrine()->getManager();
+
             $entityManager->persist($trick);
             $entityManager->flush();
 
@@ -140,11 +151,10 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/supprime/image/{id}", name="trick_delete_image", methods={"DELETE"})
+     * @Route("/supprime/image/{id}", name="trick_delete_image")
      */
     public function deleteImage(Images $image, Request $request){
         $data = json_decode($request->getContent(), true);
-
         // On vérifie si le token est valide
         if($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])){
             // On récupère le nom de l'image

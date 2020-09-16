@@ -8,7 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use function Sodium\add;
+
 
 class TrickType extends AbstractType
 {
@@ -27,6 +27,12 @@ class TrickType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 ])
+            ->add('videos', CollectionType::class, array(
+                'entry_type'   => VideosType::class,
+                'allow_add'    => true,
+                'allow_delete' => true,
+                'required' => false
+            ))
         ;
 
 

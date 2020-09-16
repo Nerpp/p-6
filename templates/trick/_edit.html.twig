@@ -1,0 +1,16 @@
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+{# vérifier si le path est "Trick_edit" on affiche les images #}
+{% if app.request.attributes.get('_route') == 'trick_edit' %}
+    <h2>Image </h2>
+    {% for image in trick.images %}
+        <div>
+            <img src="{{ asset('/uploads/' ~ image.name) }}" alt="Image" style="width: 150px; height: 150px">
+            <a href="{{ path('trick_delete_image', { id:image.id } ) }}"
+               data-delete data-token="{{ csrf_token('delete ~ image.id') }} "
+            >Supprimer</a>
+        </div>
+    {% endfor %}
+{% endif %}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

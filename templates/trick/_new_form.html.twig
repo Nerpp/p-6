@@ -3,19 +3,20 @@
 {{ form_start(form) }}
     {{ form_row(form.name, {'attr': { 'placeholder' : "nom du trick" } }) }}
     {{ form_row(form.description, { 'attr': { 'placeholder': "description du trick" } }) }}
-    {{ form_row(form.fkTricksGroup) }}
+
 
 <h3>Images</h3>
 
 <ul class="image"
     data-prototype="{{ form_widget(form.pictures.vars.prototype)|e('html_attr') }}">
-
     {% for pictures in form.pics %}
         <li>{{ pic.picture }}</li>
     {% endfor %}
-
 </ul>
+
+<h3>Videos</h3>
+
+
 
 <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
-
