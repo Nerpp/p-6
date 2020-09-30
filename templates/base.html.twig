@@ -2,36 +2,40 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+        <title>{% block title %}snowtricks{% endblock %}</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+        {% block stylesheets %}{% endblock %}
     </head>
     <body>
-    <nav>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-1">
-                    <img src="{{ asset('Image/logo.jpg') }}" alt="logo">
-                </div>
-                <div class="col-3 ml-auto text-right d-flex  align-items-center">
-                    <p>
-                        <a href="{{ path('app_home') }}">Home </a>|
-                        <a href="{{ path('trick_index') }}"> Tricks </a>|
-                        <a href="{{ path('app_login') }}"> Sign in </a>|
-                        <a href="{{ path('app_register') }}"> Sign Up</a>
-                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                            <a href="{{ path('app_logout') }}">| Log out</a>
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
+    {% include 'partials/header.html.twig' %}
+    <section class="page-section portfolio" id="portfolio">
+        <div class="container">
+            {% block body %}{% endblock %}
         </div>
-    </nav>
-        {% block body %}{% endblock %}
+    </section>
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Contact form JS-->
+        <script src="{{ asset('assets/mail/jqBootstrapValidation.js') }}"></script>
+        <script src="{{ asset('assets/mail/contact_me.js') }}"></script>
+        <!-- Core theme JS-->
+        <script src="{{ asset('js/scripts.js') }}"></script>
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

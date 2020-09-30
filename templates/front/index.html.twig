@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FrontController!{% endblock %}
+
+{% block body %}
+    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">LES DERNIERS TRICKS</h2>
+    <div class="divider-custom">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+        <div class="divider-custom-line"></div>
+    </div>
+
+<!-- Portfolio Grid Items-->
+<div class="row">
+    {% for trick in tricks  %}
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="..." alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">{{ trick.name }}</h5>
+                <p class="card-text">{{ trick.description }}</p>
+                <a href="{{ path('trick_show', {'id': trick.id}) }}" class="btn btn-primary">show</a>
+                <a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-primary">edit</a>
+            </div>
+        </div>
+    {% else %}
+
+        <p>no records found</p>
+
+    {% endfor %}
+
+</div>
+
+
+{% endblock %}

@@ -2,20 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\Images;
+use App\Entity\Image;
 use App\Entity\Trick;
-
 use App\Form\TrickType;
-use App\Form\VideosType;
-
 use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Route("/trick")
@@ -32,9 +28,6 @@ class TrickController extends AbstractController
         ]);
     }
 
-
-
-
     /**
      * @Route("/new", name="trick_new", methods={"GET","POST"})
      */
@@ -45,35 +38,38 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            //on récupere les images transmises
             $entityManager = $this->getDoctrine()->getManager();
-            $images = $form->get('images')->getData();
-            //on boucle sur les images pour traiter le array
-            foreach ($images as $image){
-                //On génere un nouveau nom de fichier unique, guess extension repêre les extension .jpg etc..
-                $fichier = md5(uniqid()) . '.' . $image->guessExtension();
-
-                //On copie le fichiers dans le dossier upload
-                $image->move(
-                    $this->getParameter('images_directory'),
-                    $fichier
-                );
-
-                //On stocke dans la Bdd le nom de l'image
-                $img = new Images();
-                $img->setName($fichier);
-                $trick->addImage($img);
-
-                //Videos
+            $files=$form->get('image')->getData();
+            foreach ($files as $image) {
+                $filename=$trick->getName();
+                $filename= str_replace(' ', '', $filename);
+                $unwanted_array = array('Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+                    'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+                    'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+                    'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+                    'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
+                $filename = strtr( $filename, $unwanted_array );
+                $filename=$filename."_".md5(uniqid()).".".$image->guessExtension();
+                if($image){
+                    try {
+                        $image->move(
+                            $this->getParameter('images_directory'),
+                            $filename
+                        );
+                    } catch (FileException $e) {
+                        // ... handle exception if something happens during file upload
+                    }
+                }
+                $image=new Image();
+                $image->setSource($filename);
+                $trick->addImage($image);
             }
-
-            foreach ($trick->getVideos() as $video)
+            foreach ($trick->getVideo() as $video)
             {
                 $entityManager->persist($video);
             }
-            $trick->setCreateDate(new \DateTime());
 
+            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($trick);
             $entityManager->flush();
 
@@ -105,27 +101,33 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //on récupere les images transmises
-            $images = $form->get('images')->getData();
-
-            //on boucle sur les images pour traiter le array
-            foreach ($images as $image){
-                //On génere un nouveau nom de fichier unique, guess extension repêre les extension .jpg etc..
-                $fichier = md5(uniqid()) . '.' . $image->guessExtension();
-
-                //On copie le fichiers dans le dossier upload
-                $image->move(
-                    $this->getParameter('images_directory'),
-                    $fichier
-                );
-
-                //On stocke dans la Bdd le nom de l'image
-                $img = new Images();
-                $img->setName($fichier);
-                $trick->addImage($img);
+            $entityManager = $this->getDoctrine()->getManager();
+            $files=$form->get('image')->getData();
+            foreach ($files as $image) {
+                $filename=$trick->getName();
+                $filename= str_replace(' ', '', $filename);
+                $unwanted_array = array('Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+                    'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+                    'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+                    'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+                    'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
+                $filename = strtr( $filename, $unwanted_array );
+                $filename=$filename."_".md5(uniqid()).".".$image->guessExtension();
+                if($image){
+                    try {
+                        $image->move(
+                            $this->getParameter('images_directory'),
+                            $filename
+                        );
+                    } catch (FileException $e) {
+                        // ... handle exception if something happens during file upload
+                    }
+                }
+                $image=new Image();
+                $image->setSource($filename);
+                $trick->addImage($image);
             }
-            $trick->setUpdateDate(new \DateTime());
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager->flush();
 
             return $this->redirectToRoute('trick_index');
         }
@@ -151,26 +153,22 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/supprime/image/{id}", name="trick_delete_image")
+     * @Route("image/{id}/delete", name="image_delete")
      */
-    public function deleteImage(Images $image, Request $request){
-        $data = json_decode($request->getContent(), true);
-        // On vérifie si le token est valide
-        if($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])){
-            // On récupère le nom de l'image
-            $nom = $image->getName();
-            // On supprime le fichier
+    public function deleteImage(Request $request, Image $image): Response
+    {
+        $data=json_decode($request->getContent(), true);
+        if ($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])) {
+            $nom=$image->getSource();
             unlink($this->getParameter('images_directory').'/'.$nom);
-
-            // On supprime l'entrée de la base
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($image);
-            $em->flush();
-
-            // On répond en json
-            return new JsonResponse(['success' => 1]);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($image);
+            $entityManager->flush();
+            return new JsonResponse(['success'=>1]);
         }else{
-            return new JsonResponse(['error' => 'Token Invalide'], 400);
+            return new JsonResponse(['error'=>'Token invalid'],400);
         }
+
+        return $this->redirectToRoute('trick_index');
     }
 }

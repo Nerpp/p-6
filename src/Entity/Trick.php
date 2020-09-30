@@ -6,7 +6,6 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
@@ -14,8 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Trick
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -26,57 +25,41 @@ class Trick
     private $name;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
     /**
-     * @ORM\Column(type="datetime")
-     *
-     */
-    private $create_date;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $update_date;
-
-
-
-
-
-    /**
-     * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="trick_id")
-     */
-    private $comments_id;
-
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity=TrickGroup::class, inversedBy="tricks")
+     * @ORM\ManyToOne(targetEntity=Groups::class, inversedBy="tricks")
      */
     private $groupe;
 
     /**
-     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity=Image::class, cascade={"persist"})
      */
-    private $images;
+    private $image;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Videos::class, inversedBy="tricks", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity=Video::class, cascade={"persist"})
      */
-    private $videos;
+    private $video;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updateAt;
 
     public function __construct()
     {
-        $this->videos = new ArrayCollection();
-        $this->comments_id = new ArrayCollection();
-        $this->create_date= new \DateTime();
-        $this->update_date= new \DateTime();
-        $this->images = new ArrayCollection();
-
+        $this->image = new ArrayCollection();
+        $this->video = new ArrayCollection();
+        $this->createdAt=new \DateTime();
+        $this->updateAt=new \DateTime();
     }
 
     public function getId(): ?int
@@ -101,79 +84,19 @@ class Trick
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getCreateDate(): ?\DateTimeInterface
-    {
-        return $this->create_date;
-    }
-
-    public function setCreateDate(\DateTimeInterface $create_date): self
-    {
-        $this->create_date = $create_date;
-
-        return $this;
-    }
-
-    public function getUpdateDate(): ?\DateTimeInterface
-    {
-        return $this->update_date;
-    }
-
-    public function setUpdateDate(?\DateTimeInterface $update_date): self
-    {
-        $this->update_date = $update_date;
-
-        return $this;
-    }
-
-
-
-
-    /**
-     * @return Collection|Comments[]
-     */
-    public function getCommentsId(): Collection
-    {
-        return $this->comments_id;
-    }
-
-    public function addCommentsId(Comments $commentsId): self
-    {
-        if (!$this->comments_id->contains($commentsId)) {
-            $this->comments_id[] = $commentsId;
-            $commentsId->setTrickId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommentsId(Comments $commentsId): self
-    {
-        if ($this->comments_id->contains($commentsId)) {
-            $this->comments_id->removeElement($commentsId);
-            // set the owning side to null (unless already changed)
-            if ($commentsId->getTrickId() === $this) {
-                $commentsId->setTrickId(null);
-            }
-        }
-
-        return $this;
-    }
-
-
-
-    public function getGroupe(): ?TrickGroup
+    public function getGroupe(): ?Groups
     {
         return $this->groupe;
     }
 
-    public function setGroupe(?TrickGroup $groupe): self
+    public function setGroupe(?Groups $groupe): self
     {
         $this->groupe = $groupe;
 
@@ -181,63 +104,78 @@ class Trick
     }
 
     /**
-     * @return Collection|Images[]
+     * @return Collection|Image[]
      */
-    public function getImages(): Collection
+    public function getImage(): Collection
     {
-        return $this->images;
+        return $this->image;
     }
 
-    public function addImage(Images $image): self
+    public function addImage(Image $image): self
     {
-        if (!$this->images->contains($image)) {
-            $this->images[] = $image;
-            $image->setTrick($this);
+        if (!$this->image->contains($image)) {
+            $this->image[] = $image;
         }
 
         return $this;
     }
 
-    public function removeImage(Images $image): self
+    public function removeImage(Image $image): self
     {
-        if ($this->images->contains($image)) {
-            $this->images->removeElement($image);
-            // set the owning side to null (unless already changed)
-            if ($image->getTrick() === $this) {
-                $image->setTrick(null);
-            }
+        if ($this->image->contains($image)) {
+            $this->image->removeElement($image);
         }
 
         return $this;
     }
 
     /**
-     * @return Collection|Videos[]
+     * @return Collection|Video[]
      */
-    public function getVideos(): Collection
+    public function getVideo(): Collection
     {
-        return $this->videos;
+        return $this->video;
     }
 
-    public function addVideo(Videos $video): self
+    public function addVideo(Video $video): self
     {
-
-        if (!$this->videos->contains($video)) {
-            dd($this);
-            $this->videos[] = $video;
+        if (!$this->video->contains($video)) {
+            $this->video[] = $video;
         }
 
         return $this;
     }
 
-    public function removeVideo(Videos $video): self
+    public function removeVideo(Video $video): self
     {
-        if ($this->videos->contains($video)) {
-            $this->videos->removeElement($video);
+        if ($this->video->contains($video)) {
+            $this->video->removeElement($video);
         }
 
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
 
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdateAt(): ?\DateTimeInterface
+    {
+        return $this->updateAt;
+    }
+
+    public function setUpdateAt(\DateTimeInterface $updateAt): self
+    {
+        $this->updateAt = $updateAt;
+
+        return $this;
+    }
 }

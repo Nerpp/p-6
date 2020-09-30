@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -16,8 +14,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -39,22 +37,24 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="user_id", orphanRemoval=true)
+     * @ORM\Column(type="boolean")
      */
-    private $comments_id;
+    private $isVerified = false;
 
     /**
-     * @ORM\OneToOne(targetEntity=Images::class, mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
      */
-    private $images;
+    private $image;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $surname;
 
-
-    public function __construct()
-    {
-        $this->comments_id = new ArrayCollection();
-
-    }
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
 
     public function getId(): ?int
     {
@@ -134,53 +134,51 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection|Comments[]
-     */
-    public function getCommentsId(): Collection
+    public function isVerified(): bool
     {
-        return $this->comments_id;
+        return $this->isVerified;
     }
 
-    public function addCommentsId(Comments $commentsId): self
+    public function setIsVerified(bool $isVerified): self
     {
-        if (!$this->comments_id->contains($commentsId)) {
-            $this->comments_id[] = $commentsId;
-            $commentsId->setUserId($this);
-        }
+        $this->isVerified = $isVerified;
 
         return $this;
     }
 
-    public function removeCommentsId(Comments $commentsId): self
+    public function getImage(): ?Image
     {
-        if ($this->comments_id->contains($commentsId)) {
-            $this->comments_id->removeElement($commentsId);
-            // set the owning side to null (unless already changed)
-            if ($commentsId->getUserId() === $this) {
-                $commentsId->setUserId(null);
-            }
-        }
+        return $this->image;
+    }
+
+    public function setImage(?Image $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }
 
-    public function getImages(): ?Images
+    public function getSurname(): ?string
     {
-        return $this->images;
+        return $this->surname;
     }
 
-    public function setImages(Images $images): self
+    public function setSurname(string $surname): self
     {
-        $this->images = $images;
-
-        // set the owning side of the relation if necessary
-        if ($images->getUser() !== $this) {
-            $images->setUser($this);
-        }
+        $this->surname = $surname;
 
         return $this;
     }
 
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
 
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
 }
