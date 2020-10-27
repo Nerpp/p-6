@@ -54,6 +54,11 @@ class Trick
      */
     private $updateAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
+     */
+    private $user;
+
     public function __construct()
     {
         $this->image = new ArrayCollection();
@@ -175,6 +180,18 @@ class Trick
     public function setUpdateAt(\DateTimeInterface $updateAt): self
     {
         $this->updateAt = $updateAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

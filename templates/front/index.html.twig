@@ -19,7 +19,9 @@
                 <h5 class="card-title">{{ trick.name }}</h5>
                 <p class="card-text">{{ trick.description }}</p>
                 <a href="{{ path('trick_show', {'id': trick.id}) }}" class="btn btn-primary">show</a>
+                {% if app.user==trick.user %}
                 <a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-primary">edit</a>
+                {% endif %}
             </div>
         </div>
     {% else %}
