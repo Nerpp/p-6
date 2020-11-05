@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Comments;
 use App\Entity\Image;
 use App\Entity\Trick;
+use App\Form\CommentsType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -85,13 +87,24 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="trick_show", methods={"GET"})
+     * @Route("/{id}", name="trick_show", methods={"GET","POST"})
      */
-    public function show(Trick $trick): Response
+    public function show(Trick $trick, Request $request): Response
     {
-        dd($trick);
+        $comment=new Comments();
+        $form = $this->createForm(CommentsType::class, $comment);
+        $form->handleRequest($request);
+        $user=$this->getUser();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setUser($user)->setTrick($trick);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($trick);
+            $entityManager->flush();
+        }
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
+            'form'=>$form->createView(),
         ]);
     }
 
@@ -151,10 +164,14 @@ class TrickController extends AbstractController
      */
     public function delete(Request $request, Trick $trick): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($trick);
-            $entityManager->flush();
+        $user=$this->getUser();
+        $userTrick=$trick->getUser();
+        if ($user===$userTrick) {
+            if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($trick);
+                $entityManager->flush();
+            }
         }
 
         return $this->redirectToRoute('trick_index');

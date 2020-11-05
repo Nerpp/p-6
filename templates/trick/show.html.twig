@@ -16,7 +16,7 @@
                 <td>{{ trick.name }}</td>
             </tr>
             <tr>
-                <td>{{ trick. }}</td>
+                <td><img src="{{ asset('images/ ~ trick.id.image.source') }}" alt=""></td>
             </tr>
             <tr>
                 <th>Description</th>
@@ -35,9 +35,15 @@
 
     <a href="{{ path('trick_index') }}">back to list</a>
 
+    {% if app.user==trick.user %}
     <a href="{{ path('trick_edit', {'id': trick.id}) }}">edit</a>
 
     {{ include('trick/_delete_form.html.twig') }}
+    {% endif %}
 
     <h2>Commentaires</h2>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit">commenter</button>
+    {{ form_end(form) }}
 {% endblock %}
