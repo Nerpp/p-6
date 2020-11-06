@@ -7,6 +7,7 @@ use App\Entity\Image;
 use App\Entity\Trick;
 use App\Form\CommentsType;
 use App\Form\TrickType;
+use App\Repository\CommentsRepository;
 use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -96,15 +97,18 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         $user=$this->getUser();
 
+
+
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setUser($user)->setTrick($trick);
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($trick);
+            $entityManager->persist($comment);
             $entityManager->flush();
         }
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'form'=>$form->createView(),
+
         ]);
     }
 
