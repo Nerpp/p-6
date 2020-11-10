@@ -27,7 +27,6 @@ class TrickType extends AbstractType
                 'mapped'=>false,
                 'multiple'=>true,
                 'required'=>false,
-
             ])
         ;
     }
