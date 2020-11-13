@@ -58,6 +58,13 @@ class User implements UserInterface
      */
     private $surname;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
+     */
+    private $image;
+
+
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
@@ -227,4 +234,18 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Image $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+
 }
