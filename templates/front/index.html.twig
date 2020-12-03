@@ -1,36 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello FrontController!{% endblock %}
+{% block title %}Snowtrick !{% endblock %}
 
 {% block body %}
-    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">LES DERNIERS TRICKS</h2>
-    <div class="divider-custom">
-        <div class="divider-custom-line"></div>
-        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-        <div class="divider-custom-line"></div>
-    </div>
 
-<!-- Portfolio Grid Items-->
-<div class="row">
-    {% for trick in tricks  %}
-        <div class="card" style="width: 18rem;">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">{{ trick.name }}</h5>
-                <p class="card-text">{{ trick.description }}</p>
-                <a href="{{ path('trick_show', {'id': trick.id}) }}" class="btn btn-primary">show</a>
-                {% if app.user==trick.user %}
-                <a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-primary">edit</a>
-                {% endif %}
-            </div>
-        </div>
-    {% else %}
+	<h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">LES DERNIERS TRICKS</h2>
+	<div class="divider-custom">
+		<div class="divider-custom-line"></div>
+		<div class="divider-custom-icon">
+			<i class="fas fa-star"></i>
+		</div>
+		<div class="divider-custom-line"></div>
+	</div>
 
-        <p>no records found</p>
+	{# {{  }} #}
 
-    {% endfor %}
+	<!-- Portfolio Grid Items-->
+	<div class="row" id="cardTrick">
+	
+		{% for trick in tricks  %}
+			
+			<div class="card" style="width: 18rem;">
+				<img class="card-img-top" src="{{ asset("images/"~trick.image[0].source) }}" alt="{{ trick.name }}">
+				<div class="card-body">
+					<a href="{{ path('trick_show', {'id': trick.id}) }}">
+						<h5 class="card-title">{{ trick.name }}</h5>
+					</i>
+				</a>
+				{# <p class="card-text">{{ trick.description }}</p> #}
+				{% if app.user==trick.user %}
+					<a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-primary">
+						<i class="fas fa-edit"></i>
+					</a>
+					<a href="{{ path('trick_delete', {'id': trick.id}) }}" class="btn btn-danger" onclick="confirmation()">
+						<i class="far fa-trash-alt"></i>
+					</a>
+				{% endif %}
+			</div>
+		</div>
+	{% else %}
+
+		<p>no records found</p>
+
+	{% endfor %}
 
 </div>
+{% endblock %}
 
+{% block javascripts %}
+<script>
 
+function confirmation() {
+confirm("Etes vous sur de continuer cette action définitive ?");
+}
+</script>
 {% endblock %}

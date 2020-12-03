@@ -98,8 +98,7 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         $user=$this->getUser();
 
-
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setUser($user)->setTrick($trick);
             $entityManager = $this->getDoctrine()->getManager();
@@ -108,7 +107,7 @@ class TrickController extends AbstractController
         }
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'form'=>$form->createView(),
+            'formComments'=>$form->createView(),
 
         ]);
     }
