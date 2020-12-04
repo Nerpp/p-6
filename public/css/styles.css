@@ -10268,9 +10268,5 @@ form .row:first-child .floating-label-form-group {
 .arrow{
   padding: 6%;
   height: 100px;
-}
-
-.arrow-position{
-  float: right;
-  display: inline-block;
+  background-color:#1abc9c;
 }
