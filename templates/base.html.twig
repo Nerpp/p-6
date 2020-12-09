@@ -12,19 +12,41 @@
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Oxygen&family=Quicksand&display=swap" rel="stylesheet"> 
+
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+        
+        <!-- Core theme CSS -->
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
         {% block stylesheets %}{% endblock %}
     </head>
-    <body>
-    {% include 'partials/header.html.twig' %}
-    <section class="page-section portfolio" id="portfolio">
+    <body class="d-flex flex-column min-vh-100 pb-5">
+
+    <navbar>
+    <div class="d-none d-sm-block">
+        {% include 'partials/navbar.html.twig' %}
+    </div>
+    </navbar>
+
+    <header>
+        <div class="container-fluid">
+            {% block header %}{% endblock %}
+        </div>
+    </header>
+        
+    <section>
         <div class="container">
             {% block body %}{% endblock %}
         </div>
     </section>
+
+    <footer class="mt-auto">
+        <div class="d-block d-sm-none">
+            {% include 'partials/navbar-footer.html.twig' %}
+        </div>
+    </footer>
+    
 
         <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
