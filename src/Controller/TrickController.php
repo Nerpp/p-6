@@ -69,8 +69,13 @@ class TrickController extends AbstractController
                 $image->setSource($filename);
                 $trick->addImage($image);
             }
+
             foreach ($trick->getVideo() as $video)
             {
+//                 $url = " https://www.youtube.com/watch?v=VX96I7PO8YU ";
+//    parse_str( parse_url( $url, PHP_URL_QUERY ), $my_array );
+//    echo $my_array['v'];
+
                 $entityManager->persist($video);
             }
 

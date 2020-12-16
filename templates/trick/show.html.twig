@@ -1,8 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ trick.name }} {% endblock %}
+{% block title %}
+	{{ trick.name }}
+{% endblock %}
 
-{% block titre %} {{ trick.name }} {% endblock %}
+{% block titre %}
+	{{ trick.name }}
+{% endblock %}
+
+
+{% block header %}
+
+	<div class="row">
+		<div id="imgBackground" class="col-12 p-5" style="background-image: url('{{asset(" images/" ~ trick.image[0].source) }}') ; background-repeat: no-repeat;"></div>
+	</div>
+
+{% endblock %}
 
 {% block body %}
 
@@ -38,12 +51,21 @@
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-3">
-			<h2>Description</h2>
-		</div>
-	</div>
 
+	{{ dump(trick.video[0].url) }}
+
+
+
+
+	<div class="row">
+		{% for videos in trick.video  %}
+			<div class="col-4">
+				<iframe width="300" height="300" src="{{ videos.url}}" frameborder="0" 
+				allow=" picture-in-picture" ></iframe>
+			</div>
+				 
+		{% endfor %}
+	</div>
 
 	<div class="row justify-content-center">
 		<div class="col-6">
@@ -51,39 +73,31 @@
 		</div>
 	</div>
 
-	<div class="row">
+	<div class="row  justify-content-center">
 		<div class="col-3">
-			<h2>Videos</h2>
+			<p>
+				<strong>
+					Groupe :
+				</strong>
+				{{ trick.groupe.name }}
+			</p>
 		</div>
-	</div>
-
-	<div class="row">
-		{% for videos in trick.video  %}
-			<div class="col-4">
-				<iframe width="300" height="300" src="{{ videos.url}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-			</div>
-		{% endfor %}
-	</div>
-
-	<div class="row  justify-content-end">
 		<div class="col-3">
 			<p>
 				<strong>Crée le :</strong>
 				{{ trick.createdAt ? trick.createdAt|date('d-m-Y H:i') : '' }}
 			</p>
 		</div>
-	</div>
 
-	{% if trick.updateAt == trick.createdAt %}
-		<div class="row  justify-content-end">
+		{% if trick.updateAt != trick.createdAt %}
 			<div class="col-3">
 				<p>
 					<strong>Mis à jour :</strong>
 					{{ trick.updateAt|date('d-m-Y H:i') }}
 				</p>
 			</div>
-		</div>
-	{% endif %}
+		{% endif %}
+	</div>
 
 	<div class="row justify-content-between">
 		<div class="col-4">
@@ -103,30 +117,35 @@
 		{% endif %}
 	</div>
 
-	{% if(app.user) %}
-<div class="row">
-	{{ form_start(formComments) }}
-
-	<div class="col-12">
-		<label for="">
-			<img src="{{ asset("images/"~app.user.image.source ) }}" class="commentProfile">
-		</label>
-		{{ form_widget(formComments.comment,{'attr': {'placeholder': "Commenter en tant que "~app.user.name  }}) }}
-	</div>
-	<button type="submit">Ajouter un commentaire</button>
-	{{ form_end(formComments) }}
-</div>
+	{% if (app.user) %}
+		<div class="row justify-content-center p-3">
+			<div class="col-2">
+			
+				{{ form_start(formComments) }}
+				<label for="" class="">
+					<img src="{{ asset("images/"~app.user.image.source ) }}" class="commentProfile">
+				</label>
+			</div>
+			<div class="col-6">
+				{{ form_widget(formComments.comment,{'attr': {'placeholder': "Commenter en tant que "~app.user.name,'class':'form-control p-2'  }}) }}
+			
+			</div>
+			<div class="col-3">
+				<button type="submit">Ajouter un commentaire</button>
+				{{ form_end(formComments) }}
+			</div>
+		</div>
 	{% endif %}
 
-	{% for comment in trick.comments  %}
-		<div class="row">
+	<div class="row p-3">
+	<p>{{ trick.comments|length }}</p>
+		{% for comment in trick.comments  %}
+			<div col="col-12 p-1">
+				<img src="{{ asset("images/"~trick.user.image.source ) }}" class="commentProfile"><strong>{{ comment.user.name }}</strong>
+				:
+				{{ comment.comment }}
+			</div>
 
-			<p><img src="{{ asset("images/"~trick.user.image.source ) }}" class="commentProfile">
-				{{ comment.user.name }}</p>
-		</div>
-		<div class="row jumbotron">
-			<p>{{ comment.comment }}</p>
-		</div>
-	{% endfor %}
-
+		{% endfor %}
+	</div>
 {% endblock %}
