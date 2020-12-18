@@ -31,6 +31,7 @@ class Groups
 
     /**
      * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="groupe")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $tricks;
 
