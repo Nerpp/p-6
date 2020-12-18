@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Trick;
 use App\Entity\Groups;
 use App\Entity\User;
+use App\Entity\Comments;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Faker;
@@ -161,10 +162,17 @@ class AppFixtures extends Fixture
             $manager->persist($figuregroupe);
         }
 
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 9; $i++) {
             $user = new User();
-            $user->setEmail($faker->safeEmail)
-                ->setPassword($this->encoder->encodePassword($user, "123456"));
+            // echo $faker->freeEmailDomain . "\n";
+            $gender = ['female','male'];
+            $firstname = $faker->firstName($gender=$gender[rand(0, count($gender) - 1)]);
+            $lastName = $faker->lastName();
+            $email = $firstname.'.'.$lastName.'@'.$faker->freeEmailDomain;
+            $user->setEmail($email)
+                ->setPassword($this->encoder->encodePassword($user, "123456"))
+                ->setName($firstname)
+                ->setSurname($lastName);
             $manager->persist($user);
         }
 
@@ -175,12 +183,17 @@ class AppFixtures extends Fixture
         $allUser = $manager->getRepository(User::class)->findAll();
 
         /**
-         * table containing all user ids to randomize comment 
-         * @var array $userIds
-         */
+          * table containing all user ids global variable 
+          * @var array $userIds
+          */
+        
         $userIds = [];
         foreach ($allUser as $userId) {
             array_push($userIds, $userId->getId());
+
+            $comments = new Comments;
+
+
         }
 
         foreach ($figureDatas as $figureData) {
@@ -195,6 +208,9 @@ class AppFixtures extends Fixture
                 ->setDescription($figureData['desciption']);
             $manager->persist($figure);
         }
+
+        
+
         $manager->flush();
     }
 }
