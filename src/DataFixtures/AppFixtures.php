@@ -193,21 +193,27 @@ class AppFixtures extends Fixture
         // $userId[rand(0, count($userId) - 1)]
 
         /** @var array $allTricks */
-        // $allTricks = $manager->getRepository(Trick::class)->findAll();
+        $allTricks = $manager->getRepository(Trick::class)->findAll();
  
-        // foreach($allTricks as $allTrick){
+        foreach($allTricks as $allTrick){
 
-        //     for($i=0;$i<15;$i++){
-        //         $comment = new Comments;
-        //         $comment
-        //             ->setUser($userId)
-        //             ->setTrick($allTrick[$id][$i])
-        //             ->setComment($randComments[rand(0, count($randComments) - 1)])
-        //             ->setCreationDate($faker->dateTimeInInterval('-30 days', '+5 days'));
-        //         $manager->persist($comment);
-        //     }
-        // }
+            for($i=0;$i<15;$i++){
+                $comment = new Comments;
+                $comment
+                    ->setUser(
+                        $manager->getRepository(User::class)
+                            ->findOneBy(['id' => $userIds[rand(0, count($userIds) - 1)]])
+                    )
+                    ->setTrick(
+                        $manager->getRepository(Trick::class)
+                            ->findOneBy(['id' => $allTricks[rand(0, count($allTricks) - 1)]])
+                    )
+                    ->setComment($randComments[rand(0, count($randComments) - 1)])
+                    ->setCreationDate($faker->dateTimeInInterval('-30 days', '+5 days'));
+                $manager->persist($comment);
+            }
+        }
 
-        // $manager->flush();
+        $manager->flush();
     }
 }
