@@ -110,26 +110,6 @@ class AppFixtures extends Fixture
                 'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
                 'categorie' => 'Les grabs'
             ],
-            [
-                'titre' => 'Japaasdfsadfn air',
-                'desciption' => 'Saisie de l\'avant de la planche, avec la main avant, du côté de la carre frontside.',
-                'categorie' => 'Les grabs'
-            ],
-            [
-                'titre' => 'Jaasdfsadfpan air',
-                'desciption' => 'Saisie de l\'avant de la planche, avec la main avant, du côté de la carre frontside.',
-                'categorie' => 'Les grabs'
-            ],
-            [
-                'titre' => 'Japasdfasdfasan air',
-                'desciption' => 'Saisie de l\'avant de la planche, avec la main avant, du côté de la carre frontside.',
-                'categorie' => 'Les grabs'
-            ],
-            [
-                'titre' => 'Jdfasdfasdfapan air',
-                'desciption' => 'Saisie de l\'avant de la planche, avec la main avant, du côté de la carre frontside.',
-                'categorie' => 'Les grabs'
-            ],
         ];
         
         $videosYoutube = [
@@ -140,7 +120,7 @@ class AppFixtures extends Fixture
             'https://www.youtube.com/embed/SQyTWk7OxSI'
         ];
 
-        $RandComments = [
+        $randComments = [
             'Trop bien cette figure',
             'C\'est magnifique',
             'C\'est ma figure !',
@@ -164,7 +144,6 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 9; $i++) {
             $user = new User();
-            // echo $faker->freeEmailDomain . "\n";
             $gender = ['female','male'];
             $firstname = $faker->firstName($gender=$gender[rand(0, count($gender) - 1)]);
             $lastName = $faker->lastName();
@@ -190,10 +169,6 @@ class AppFixtures extends Fixture
         $userIds = [];
         foreach ($allUser as $userId) {
             array_push($userIds, $userId->getId());
-
-            $comments = new Comments;
-
-
         }
 
         foreach ($figureDatas as $figureData) {
@@ -205,12 +180,34 @@ class AppFixtures extends Fixture
                     $manager->getRepository(Groups::class)
                         ->findOneBy(['name' => $figureData['categorie']])
                 )
+                ->setUser(
+                    $manager->getRepository(User::class)
+                        ->findOneBy(['id' => $userIds[rand(0, count($userIds) - 1)]])
+                )
                 ->setDescription($figureData['desciption']);
             $manager->persist($figure);
         }
-
-        
-
+    
         $manager->flush();
+
+        // $userId[rand(0, count($userId) - 1)]
+
+        /** @var array $allTricks */
+        // $allTricks = $manager->getRepository(Trick::class)->findAll();
+ 
+        // foreach($allTricks as $allTrick){
+
+        //     for($i=0;$i<15;$i++){
+        //         $comment = new Comments;
+        //         $comment
+        //             ->setUser($userId)
+        //             ->setTrick($allTrick[$id][$i])
+        //             ->setComment($randComments[rand(0, count($randComments) - 1)])
+        //             ->setCreationDate($faker->dateTimeInInterval('-30 days', '+5 days'));
+        //         $manager->persist($comment);
+        //     }
+        // }
+
+        // $manager->flush();
     }
 }
