@@ -19,6 +19,7 @@ use Doctrine\Persistence\ObjectManager;
 class AppFixtures extends Fixture
 {
     private $encoder;
+    private $gender = array();
 
     public function __construct(UserPasswordEncoderInterface $encoder) {
         $this->encoder = $encoder;
@@ -138,6 +139,7 @@ class AppFixtures extends Fixture
             'Facile'
         ];
 
+        
         foreach ($figureGroupeNames as $name) {
             $figuregroupe = new Groups();
             $figuregroupe->setName($name['name']);
@@ -147,21 +149,29 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 9; $i++) {
 
-            $gender = ['female','male'];
-            $gender=$gender[rand(0, count($gender) - 1)];
+        $gender = 
+        [
+            [
+            'gender'=>'female',
+            'image' =>'profileFemale.jpg'
+            ],
+            [
+            'gender' =>'male',
+            'image' =>'profileMale.jpg',
+            ]
+        ];
+
+            $gender = $gender[rand(0, count($gender) - 1)];
 
             $image = new Image;
-            if ($gender === 'female') {
-                $image->setSource('profileFemale.jpg');
-            }else{
-                $image->setSource('profileMale.jpg');
-            }
-            
+
+            $image->setSource($gender['image']);
+
             $manager->persist($image);
 
             $user = new User();
             
-            $firstname = $faker->firstName($gender);
+            $firstname = $faker->firstName($gender['gender']);
             $lastName = $faker->lastName();
             $email = $firstname.'.'.$lastName.'@'.$faker->freeEmailDomain;
             $user->setEmail($email)
@@ -195,8 +205,6 @@ class AppFixtures extends Fixture
 
         foreach ($figureDatas as $figureData) {
 
-            
-            
             $figure = new  Trick();
             $figure
                 ->setName($figureData['titre'])
