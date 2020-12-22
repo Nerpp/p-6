@@ -6,6 +6,9 @@ use App\Entity\Trick;
 use App\Entity\Groups;
 use App\Entity\User;
 use App\Entity\Comments;
+use App\Entity\Image;
+use App\Entity\Video;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Faker;
@@ -143,12 +146,26 @@ class AppFixtures extends Fixture
         }
 
         for ($i = 0; $i < 9; $i++) {
-            $user = new User();
+
             $gender = ['female','male'];
-            $firstname = $faker->firstName($gender=$gender[rand(0, count($gender) - 1)]);
+            $gender=$gender[rand(0, count($gender) - 1)];
+
+            $image = new Image;
+            if ($gender === 'female') {
+                $image->setSource('profileFemale.jpg');
+            }else{
+                $image->setSource('profileMale.jpg');
+            }
+            
+            $manager->persist($image);
+
+            $user = new User();
+            
+            $firstname = $faker->firstName($gender);
             $lastName = $faker->lastName();
             $email = $firstname.'.'.$lastName.'@'.$faker->freeEmailDomain;
             $user->setEmail($email)
+                ->setImage($image)
                 ->setPassword($this->encoder->encodePassword($user, "123456"))
                 ->setName($firstname)
                 ->setSurname($lastName);
@@ -161,17 +178,25 @@ class AppFixtures extends Fixture
         /** @var User $allUser */
         $allUser = $manager->getRepository(User::class)->findAll();
 
-        /**
-          * table containing all user ids global variable 
-          * @var array $userIds
-          */
+         /** @var Groups $allGroup */
+        $allGroup = $manager->getRepository(Groups::class)->findAll();
+
         
-        $userIds = [];
-        foreach ($allUser as $userId) {
-            array_push($userIds, $userId->getId());
-        }
+
+            for ($i=0; $i < count($videosYoutube); $i++) { 
+                $videos = new Video;
+                $videos->setUrl($videosYoutube[$i]);
+                $manager->persist($videos);
+            }
+
+            $manager->flush();
+
+            
 
         foreach ($figureDatas as $figureData) {
+
+            
+            
             $figure = new  Trick();
             $figure
                 ->setName($figureData['titre'])
@@ -180,29 +205,29 @@ class AppFixtures extends Fixture
                     $manager->getRepository(Groups::class)
                         ->findOneBy(['name' => $figureData['categorie']])
                 )
-                ->setUser(
-                    $manager->getRepository(User::class)
-                        ->findOneBy(['id' => $userIds[rand(0, count($userIds) - 1)]])
+                ->addVideo(
+                    $manager->getRepository(Video::class)
+                        ->findOneBy(['url' => $videosYoutube[rand(0, count($videosYoutube) - 1)]])
                 )
+                ->setUser($allUser[rand(0, count($allUser) - 1)])
                 ->setDescription($figureData['desciption']);
             $manager->persist($figure);
         }
     
         $manager->flush();
 
-        // $userId[rand(0, count($userId) - 1)]
-
         /** @var array $allTricks */
         $allTricks = $manager->getRepository(Trick::class)->findAll();
  
         foreach($allTricks as $allTrick){
 
-            for($i=0;$i<15;$i++){
+            $i =0;
+            for(;$i<15;$i++){
                 $comment = new Comments;
                 $comment
                     ->setUser(
                         $manager->getRepository(User::class)
-                            ->findOneBy(['id' => $userIds[rand(0, count($userIds) - 1)]])
+                            ->findOneBy(['id' => $allUser[rand(0, count($allUser) - 1)]])
                     )
                     ->setTrick(
                         $manager->getRepository(Trick::class)
@@ -213,7 +238,8 @@ class AppFixtures extends Fixture
                 $manager->persist($comment);
             }
         }
-
+        
+        
         $manager->flush();
     }
 }
