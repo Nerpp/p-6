@@ -164,9 +164,7 @@ class AppFixtures extends Fixture
             $gender = $gender[rand(0, count($gender) - 1)];
 
             $image = new Image;
-
             $image->setSource($gender['image']);
-
             $manager->persist($image);
 
             $user = new User();
@@ -188,8 +186,6 @@ class AppFixtures extends Fixture
         /** @var User $allUser */
         $allUser = $manager->getRepository(User::class)->findAll();
 
-         /** @var Groups $allGroup */
-        $allGroup = $manager->getRepository(Groups::class)->findAll();
 
         
 
@@ -199,12 +195,29 @@ class AppFixtures extends Fixture
                 $manager->persist($videos);
             }
 
+           
+            
+            
+
+
             $manager->flush();
 
             
 
         foreach ($figureDatas as $figureData) {
 
+             $images = [
+                'tricktest_0c3c40713a358a86904b333a0af778e5.jpeg',
+                'tricktest_61a4eb02906f8c7e522429e6d3477162.jpeg',
+                'tricktest_e5e92369c6de5be82f1b9c3729871497.jpeg',
+            ];
+
+           
+                $image = new Image;
+                $image->setSource($images[rand(0, count($images) - 1)]);
+                $manager->persist($image);
+            
+            
             $figure = new  Trick();
             $figure
                 ->setName($figureData['titre'])
@@ -213,6 +226,7 @@ class AppFixtures extends Fixture
                     $manager->getRepository(Groups::class)
                         ->findOneBy(['name' => $figureData['categorie']])
                 )
+                ->addImage($image)
                 ->addVideo(
                     $manager->getRepository(Video::class)
                         ->findOneBy(['url' => $videosYoutube[rand(0, count($videosYoutube) - 1)]])
