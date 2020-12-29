@@ -39,5 +39,4 @@ class Image
 
         return $this;
     }
-
 }

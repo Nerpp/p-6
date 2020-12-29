@@ -69,8 +69,8 @@ class Trick
     {
         $this->image = new ArrayCollection();
         $this->video = new ArrayCollection();
-        $this->createdAt=new \DateTime();
-        $this->updateAt=new \DateTime();
+        $this->createdAt = new \DateTime();
+        $this->updateAt = new \DateTime();
         $this->comments = new ArrayCollection();
     }
 

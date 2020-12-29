@@ -35,7 +35,7 @@ class RegistrationController extends AbstractController
             );
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
-                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
                 try {
                     $imageFile->move(
                         $this->getParameter('images_directory'),
@@ -45,7 +45,7 @@ class RegistrationController extends AbstractController
                     // ... handle exception if something happens during file upload
                 }
 
-                $image=new Image();
+                $image = new Image();
                 $image->setSource($newFilename);
                 $user->setImage($image);
             }
