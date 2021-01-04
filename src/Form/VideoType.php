@@ -18,8 +18,8 @@ class VideoType extends AbstractType
                     'class' => 'mb-2',
                     'placeholder' => 'URL youtube de la vidéo'
                 ),
-                'label' =>false
-            ] )
+                'label' => false
+            ])
         ;
     }
 

@@ -19,10 +19,11 @@ class TrickRepository extends ServiceEntityRepository
         parent::__construct($registry, Trick::class);
     }
 
-    public function getLastTricks(){
+    public function getLastTricks()
+    {
         return $this->createQueryBuilder('t')
             ->setMaxResults('3')
-            ->orderBy('t.id','DESC')
+            ->orderBy('t.id', 'DESC')
             ->getQuery()->getResult();
     }
 

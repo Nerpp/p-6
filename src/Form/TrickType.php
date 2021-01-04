@@ -23,10 +23,10 @@ class TrickType extends AbstractType
                 'allow_delete' => true,
                 'required' => false
             ))
-            ->add('image', FileType::class,[
-                'mapped'=>false,
-                'multiple'=>true,
-                'required'=>false,
+            ->add('image', FileType::class, [
+                'mapped' => false,
+                'multiple' => true,
+                'required' => false,
             ])
         ;
     }
