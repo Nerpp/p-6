@@ -191,14 +191,7 @@ class AppFixtures extends Fixture
             $manager->persist($videos);
         }
 
-
-
-
-
-
             $manager->flush();
-
-
 
         foreach ($figureDatas as $figureData) {
              $images = [
@@ -213,13 +206,19 @@ class AppFixtures extends Fixture
                 $manager->persist($image);
 
 
+                $allGroups = $manager->getRepository(Groups::class)->findAll();
+
              $figure = new  Trick();
              $figure
                 ->setName($figureData['titre'])
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
                 ->setGroupe(
-                    $manager->getRepository(Groups::class)
-                        ->findOneBy(['name' => $figureData['categorie']])
+                    // $manager->getRepository(Groups::class)
+                    //     ->findOneBy(['name' => $figureData['categorie']])
+                    
+                    // FIXME Notice: Undefined index: Les grabs
+                    
+                        $allGroups[$figureData['categorie']]
                 )
                 ->addImage($image)
                 ->addVideo(

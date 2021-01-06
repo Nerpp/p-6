@@ -22,7 +22,7 @@ class TrickRepository extends ServiceEntityRepository
     public function getLastTricks()
     {
         return $this->createQueryBuilder('t')
-            ->setMaxResults('3')
+            ->setMaxResults('10')
             ->orderBy('t.id', 'DESC')
             ->getQuery()->getResult();
     }
