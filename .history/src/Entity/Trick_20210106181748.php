@@ -246,9 +246,4 @@ class Trick
     {
         return $this->slug();
     }
-
-    public function setSlug(string $slug):self
-    {
-        return $this->slug = $slug;
-    }
 }

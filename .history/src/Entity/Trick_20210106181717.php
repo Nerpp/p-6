@@ -244,11 +244,6 @@ class Trick
 
     public function getSlug():?string
     {
-        return $this->slug();
-    }
-
-    public function setSlug(string $slug):self
-    {
-        return $this->slug = $slug;
+        
     }
 }

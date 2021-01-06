@@ -69,8 +69,7 @@ class Trick
 
     /**
      * @var string
-     * @Gedmo\Slug(fields={title})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Gedmo\Slug(fields={{}})
      */
 
     public function __construct()
@@ -240,15 +239,5 @@ class Trick
         }
 
         return $this;
-    }
-
-    public function getSlug():?string
-    {
-        return $this->slug();
-    }
-
-    public function setSlug(string $slug):self
-    {
-        return $this->slug = $slug;
     }
 }
