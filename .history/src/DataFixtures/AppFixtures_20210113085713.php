@@ -212,7 +212,7 @@ class AppFixtures extends Fixture
              $figure = new  Trick();
              $figure
                 ->setName($figureData['titre'])
-                ->setSlug(iconv('UTF-8','ASCII//TRANSLIT',$figureData['titre']))
+                ->setSlug(iconv('UTF-8','ASCII//TRANSLIT',$figureData['slug']))
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
                 ->setGroupe(
                     $manager->getRepository(Groups::class)

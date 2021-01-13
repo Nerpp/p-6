@@ -6,7 +6,7 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
@@ -65,11 +65,6 @@ class Trick
      * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="trick")
      */
     private $comments;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $slug;
 
 
     public function __construct()
@@ -237,20 +232,6 @@ class Trick
                 $comment->setTrick(null);
             }
         }
-
-        return $this;
-    }
-
-    // Slug
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
 
         return $this;
     }

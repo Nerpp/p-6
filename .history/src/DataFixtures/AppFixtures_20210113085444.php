@@ -65,7 +65,7 @@ class AppFixtures extends Fixture
             [
                 'titre' => 'Mute',
                 'desciption' => 'saisie de la carre frontside de la planche entre les deux pieds avec la main avant.',
-                'categorie' => 'Les grabs',
+                'categorie' => 'Les grabs'
             ],
             [
                 'titre' => '360',
@@ -212,7 +212,7 @@ class AppFixtures extends Fixture
              $figure = new  Trick();
              $figure
                 ->setName($figureData['titre'])
-                ->setSlug(iconv('UTF-8','ASCII//TRANSLIT',$figureData['titre']))
+                
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
                 ->setGroupe(
                     $manager->getRepository(Groups::class)

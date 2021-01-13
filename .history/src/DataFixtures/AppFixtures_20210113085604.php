@@ -65,7 +65,7 @@ class AppFixtures extends Fixture
             [
                 'titre' => 'Mute',
                 'desciption' => 'saisie de la carre frontside de la planche entre les deux pieds avec la main avant.',
-                'categorie' => 'Les grabs',
+                'categorie' => 'Les grabs'
             ],
             [
                 'titre' => '360',

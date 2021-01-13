@@ -241,7 +241,7 @@ class Trick
         return $this;
     }
 
-    // Slug
+    Slug
 
     public function getSlug(): ?string
     {
