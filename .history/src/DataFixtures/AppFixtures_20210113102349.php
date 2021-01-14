@@ -24,12 +24,6 @@ class AppFixtures extends Fixture
         $this->encoder = $encoder;
     }
 
-    public function delAccent(string $var)
-    {
-        setlocale(LC_ALL,'fr_FR.UTF-8');
-       return iconv('UTF-8','ASCII//TRANSLIT',$var);
-    }
-
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create('fr_FR');
@@ -213,23 +207,20 @@ class AppFixtures extends Fixture
                 $manager->persist($image);
 
 
-                $allGroups = $manager->getRepository(Groups::class)->findAll();
+                $allGroups = $manager->getRepository(Groups::class)->find('name');
 
              $figure = new  Trick();
-             
-
-             
              $figure
                 ->setName($figureData['titre'])
-                ->setSlug($this->delAccent($figureData['titre']))
+                ->setSlug(iconv('UTF-8','ASCII//TRANSLIT',$figureData['titre']))
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
                 ->setGroupe(
-                    $manager->getRepository(Groups::class)
-                        ->findOneBy(['name' => $figureData['categorie']])
+                    // $manager->getRepository(Groups::class)
+                    //     ->findOneBy(['name' => $figureData['categorie']])
                     
                     // FIXME Notice: Undefined index: Les grabs
                     
-                        
+                        $allGroups['name']
                 )
                 ->addImage($image)
                 ->addVideo(

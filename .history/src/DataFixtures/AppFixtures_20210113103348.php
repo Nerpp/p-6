@@ -27,7 +27,8 @@ class AppFixtures extends Fixture
     public function delAccent(string $var)
     {
         setlocale(LC_ALL,'fr_FR.UTF-8');
-       return iconv('UTF-8','ASCII//TRANSLIT',$var);
+        iconv('UTF-8','ASCII//TRANSLIT',$var)
+
     }
 
     public function load(ObjectManager $manager)
@@ -221,7 +222,7 @@ class AppFixtures extends Fixture
              
              $figure
                 ->setName($figureData['titre'])
-                ->setSlug($this->delAccent($figureData['titre']))
+                ->setSlug()
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
                 ->setGroupe(
                     $manager->getRepository(Groups::class)

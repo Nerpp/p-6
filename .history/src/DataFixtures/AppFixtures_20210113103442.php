@@ -27,7 +27,7 @@ class AppFixtures extends Fixture
     public function delAccent(string $var)
     {
         setlocale(LC_ALL,'fr_FR.UTF-8');
-       return iconv('UTF-8','ASCII//TRANSLIT',$var);
+        iconv('UTF-8','ASCII//TRANSLIT',$var);
     }
 
     public function load(ObjectManager $manager)
