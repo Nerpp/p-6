@@ -13,7 +13,7 @@ h1{
 /* font */
 
 /* html */
-/* html, body { margin:0; height: 100%;} */
+html, body { margin:0; height: 100%;}
 /* html */
 
 /* navbar */
@@ -26,10 +26,8 @@ h1{
 /* front */
 
 /* image front */
-#front-image{
-
-  height: 90vh;
-  background-image: url("/public/images/default.jpg");
+.front-image{
+  background: #333; color: white; padding: 50px 20px; height: 100%;
 }
 /* image front */
 

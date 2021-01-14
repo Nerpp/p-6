@@ -28,8 +28,9 @@ h1{
 /* image front */
 #front-image{
 
-  height: 90vh;
-  background-image: url("/public/images/default.jpg");
+  mheight: 100vh;
+
+  background-color: aqua;
 }
 /* image front */
 

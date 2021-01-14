@@ -29,7 +29,8 @@ h1{
 #front-image{
 
   height: 90vh;
-  background-image: url("/public/images/default.jpg");
+
+  background-image: url("public/images\default.jpg");
 }
 /* image front */
 

@@ -13,7 +13,7 @@ h1{
 /* font */
 
 /* html */
-/* html, body { margin:0; height: 100%;} */
+html, body { margin:0; height: 100%;}
 /* html */
 
 /* navbar */
@@ -28,8 +28,9 @@ h1{
 /* image front */
 #front-image{
 
-  height: 90vh;
-  background-image: url("/public/images/default.jpg");
+  height: 100p;
+
+  background-color: aqua;
 }
 /* image front */
 
