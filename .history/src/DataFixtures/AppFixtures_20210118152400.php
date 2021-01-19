@@ -201,10 +201,9 @@ class AppFixtures extends Fixture
             $manager->persist($videos);
 
             $manager->flush();
-            $videosInserted[] = $videos;
+            $manager->flush();
         }
 
-        $allTricks = [];
             
 
         foreach ($figureDatas as $figureData) {
@@ -223,7 +222,8 @@ class AppFixtures extends Fixture
                 
 
              $figure = new  Trick();
-            
+             
+
              
              $figure
                 ->setName($figureData['titre'])
@@ -231,31 +231,41 @@ class AppFixtures extends Fixture
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
                 ->setGroupe($allGroups[rand(0, count($allGroups) - 1)])
                 ->addImage($image)
-                ->addVideo($videosInserted[rand(0, count($videosInserted) - 1)])
+                ->addVideo(
+                    $manager->getRepository(Video::class)
+                        ->findOneBy(['url' => $videosYoutube[rand(0, count($videosYoutube) - 1)]])
+                )
                 ->setUser($allUser[rand(0, count($allUser) - 1)])
                 ->setDescription($figureData['desciption']);
             $manager->persist($figure);
-            $manager->flush();
-
-            $allTricks[] = $figure;
         }
 
+        $manager->flush();
+
+        /** @var array $allTricks */
+        $allTricks = $manager->getRepository(Trick::class)->findAll();
 
         foreach ($allTricks as $allTrick) {
             $i = 0;
             for (; $i < 15; $i++) {
                 $comment = new Comments();
                 $comment
-                    ->setUser($allUser[rand(0, count($allUser) - 1)])
-                    ->setTrick($allTricks[rand(0, count($allTricks) - 1)])
+                    ->setUser(
+                        $allUser[rand(0, count($allUser) - 1)]
+                    )
+                    ->setTrick(
+                        // $manager->getRepository(Trick::class)
+                        //     ->findOneBy(['id' => $allTricks[rand(0, count($allTricks) - 1)]])
+
+                        $allTricks[rand(0, count($allTricks) - 1)]
+                    )
                     ->setComment($randComments[rand(0, count($randComments) - 1)])
                     ->setCreationDate($faker->dateTimeInInterval('-30 days', '+5 days'));
                 $manager->persist($comment);
-                $manager->flush();
             }
         }
 
 
-       
+        $manager->flush();
     }
 }

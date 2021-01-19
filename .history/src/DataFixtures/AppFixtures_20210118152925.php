@@ -251,7 +251,6 @@ class AppFixtures extends Fixture
                     ->setComment($randComments[rand(0, count($randComments) - 1)])
                     ->setCreationDate($faker->dateTimeInInterval('-30 days', '+5 days'));
                 $manager->persist($comment);
-                $manager->flush();
             }
         }
 

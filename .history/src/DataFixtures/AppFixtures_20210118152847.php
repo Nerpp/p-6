@@ -246,16 +246,18 @@ class AppFixtures extends Fixture
             for (; $i < 15; $i++) {
                 $comment = new Comments();
                 $comment
-                    ->setUser($allUser[rand(0, count($allUser) - 1)])
-                    ->setTrick($allTricks[rand(0, count($allTricks) - 1)])
+                    ->setUser(
+                        $allUser[rand(0, count($allUser) - 1)]
+                    )
+                    ->setTrick($allTricks[rand(0, count($allTricks) - 1)]
+                    )
                     ->setComment($randComments[rand(0, count($randComments) - 1)])
                     ->setCreationDate($faker->dateTimeInInterval('-30 days', '+5 days'));
                 $manager->persist($comment);
-                $manager->flush();
             }
         }
 
 
-       
+        $manager->flush();
     }
 }
