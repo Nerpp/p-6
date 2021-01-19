@@ -16,7 +16,7 @@ class FrontController extends AbstractController
     {
         
         return $this->render('front/index.html.twig', [
-            'tricks' => $trickRepository->getLastTricks(),
+            'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit=10,$offset=null),
         ]);
     }
 }
