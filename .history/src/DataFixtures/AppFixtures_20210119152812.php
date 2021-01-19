@@ -24,12 +24,6 @@ class AppFixtures extends Fixture
         $this->encoder = $encoder;
     }
 
-    public function delAccent(string $var)
-    {
-        setlocale(LC_ALL,'fr_FR.UTF-8');
-       return iconv('UTF-8','ASCII//TRANSLIT',$var);
-    }
-
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create('fr_FR');
@@ -71,7 +65,7 @@ class AppFixtures extends Fixture
             [
                 'titre' => 'Mute',
                 'desciption' => 'saisie de la carre frontside de la planche entre les deux pieds avec la main avant.',
-                'categorie' => 'Les grabs',
+                'categorie' => 'Les grabs'
             ],
             [
                 'titre' => '360',
@@ -89,10 +83,9 @@ class AppFixtures extends Fixture
                 'categorie' => 'Les rotations'
             ],
             [
-                'titre' => 'Back flips éà',
+                'titre' => 'Back flips',
                 'desciption' => 'Rotations en arrière',
-                'categorie' => 'Les rotations',
-                'slug' => 'back-flips-ea'
+                'categorie' => 'Les rotations'
             ],
             [
                 'titre' => 'Rodeo',
@@ -145,14 +138,12 @@ class AppFixtures extends Fixture
             'Facile'
         ];
 
-        $allGroups = [];
+
         foreach ($figureGroupeNames as $name) {
             $figuregroupe = new Groups();
             $figuregroupe->setName($name['name']);
             $figuregroupe->setDescription($name['description']);
             $manager->persist($figuregroupe);
-            $manager->flush();
-            $allGroups[]= $figuregroupe;
         }
 
         for ($i = 0; $i < 9; $i++) {
@@ -193,19 +184,21 @@ class AppFixtures extends Fixture
         $manager->flush();
 
 
-        $videosInserted = [];
 
         for ($i = 0; $i < count($videosYoutube); $i++) {
             $videos = new Video();
             $videos->setUrl($videosYoutube[$i]);
             $manager->persist($videos);
-
-            $manager->flush();
-            $videosInserted[] = $videos;
         }
 
-        $allTricks = [];
-            
+
+
+
+
+
+            $manager->flush();
+
+
 
         foreach ($figureDatas as $figureData) {
              $images = [
@@ -220,40 +213,50 @@ class AppFixtures extends Fixture
                 $manager->persist($image);
 
 
-                
-
              $figure = new  Trick();
-            
-             
              $figure
                 ->setName($figureData['titre'])
-                ->setSlug($this->delAccent($figureData['titre']))
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
-                ->setGroupe($allGroups[rand(0, count($allGroups) - 1)])
+                ->setGroupe(
+                    $manager->getRepository(Groups::class)
+                        ->findOneBy(['name' => $figureData['categorie']])
+                )
                 ->addImage($image)
-                ->addVideo($videosInserted[rand(0, count($videosInserted) - 1)])
+                ->addVideo(
+                    $manager->getRepository(Video::class)
+                        ->findOneBy(['url' => $videosYoutube[rand(0, count($videosYoutube) - 1)]])
+                )
                 ->setUser($allUser[rand(0, count($allUser) - 1)])
                 ->setDescription($figureData['desciption']);
             $manager->persist($figure);
-            $manager->flush();
-
-            $allTricks[] = $figure;
         }
 
+        $manager->flush();
+
+        /** @var array $allTricks */
+        $allTricks = $manager->getRepository(Trick::class)->findAll();
 
         foreach ($allTricks as $allTrick) {
             $i = 0;
             for (; $i < 15; $i++) {
                 $comment = new Comments();
                 $comment
-                    ->setUser($allUser[rand(0, count($allUser) - 1)])
-                    ->setTrick($allTricks[rand(0, count($allTricks) - 1)])
+                    ->setUser(
+                        $allUser[rand(0, count($allUser) - 1)]
+                    )
+                    ->setTrick(
+                        // $manager->getRepository(Trick::class)
+                        //     ->findOneBy(['id' => $allTricks[rand(0, count($allTricks) - 1)]])
+
+                        $allTricks[rand(0, count($allTricks) - 1)]
+                    )
                     ->setComment($randComments[rand(0, count($randComments) - 1)])
                     ->setCreationDate($faker->dateTimeInInterval('-30 days', '+5 days'));
                 $manager->persist($comment);
-                $manager->flush();
             }
         }
 
+
+        $manager->flush();
     }
 }
