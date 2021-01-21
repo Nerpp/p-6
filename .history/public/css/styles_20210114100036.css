@@ -12,6 +12,10 @@ h1{
 }
 /* font */
 
+/* html */
+html, body { margin:0; height: 100%;}
+/* html */
+
 /* navbar */
 .navbar
 {
@@ -22,11 +26,10 @@ h1{
 /* front */
 
 /* image front */
-/* TODO fixer l'url de l'image */
 #front-image{
-  height: 90vh;
-  
-  /* background-color: lightblue; */
+  min-height: 100%;
+  max-width: 100%;
+  background-color:#1abc9c;
 }
 /* image front */
 

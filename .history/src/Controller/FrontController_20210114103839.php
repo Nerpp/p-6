@@ -6,7 +6,6 @@ use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 class FrontController extends AbstractController
 {
     /**
@@ -14,9 +13,9 @@ class FrontController extends AbstractController
      */
     public function index(TrickRepository $tricksRepository)
     {
-        
         return $this->render('front/index.html.twig', [
-            'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit=10,$offset=null),
+            // 'tricks' => $trickRepository->getLastTricks(),
+            'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit=10,$offset=null)
         ]);
     }
 }

@@ -22,11 +22,9 @@ h1{
 /* front */
 
 /* image front */
-/* TODO fixer l'url de l'image */
-#front-image{
-  height: 90vh;
+.front{
   
-  /* background-color: lightblue; */
+  background-color:#1abc9c;
 }
 /* image front */
 
