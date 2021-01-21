@@ -22,11 +22,15 @@ h1{
 /* front */
 
 /* image front */
-/* TODO fixer l'url de l'image */
-#front-image{
-  height: 90vh;
-  
-  /* background-color: lightblue; */
+#front{
+ height: 100vh;
+}
+
+.bg{
+  min-width: 100%;
+  height: auto;
+  position: absolute;
+  z-index: -1;
 }
 /* image front */
 
@@ -42,11 +46,3 @@ width: 50px;
 height: auto;
 }
 /* image profile */
-
-
-
-/* Image background trick show */
-#imgBackground{
-  background-repeat: no-repeat;
-}
-/* Image background trick show */
