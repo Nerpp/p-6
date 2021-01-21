@@ -151,6 +151,7 @@ class TrickController extends AbstractController
                     }
                     $image = new Image();
                     $image->setSource($filename);
+                    $trick->setSlug($trick->getName());
                     $trick->addImage($image);
                 }
                 $entityManager->flush();
