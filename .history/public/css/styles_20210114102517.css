@@ -1,0 +1,56 @@
+/* font */
+h1{
+  font-family: 'Quicksand', sans-serif;
+}
+
+.title-font{
+  font-family: 'Do Hyeon', sans-serif;
+}
+
+.nav-link{
+  font-family: 'Oxygen', sans-serif;
+}
+/* font */
+
+/* html */
+/* html, body { margin:0; height: 100%;} */
+/* html */
+
+/* navbar */
+.navbar
+{
+  background-color:  	#00008B;
+  padding: 3%;
+
+}
+/* front */
+
+/* image front */
+#front-image{
+
+  height: 90vh;
+
+  background-image: url("publicimages\default.jpg");
+}
+/* image front */
+
+/* card */
+.card{
+  width: 18rem;
+}
+/* card */
+
+/* image profile */
+.commentProfile{
+width: 50px;
+height: auto;
+}
+/* image profile */
+
+
+
+/* Image background trick show */
+#imgBackground{
+  background-repeat: no-repeat;
+}
+/* Image background trick show */
