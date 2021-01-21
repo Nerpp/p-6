@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Snowtrick !{% endblock %}
+{% block title %}Snowtrick !
+{% endblock %}
 
 {% block header %}
-{% include 'front/header-front.html.twig' %}
+	{% include 'front/header-front.html.twig' %}
 {% endblock %}
 
 {% block body %}
@@ -12,41 +13,39 @@
 
 	<!-- Portfolio Grid Items-->
 	<div class="row justify-content-around p-2" id="cardTrick">
-	
+
 		{% for trick in tricks  %}
-			
+
 			<div class="card">
-				<img class="card-img-top" src="{{ asset("images/"~trick.image[0].source) }}" alt="{{ trick.name }}">
-				<div class="card-body">
-					<a href="{{ path('trick_show', {'id': trick.id}) }}">
+				<a href="{{ path('trick_show', {'id': trick.id}) }}">
+					<img class="card-img-top" src="{{ asset("images/"~trick.image[0].source) }}" alt="{{ trick.name }}">
+					<div class="card-body">
 						<h5 class="card-title">{{ trick.name }}</h5>
-					</i>
+						{% if app.user==trick.user %}
+							<a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-primary">
+								<i class="fas fa-edit"></i>
+							</a>
+							<a href="{{ path('trick_delete', {'id': trick.id}) }}" class="btn btn-danger" onclick="confirmation()">
+								<i class="far fa-trash-alt"></i>
+							</a>
+						{% endif %}
+					</div>
 				</a>
-				{# <p class="card-text">{{ trick.description }}</p> #}
-				{% if app.user==trick.user %}
-					<a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-primary">
-						<i class="fas fa-edit"></i>
-					</a>
-					<a href="{{ path('trick_delete', {'id': trick.id}) }}" class="btn btn-danger" onclick="confirmation()">
-						<i class="far fa-trash-alt"></i>
-					</a>
-				{% endif %}
 			</div>
-		</div>
-	{% else %}
+		{% else %}
 
-		<p>no records found</p>
+			<p>no records found</p>
 
-	{% endfor %}
+		{% endfor %}
 
-</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-<script>
+	<script>
 
-function confirmation() {
+		function confirmation() {
 confirm("Etes vous sur de continuer cette action définitive ?");
 }
-</script>
+	</script>
 {% endblock %}

@@ -1,0 +1,52 @@
+/* font */
+h1{
+  font-family: 'Quicksand', sans-serif;
+}
+
+.title-font{
+  font-family: 'Do Hyeon', sans-serif;
+}
+
+.nav-link{
+  font-family: 'Oxygen', sans-serif;
+}
+/* font */
+
+/* navbar */
+.navbar
+{
+  background-color:  	#00008B;
+  padding: 3%;
+
+}
+/* front */
+
+/* image front */
+TODO fixer l'url de l'image
+#front-image{
+  height: 90vh;
+  background-image: url("../public/images/default.jpg");
+  background-color: lightblue;
+}
+/* image front */
+
+/* card */
+.card{
+  width: 18rem;
+}
+/* card */
+
+/* image profile */
+.commentProfile{
+width: 50px;
+height: auto;
+}
+/* image profile */
+
+
+
+/* Image background trick show */
+#imgBackground{
+  background-repeat: no-repeat;
+}
+/* Image background trick show */
