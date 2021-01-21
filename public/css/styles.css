@@ -23,7 +23,14 @@ h1{
 
 /* image front */
 #front{
-  background-color:#1abc9c;
+ height: 100vh;
+}
+
+.bg{
+  min-width: 100%;
+  height: auto;
+  position: absolute;
+  z-index: -1;
 }
 /* image front */
 
@@ -39,11 +46,3 @@ width: 50px;
 height: auto;
 }
 /* image profile */
-
-
-
-/* Image background trick show */
-#imgBackground{
-  background-repeat: no-repeat;
-}
-/* Image background trick show */
