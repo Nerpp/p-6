@@ -28,7 +28,7 @@ h1{
 
 .bg{
   min-width: 100%;
-  height: auto;
+  height: 90%;
   position: absolute;
   z-index: -1;
 }
@@ -36,7 +36,7 @@ h1{
 
 /* card */
 .card{
-  width: 18rem;
+  /* width: 18rem; */
 }
 /* card */
 
