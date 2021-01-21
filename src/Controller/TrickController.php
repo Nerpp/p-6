@@ -19,8 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
 {
-   
-
     /**
      * @Route("/", name="trick_index", methods={"GET"})
      */
@@ -71,18 +69,18 @@ class TrickController extends AbstractController
 
             //TODO del v for embed
             foreach ($trick->getVideo() as $video) {
-//                 $url = " https://www.youtube.com/watch?v=VX96I7PO8YU ";
-//    parse_str( parse_url( $url, PHP_URL_QUERY ), $my_array );
-//    echo $my_array['v'];
+                // $url = " https://www.youtube.com/watch?v=VX96I7PO8YU ";
+                // parse_str( parse_url( $url, PHP_URL_QUERY ), $my_array );
+                // echo $my_array['v'];
 
                 $entityManager->persist($video);
             }
 
             $entityManager = $this->getDoctrine()->getManager();
             $trick->setUser($user);
+            $trick->setSlug($trick->getName());
             $entityManager->persist($trick);
             $entityManager->flush();
-
 
             return $this->redirectToRoute('front_index');
         }
