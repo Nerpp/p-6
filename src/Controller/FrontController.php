@@ -12,7 +12,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/", name="front_index")
      */
-    public function index(TrickRepository $trickRepository)
+    public function index(TrickRepository $tricksRepository)
     {
         
         return $this->render('front/index.html.twig', [
