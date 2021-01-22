@@ -128,7 +128,8 @@ class AppFixtures extends Fixture
             'https://www.youtube.com/embed/G9qlTInKbNE',
             'https://www.youtube.com/embed/8AWdZKMTG3U',
             'https://www.youtube.com/embed/SQyTWk7OxSI',
-            'https://www.youtube.com/embed/V9xuy-rVj9w',
+            
+            'https://youtu.be/V9xuy-rVj9w
         ];
 
         $randComments = [
