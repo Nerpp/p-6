@@ -21,28 +21,26 @@
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
         {% block stylesheets %}{% endblock %}
     </head>
-    <body class="d-flex flex-column min-vh-100 pb-4">
+    <body>
 
     <navbar>
-    <div class="d-none d-sm-block">
-        {% include 'partials/navbar.html.twig' %}
-    </div>
+        <div class="d-none d-sm-block">
+            {% include 'partials/navbar.html.twig' %}
+        </div>
     </navbar>
 
     <header>
-        <div class="container-fluid">
-            {% block header %}{% endblock %}
-        </div>
+        {% block header %}{% endblock %}
     </header>
         
     <section>
         <div class="container p-3">
-            {% block body %}{% endblock %}
+            {% block section %}{% endblock %}
         </div>
     </section>
 
-    <footer class="mt-auto p-3">
-        <div class="d-block d-sm-none">
+    <footer class="">
+        <div class="container-fluid p-3">
             {% include 'partials/navbar-footer.html.twig' %}
         </div>
     </footer>
@@ -55,9 +53,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
         <!-- Contact form JS-->
         <script src="{{ asset('assets/mail/jqBootstrapValidation.js') }}"></script>
-        <script src="{{ asset('assets/mail/contact_me.js') }}"></script>
-        <!-- Core theme JS-->
-        <script src="{{ asset('js/scripts.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

@@ -1,27 +1,35 @@
-<div class="container-fluid">
-	<div class="row justify-content-around">
-		<div class="col-">
-			<a href="{{ path('front_index') }}" class="btn btn-primary">
-				<i class="fas fa-home"></i>
-			</a>
-		</div>
-		<div class="col-">
-			<a href="{{ path('trick_index') }}" class="btn btn-primary">
-				<i class="fas fa-bookmark"></i>
-			</a>
-		</div>
-		{% if app.user %}
+
+	<div class="d-block d-sm-none">
+		<div class="row justify-content-around">
 			<div class="col-">
-				<a href="{{ path('app_logout') }}" class="btn btn-primary">
-					<i class="fas fa-sign-out-alt"></i>
+				<a href="{{ path('front_index') }}" class="btn btn-primary">
+					<i class="fas fa-home"></i>
 				</a>
 			</div>
-		{% else %}
 			<div class="col-">
-				<a href="{{ path('app_login') }}" class="btn btn-primary">
-					<i class="fas fa-sign-in-alt"></i>
+				<a href="{{ path('trick_index') }}" class="btn btn-primary">
+					<i class="fas fa-bookmark"></i>
 				</a>
 			</div>
-		{% endif %}
+			{% if app.user %}
+				<div class="col-">
+					<a href="{{ path('app_logout') }}" class="btn btn-primary">
+						<i class="fas fa-sign-out-alt"></i>
+					</a>
+				</div>
+			{% else %}
+				<div class="col-">
+					<a href="{{ path('app_login') }}" class="btn btn-primary">
+						<i class="fas fa-sign-in-alt"></i>
+					</a>
+				</div>
+			{% endif %}
+		</div>
 	</div>
-</div>
+	<div class="d-none d-sm-block">
+		<div class="row">
+			<div class="col-12 shadow bg-secondary text-white">
+				<p>@copyright Aurélien Regi</p>
+			</div>
+		</div>
+	</div>

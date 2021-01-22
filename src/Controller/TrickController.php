@@ -158,6 +158,17 @@ class TrickController extends AbstractController
 
                 return $this->redirectToRoute('trick_index');
             }
+           
+        }else{
+        $comment = new Comments();
+        $form = $this->createForm(CommentsType::class, $comment);
+        $form->handleRequest($request);
+        $user = $this->getUser();
+            return $this->render('trick/show.html.twig', [
+                'trick' => $trick,
+                'formComments' => $form->createView(),
+    
+            ]); 
         }
 
         return $this->render('trick/edit.html.twig', [

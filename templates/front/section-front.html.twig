@@ -1,16 +1,16 @@
 <div class="row">
 	<div class="col-12 text-center text-uppercase text-secondary p-2">
-		<h2>LES DERNIERS TRICKS</h2>
+		<h2 id="cardTrick">LES DERNIERS TRICKS</h2>
 	</div>
 
 	<!-- Portfolio Grid Items-->
-	<div class="row justify-content-around p-2" id="cardTrick">
+	<div class="row justify-content-around p-2">
 
 		{% for trick in tricks  %}
 
-			<div class="col-4 card">
+			<div class="col-4 card p-2">
 				<a href="{{ path('trick_show', {'slug': trick.slug}) }}">
-					<img class="card-img-top" src="{{ asset("images/"~trick.image[0].source) }}" alt="{{ trick.name }}">
+					<img class="card-img-top card-img-size" src="{{ asset("images/"~trick.image[0].source) }}" alt="{{ trick.name }}">
 					<div class="card-body">
 						<h5 class="card-title">{{ trick.name }}</h5>
 						{% if app.user==trick.user %}
@@ -25,11 +25,12 @@
 				</a>
 			</div>
 		{% else %}
-
-			<p>no records found</p>
-
+			<div class="col-12 text-center">
+				<p>no records found</p>
+			</div>
 		{% endfor %}
 
 	</div>
 
 </div>
+
