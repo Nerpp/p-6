@@ -21,6 +21,13 @@
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
 
+<<<<<<< HEAD
 ### history ###
 /.history
 ### history ###
+=======
+
+### history ###
+/.history
+### history ###
+>>>>>>> dev-repo
