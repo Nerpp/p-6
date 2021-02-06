@@ -126,17 +126,16 @@
 	</div>
 
 	{#  TODO les dates #}
-	{# <div class="row p-3"> #}
+	
 	{% for comment in trick.comments  %}
 
-		{{ dump(comment) }}
 
-		{# <div col="col-12">
+		<div col="col-12">
 						<p>
-							<img src="{{ asset("images/"~comment.user.image.source ) }}" class="commentProfile"><strong>{{ comment.user.name }}</strong> <i>{{ comment.creation_date|date('d-m-Y H:i') }}</i>
+							<img src="{{ asset("images/"~comment.user.image.source ) }}" class="commentProfile"><strong>{{ comment.user.name }}</strong> <i>{{ comment.creationdate|date('d-m-Y H:i') }}</i>
 							:
 							{{ comment.comment }}
 						</p>
-					</div> #}
+					</div>
 	{% endfor %}
-	{# </div> #}
+	
