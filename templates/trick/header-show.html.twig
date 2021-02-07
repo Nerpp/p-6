@@ -1,0 +1,25 @@
+<div class="container" id="headerShow">
+	<div class="row"  >
+		<div class="col-12">
+			{% if trick.image[0].source != false %}
+				<img class="img-fluid bgShow" src="{{ asset("images/"~trick.image[0].source) }}" alt="Responsive image">
+			{% else %}
+				<img class="img-fluid bgShow" src="{{ asset("/images/bgDefault.jpg") }}" alt="Responsive image">
+			{% endif %}
+		</div>
+		
+		<div class="col-12 text-right">
+			<a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-primary">
+				<i class="fas fa-edit"></i>
+			</a>
+			<a href="{{ path('trick_delete', {'id': trick.id}) }}" class="btn btn-danger">
+				<i class="far fa-trash-alt"></i>
+			</a>
+		</div>
+
+		<div class="col-12 text-center">
+			<h1>{{ trick.name }}</h1>
+		</div>
+
+	</div>
+</div>

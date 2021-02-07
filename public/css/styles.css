@@ -15,7 +15,7 @@ h1{
 /* navbar */
 .navbar
 {
-  background-color:  	#00008B;
+  background-color: #E5E8E8;
   padding: 3%;
 
 }
@@ -28,17 +28,30 @@ h1{
 
 .bg{
   min-width: 100%;
-  height: auto;
+  height: 90%;
   position: absolute;
   z-index: -1;
 }
 /* image front */
 
-/* card */
-.card{
-  width: 18rem;
+/* img card */
+.card-img-size{
+  width: 100%;
+  height: auto;
 }
-/* card */
+/* img card */
+
+/* img show */
+#headerShow{
+  min-height: 100vh;
+}
+
+.bgShow{
+  width: 100%;
+  height: auto;
+  position: absolute;
+  z-index: -1;
+}
 
 /* image profile */
 .commentProfile{
