@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Entity\Comments;
 use App\Entity\Image;
 use App\Entity\Video;
+use App\Services\Cleaner;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Faker;
@@ -22,12 +23,6 @@ class AppFixtures extends Fixture
     public function __construct(UserPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
-    }
-
-    public function delAccent(string $var)
-    {
-        setlocale(LC_ALL,'fr_FR.UTF-8');
-       return iconv('UTF-8','ASCII//TRANSLIT',$var);
     }
 
     public function load(ObjectManager $manager)
@@ -207,6 +202,7 @@ class AppFixtures extends Fixture
 
         $allTricks = [];
             
+        
 
         foreach ($figureDatas as $figureData) {
              $images = [
@@ -224,11 +220,12 @@ class AppFixtures extends Fixture
                 
 
              $figure = new  Trick();
+             $clean = new Cleaner();
             
-             
+            //  TODO delAccent
              $figure
                 ->setName($figureData['titre'])
-                ->setSlug($this->delAccent($figureData['titre']))
+                ->setSlug($clean->delAccent($figureData['titre']))
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
                 ->setGroupe($allGroups[rand(0, count($allGroups) - 1)])
                 ->addImage($image)

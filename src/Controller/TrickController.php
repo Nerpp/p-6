@@ -9,6 +9,7 @@ use App\Form\CommentsType;
 use App\Form\TrickType;
 use App\Repository\CommentsRepository;
 use App\Repository\TrickRepository;
+use App\Services\Cleaner;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,6 +20,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
 {
+    public function __construct()
+    {
+        $clean = new Cleaner;
+    }
+
     /**
      * @Route("/", name="trick_index", methods={"GET"})
      */
@@ -43,14 +49,9 @@ class TrickController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $files = $form->get('image')->getData();
             foreach ($files as $image) {
-                $filename = $trick->getName();
-                $filename = str_replace(' ', '', $filename);
-                $unwanted_array = array('Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E',
-                    'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U',
-                    'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U', 'Ý' => 'Y', 'Þ' => 'B', 'ß' => 'Ss', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'a', 'ç' => 'c',
-                    'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
-                    'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y');
-                $filename = strtr($filename, $unwanted_array);
+
+                $filename =  $this->clean->delAccent($trick->getName());
+                
                 $filename = $filename . "_" . md5(uniqid()) . "." . $image->guessExtension();
                 if ($image) {
                     try {
@@ -78,7 +79,7 @@ class TrickController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
             $trick->setUser($user);
-            $trick->setSlug($trick->getName());
+            $trick->setSlug($this->clean->delAccent($trick->getName()));
             $entityManager->persist($trick);
             $entityManager->flush();
 
@@ -130,14 +131,9 @@ class TrickController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $files = $form->get('image')->getData();
                 foreach ($files as $image) {
-                    $filename = $trick->getName();
-                    $filename = str_replace(' ', '', $filename);
-                    $unwanted_array = array('Š' => 'S', 'š' => 's', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E',
-                        'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U',
-                        'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U', 'Ý' => 'Y', 'Þ' => 'B', 'ß' => 'Ss', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'a', 'ç' => 'c',
-                        'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
-                        'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y' );
-                    $filename = strtr($filename, $unwanted_array);
+                    
+                    $filename =  $this->clean->delAccent($trick->getName());
+
                     $filename = $filename . "_" . md5(uniqid()) . "." . $image->guessExtension();
                     if ($image) {
                         try {
@@ -151,7 +147,7 @@ class TrickController extends AbstractController
                     }
                     $image = new Image();
                     $image->setSource($filename);
-                    $trick->setSlug($trick->getName());
+                    $trick->setSlug($this->clean->delAccent($trick->getName()));
                     $trick->addImage($image);
                 }
                 $entityManager->flush();
