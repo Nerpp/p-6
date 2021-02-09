@@ -22,7 +22,7 @@ class TrickController extends AbstractController
 {
     public function __construct()
     {
-        $clean = new Cleaner;
+        $this->clean = new Cleaner;
     }
 
     /**
