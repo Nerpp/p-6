@@ -31,6 +31,20 @@
 		{% endfor %}
 	</div>
 
-	<a href="{{ path('front_pagination',{'length':tricks|length }) }}" class="btn btn-primary">More</a>
+	{% if (tricks|length > 15) %}
+		<div class="col-12 text-center">
+			<a href="{{ path('front_pagination',{'length':tricks|length }) }}" class="btn btn-primary">Load more</a>
+		</div>
+		<div class="d-none d-sm-block col-12 text-right p-5">
+			<a href="#cardTrick">
+				<i class="fas fa-arrow-up fa-5x"></i>
+			</a>
+		</div>
+		<div class="d-block d-sm-none col-12 text-right p-5">
+			<a href="#cardTrick">
+				<i class="fas fa-arrow-up fa-3x"></i>
+			</a>
+		</div>
+	{% endif %}
 </div>
 
