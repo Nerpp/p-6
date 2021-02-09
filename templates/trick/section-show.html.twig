@@ -126,7 +126,7 @@
 </div>
 
 
-{% for comment in trick.comments  %}
+{# {% for comment in trick.comments  %}
 	<div col="col-12">
 		<p>
 			<img src="{{ asset("images/"~comment.user.image.source ) }}" class="commentProfile"><strong>{{ comment.user.name }}</strong>
@@ -135,4 +135,21 @@
 			{{ comment.comment }}
 		</p>
 	</div>
+{% endfor %} #}
+
+{% for comment in comments  %}
+	<div col="col-12">
+		<p>
+			<img src="{{ asset("images/"~comment.user.image.source ) }}" class="commentProfile"><strong>{{ comment.user.name }}</strong> le 
+			<i>{{ comment.creationdate|date('d-m-Y H:i') }}</i>
+			:
+			{{ comment.comment }}
+		</p>
+	</div>
 {% endfor %}
+
+{% if (comments|length <= trick.comments|length) %}
+		<div class="col-12 text-center">
+			<a href="{{ path('trick_show',{'length':comments|length , 'slug': trick.slug }) }}" class="btn btn-primary">Load more</a>
+		</div>
+	{% endif %}

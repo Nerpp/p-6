@@ -10,6 +10,7 @@ use App\Form\TrickType;
 use App\Repository\CommentsRepository;
 use App\Repository\TrickRepository;
 use App\Services\Cleaner;
+use App\Services\Pagination;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -95,13 +96,13 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}", name="trick_show", methods={"GET","POST"})
      */
-    public function show(Trick $trick, Request $request): Response
+    public function show(Trick $trick, Request $request, Comments $comment,CommentsRepository $commentsRepository,Pagination $pagination): Response
     {
-        dump($trick);
-        $comment = new Comments();
         $form = $this->createForm(CommentsType::class, $comment);
         $form->handleRequest($request);
         $user = $this->getUser();
+
+        
 
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -110,9 +111,18 @@ class TrickController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
         }
-        
+
+        $bdd = count($commentsRepository->findAll());
+
+        if($request->query->get('length') !==  null){
+        $length = $pagination->commentsPagination($request->query->get('length'),$bdd);
+        }else{
+            $length = $pagination->commentsPagination(0,$bdd);
+        }
+
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
+            'comments' => $commentsRepository->findBy(array(),array('id'=> 'ASC'),$limit=$length,$offset=null),
             'formComments' => $form->createView(),
 
         ]);
