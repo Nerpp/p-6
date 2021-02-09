@@ -97,6 +97,7 @@ class TrickController extends AbstractController
      */
     public function show(Trick $trick, Request $request): Response
     {
+        dump($trick);
         $comment = new Comments();
         $form = $this->createForm(CommentsType::class, $comment);
         $form->handleRequest($request);
@@ -109,6 +110,7 @@ class TrickController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
         }
+        
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'formComments' => $form->createView(),
