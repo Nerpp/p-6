@@ -24,8 +24,7 @@ class FrontController extends AbstractController
 
         $bdd = count($tricksRepository->findAll());
         
-       
-        $length = $pagination->pagination(0,$bdd);
+        $length = $pagination->tricksPagination(0,$bdd);
 
         return $this->render('front/index.html.twig', [
             'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit=$length,$offset=null),
@@ -38,7 +37,13 @@ class FrontController extends AbstractController
     public function pagination(TrickRepository $tricksRepository,Request $request,Pagination $pagination)
     {
         $bdd = count($tricksRepository->findAll());
-        $length = $pagination->pagination($request->query->get('length'),$bdd);
+        $paging = $request->query->get('length');
+
+        if($paging !==  null){
+            $length = $pagination->tricksPagination($paging,$bdd);
+        }else{
+            $length = $pagination->tricksPagination(0,$bdd);
+        }
 
         return $this->render('front/index.html.twig', [
             'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit= $length,$offset=null),

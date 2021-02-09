@@ -113,9 +113,10 @@ class TrickController extends AbstractController
         }
 
         $bdd = count($commentsRepository->findAll());
+        $paging = $request->query->get('length');
 
-        if($request->query->get('length') !==  null){
-        $length = $pagination->commentsPagination($request->query->get('length'),$bdd);
+        if($paging !==  null){
+            $length = $pagination->commentsPagination($paging,$bdd);
         }else{
             $length = $pagination->commentsPagination(0,$bdd);
         }

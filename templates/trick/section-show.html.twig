@@ -125,18 +125,6 @@
 	</div>
 </div>
 
-
-{# {% for comment in trick.comments  %}
-	<div col="col-12">
-		<p>
-			<img src="{{ asset("images/"~comment.user.image.source ) }}" class="commentProfile"><strong>{{ comment.user.name }}</strong>
-			<i>{{ comment.creationdate|date('d-m-Y H:i') }}</i>
-			:
-			{{ comment.comment }}
-		</p>
-	</div>
-{% endfor %} #}
-
 {% for comment in comments  %}
 	<div col="col-12">
 		<p>

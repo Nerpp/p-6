@@ -31,7 +31,7 @@
 		{% endfor %}
 	</div>
 
-	{% if (tricks|length < 15) %}
+	{% if (tricks|length > 15) %}
 		<div class="col-12 text-center">
 			<a href="{{ path('front_pagination',{'length':tricks|length }) }}" class="btn btn-primary">Load more</a>
 		</div>
