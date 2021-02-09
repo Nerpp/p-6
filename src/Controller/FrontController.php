@@ -13,16 +13,11 @@ use App\Services\Cleaner;
 
 class FrontController extends AbstractController
 {
-
-    public function __construct()
-    {
-        $this->pagination = new pagination;
-    }
-    
+  
     /**
      * @Route("/", name="front_index")
      */
-    public function index(TrickRepository $tricksRepository)
+    public function index(TrickRepository $tricksRepository,Pagination $pagination)
     {
         $clean = new Cleaner();
         dump($clean->delAccent('étè éà'));
@@ -30,7 +25,7 @@ class FrontController extends AbstractController
         $bdd = count($tricksRepository->findAll());
         
        
-        $length = $this->pagination->pagination(0,$bdd);
+        $length = $pagination->pagination(0,$bdd);
 
         return $this->render('front/index.html.twig', [
             'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit=$length,$offset=null),
@@ -40,10 +35,10 @@ class FrontController extends AbstractController
      /**
      * @Route("/extended", name="front_pagination", methods={"GET","POST"})
      */
-    public function pagination(TrickRepository $tricksRepository, Request $request)
+    public function pagination(TrickRepository $tricksRepository,Request $request,Pagination $pagination)
     {
         $bdd = count($tricksRepository->findAll());
-        $length = $this->pagination->pagination($request->query->get('length'),$bdd);
+        $length = $pagination->pagination($request->query->get('length'),$bdd);
 
         return $this->render('front/index.html.twig', [
             'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit= $length,$offset=null),
