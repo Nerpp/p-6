@@ -28,16 +28,7 @@ class TrickController extends AbstractController
         $this->adminVideo = new VideoAdmin;
     }
 
-    /**
-     * @Route("/", name="trick_index", methods={"GET"})
-     */
-    public function index(TrickRepository $trickRepository): Response
-    {
-        return $this->render('trick/index.html.twig', [
-            'tricks' => $trickRepository->findAll(),
-        ]);
-    }
-
+    
     /**
      * @Route("/new", name="trick_new", methods={"GET","POST"})
      */
@@ -200,7 +191,7 @@ class TrickController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('trick_index');
+        return $this->redirectToRoute('front_index');
     }
 
     /**
@@ -220,6 +211,6 @@ class TrickController extends AbstractController
             return new JsonResponse(['error' => 'Token invalid'], 400);
         }
 
-        return $this->redirectToRoute('trick_index');
+        return $this->redirectToRoute('front_index');
     }
 }
