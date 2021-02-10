@@ -23,16 +23,23 @@ h1{
 
 /* image front */
 #front{
- height: 100vh;
+  height: 100vh;
+ 
 }
 
 .bg{
-  min-width: 100%;
-  height: 90%;
+  width: 100%;
+  height: auto;
   position: absolute;
   z-index: -1;
 }
 /* image front */
+
+/* position affichage front */
+.position{
+  z-index: 1;
+}
+/* position affichage front */
 
 /* img card */
 .card-img-size{
