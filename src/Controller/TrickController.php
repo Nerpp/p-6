@@ -11,6 +11,7 @@ use App\Repository\CommentsRepository;
 use App\Repository\TrickRepository;
 use App\Services\Cleaner;
 use App\Services\Pagination;
+use App\Services\VideoAdmin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,6 +25,7 @@ class TrickController extends AbstractController
     public function __construct()
     {
         $this->clean = new Cleaner;
+        $this->adminVideo = new VideoAdmin;
     }
 
     /**
@@ -71,10 +73,7 @@ class TrickController extends AbstractController
 
             //TODO del v for embed
             foreach ($trick->getVideo() as $video) {
-                // $url = " https://www.youtube.com/watch?v=VX96I7PO8YU ";
-                // parse_str( parse_url( $url, PHP_URL_QUERY ), $my_array );
-                // echo $my_array['v'];
-
+                $video =  $this->adminVideo->addEmbed($video);
                 $entityManager->persist($video);
             }
 
