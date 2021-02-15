@@ -12,7 +12,7 @@
 					<img class="card-img-top card-img-size" src="{{ asset("images/"~trick.image[0].source) }}" alt="{{ trick.name }}">
 					<div class="card-body">
 						<h5 class="card-title">{{ trick.name }}</h5>
-						{% if app.user==trick.user %}
+						{% if app.user %}
 							<a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-primary">
 								<i class="fas fa-edit"></i>
 							</a>
