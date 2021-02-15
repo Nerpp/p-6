@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Comments;
 use App\Entity\Image;
+use App\Entity\Video;
 use App\Entity\Trick;
 use App\Form\CommentsType;
 use App\Form\TrickType;
@@ -92,9 +93,6 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
         $user = $this->getUser();
 
-        
-
-
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setUser($user)->setTrick($trick);
             $entityManager = $this->getDoctrine()->getManager();
@@ -122,17 +120,20 @@ class TrickController extends AbstractController
     /**
      * @Route("/{id}/edit", name="trick_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Trick $trick): Response
+    public function edit(Request $request, Trick $trick,CommentsRepository $commentsRepository,Pagination $pagination): Response
     {
         $user = $this->getUser();
-        $userTrick = $trick->getUser();
-        if ($user == $userTrick) {
+        
+        if ($user) {
             $form = $this->createForm(TrickType::class, $trick);
             $form->handleRequest($request);
+           
 
             if ($form->isSubmitted() && $form->isValid()) {
+                // dd($request,$trick);
                 $entityManager = $this->getDoctrine()->getManager();
                 $files = $form->get('image')->getData();
+                
                 foreach ($files as $image) {
                     
                     $filename =  $this->clean->delAccent($trick->getName());
@@ -148,14 +149,26 @@ class TrickController extends AbstractController
                             // ... handle exception if something happens during file upload
                         }
                     }
+
                     $image = new Image();
                     $image->setSource($filename);
                     $trick->setSlug($this->clean->delAccent($trick->getName()));
                     $trick->addImage($image);
                 }
+                 // $getVideos = $form->get('video')->getData();
+                 $getVideos = $trick->getVideo();
+                foreach ($getVideos as $video) {
+                   
+                    $videoTreated = $this->adminVideo->addEmbed($video->getUrl());
+
+                    $videos = new Video();
+                    $videos->setUrl($videoTreated);
+                    $trick->addVideo($video);
+                }
+
                 $entityManager->flush();
 
-                return $this->redirectToRoute('trick_index');
+                return $this->redirectToRoute('front_index');
             }
            
         }else{
@@ -170,8 +183,12 @@ class TrickController extends AbstractController
             ]); 
         }
 
+        $bdd = count($commentsRepository->findAll());
+        $length = $pagination->commentsPagination(0,$bdd);
+        
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
+            'comments' => $commentsRepository->findBy(array(),array('id'=> 'ASC'),$limit=$length,$offset=null),
             'form' => $form->createView(),
         ]);
     }

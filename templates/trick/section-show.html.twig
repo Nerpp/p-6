@@ -31,17 +31,15 @@
 </div>
 
 
-{{ dump(trick.video[0].url) }}
-
-
 <div class="row">
 	{% for videos in trick.video  %}
 		<div class="col-4">
 			<iframe width="300" height="300" src="{{ videos.url}}" frameborder="0" allow=" picture-in-picture"></iframe>
 		</div>
-
 	{% endfor %}
 </div>
+
+
 
 <div class="row justify-content-center">
 	<div class="col-6">
