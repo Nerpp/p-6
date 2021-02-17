@@ -156,6 +156,26 @@ class AppFixtures extends Fixture
                 'titre' => 'Stalefish',
                 'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
                 'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
             ]
         ];
 

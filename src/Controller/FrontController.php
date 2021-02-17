@@ -23,11 +23,11 @@ class FrontController extends AbstractController
         dump($clean->delAccent('étè éà'));
 
         $bdd = count($tricksRepository->findAll());
-        
         $length = $pagination->tricksPagination(0,$bdd);
 
         return $this->render('front/index.html.twig', [
             'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit=$length,$offset=null),
+            'pagination' => $bdd,
         ]);
     }
 
@@ -47,6 +47,7 @@ class FrontController extends AbstractController
 
         return $this->render('front/index.html.twig', [
             'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit= $length,$offset=null),
+            'pagination' => $bdd,
         ]);
     }
 
