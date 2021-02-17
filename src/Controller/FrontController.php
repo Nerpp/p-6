@@ -13,7 +13,7 @@ use App\Services\Cleaner;
 
 class FrontController extends AbstractController
 {
-    protected $_iLength ;
+    protected $_iLength;
     protected $_iBdd;
   
     public function __construct()
