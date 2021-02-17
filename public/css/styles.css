@@ -16,30 +16,24 @@ h1{
 .navbar
 {
   background-color: #E5E8E8;
-  padding: 3%;
+  padding: 2%;
 
 }
 /* front */
+.front{
+  padding : 0px 0px 0px 0px;
+  height: 90vh;
+  }
+  
+  .frontBg{
+    width: 100%;
+    height: 90%;
+    position: absolute;
+    z-index: -1;
+  }
+/* front */
 
-/* image front */
-#front{
-  height: 100vh;
- 
-}
 
-.bg{
-  width: 100%;
-  height: auto;
-  position: absolute;
-  z-index: -1;
-}
-/* image front */
-
-/* position affichage front */
-.position{
-  z-index: 1;
-}
-/* position affichage front */
 
 /* img card */
 .card-img-size{
@@ -48,17 +42,12 @@ h1{
 }
 /* img card */
 
-/* img show */
-#headerShow{
-  min-height: 100vh;
-}
 
-.bgShow{
-  width: 100%;
-  height: auto;
-  position: absolute;
-  z-index: -1;
-}
+
+
+
+
+
 
 /* image profile */
 .commentProfile{
@@ -66,3 +55,4 @@ width: 50px;
 height: auto;
 }
 /* image profile */
+
