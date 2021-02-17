@@ -1,52 +1,58 @@
-<div class="row">
-	<div class="col-12 text-center text-uppercase text-secondary p-2">
-		<h2 id="cardTrick">LES DERNIERS TRICKS</h2>
+<div class="container-fluid p-3">
+	<div class="row">
+		<div class="col-12 text-center text-uppercase text-secondary py-2">
+			<h2 id="cardTrick">LES DERNIERS TRICKS</h2>
+		</div>
+	<div>
+	<div class="row p-2">
+		<div class="" id='cardContener'>
+			{% for trick in tricks  %}
+				<div class="card mx-2">
+					<a href="{{ path('trick_show', {'slug': trick.slug}) }}">
+						<img class="card-img-top " src="{{ asset("images/"~trick.image[0].source) }}" alt="{{ trick.name }}">
+						<div class="card-body">
+							<div class="class">
+								<h5 class="card-title">{{ trick.name }}</h5>
+								{% if app.user %}
+
+									<a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
+										<i class="fas fa-edit"></i>
+									</a>
+
+									<a href="{{ path('trick_delete', {'id': trick.id}) }}" class="btn btn-danger" onclick="confirmation()">
+										<i class="far fa-trash-alt"></i>
+									</a>
+								</div>
+							{% endif %}
+						</div>
+					</a>
+				</div>
+			{% else %}
+				<div class="col-12 text-center">
+					<p>no records found</p>
+				</div>
+			{% endfor %}
+		</div>
 	</div>
+	<div class="row p-2">
+		{% if (pagination > tricks|length) %}
+			<div class="col-12 text-center">
+				<a href="{{ path('front_pagination',{'length':tricks|length }) }}" class="btn btn-primary">Load more</a>
+			</div>
+		{% endif %}
 
-	<div class="row justify-content-around p-2">
-
-		{% for trick in tricks  %}
-
-			<div class="col-4 card p-2">
-				<a href="{{ path('trick_show', {'slug': trick.slug}) }}">
-					<img class="card-img-top card-img-size" src="{{ asset("images/"~trick.image[0].source) }}" alt="{{ trick.name }}">
-					<div class="card-body">
-						<h5 class="card-title">{{ trick.name }}</h5>
-						{% if app.user %}
-							<a href="{{ path('trick_edit', {'id': trick.id}) }}" class="btn btn-primary">
-								<i class="fas fa-edit"></i>
-							</a>
-							<a href="{{ path('trick_delete', {'id': trick.id}) }}" class="btn btn-danger" onclick="confirmation()">
-								<i class="far fa-trash-alt"></i>
-							</a>
-						{% endif %}
-					</div>
+		{% if (tricks|length > 15) %}
+			<div class="d-none d-md-block col-12 text-right p-5">
+				<a href="#cardTrick">
+					<i class="fas fa-arrow-up fa-5x"></i>
 				</a>
 			</div>
-		{% else %}
-			<div class="col-12 text-center">
-				<p>no records found</p>
+			<div class="d-block d-md-none col-12 text-right p-5">
+				<a href="#cardTrick">
+					<i class="fas fa-arrow-up fa-3x"></i>
+				</a>
 			</div>
-		{% endfor %}
+		{% endif %}
 	</div>
 
-	{% if (pagination > tricks|length) %}
-		<div class="col-12 text-center">
-			<a href="{{ path('front_pagination',{'length':tricks|length }) }}" class="btn btn-primary">Load more</a>
-		</div>
-	{% endif %}
-
-	{% if (tricks|length > 15) %}
-		<div class="d-none d-sm-block col-12 text-right p-5">
-			<a href="#cardTrick">
-				<i class="fas fa-arrow-up fa-5x"></i>
-			</a>
-		</div>
-		<div class="d-block d-sm-none col-12 text-right p-5">
-			<a href="#cardTrick">
-				<i class="fas fa-arrow-up fa-3x"></i>
-			</a>
-		</div>
-	{% endif %}
 </div>
-

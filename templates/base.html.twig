@@ -30,21 +30,15 @@
     </navbar>
 
     <header>
-    
         {% block header %}{% endblock %}
-    
     </header>
         
     <section>
-        <div class="container p-3">
-            {% block section %}{% endblock %}
-        </div>
+        {% block section %}{% endblock %}
     </section>
 
-    <footer class="">
-        <div class="container-fluid p-3">
-            {% include 'partials/navbar-footer.html.twig' %}
-        </div>
+    <footer>
+        {% include 'partials/navbar-footer.html.twig' %}
     </footer>
     
 

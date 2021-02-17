@@ -118,7 +118,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="trick_edit", methods={"GET","POST"})
+     * @Route("/{slug}/edit", name="trick_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Trick $trick,CommentsRepository $commentsRepository,Pagination $pagination): Response
     {

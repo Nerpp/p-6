@@ -1,58 +1,57 @@
 /* font */
-h1{
-  font-family: 'Quicksand', sans-serif;
+h1 {
+  font-family: "Quicksand", sans-serif;
 }
 
-.title-font{
-  font-family: 'Do Hyeon', sans-serif;
+.title-font {
+  font-family: "Do Hyeon", sans-serif;
 }
 
-.nav-link{
-  font-family: 'Oxygen', sans-serif;
+.nav-link {
+  font-family: "Oxygen", sans-serif;
 }
 /* font */
 
 /* navbar */
-.navbar
-{
-  background-color: #E5E8E8;
+.navbar {
+  background-color: #e5e8e8;
   padding: 2%;
+}
+/* navbar */
 
+/* padding 0 */
+.pDisplay{
+  padding: 0px 0px 0px 0px;
+}
+/* padding 0 */
+
+/* front */
+.front {
+  /* padding: 0px 0px 0px 0px; */
+  height: 90vh;
+}
+
+.frontBg {
+  width: 100%;
+  height: 91%;
+  position: absolute;
+  z-index: -1;
+}
+
+#cardContener {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  width: 18rem;
 }
 /* front */
-.front{
-  padding : 0px 0px 0px 0px;
-  height: 90vh;
-  }
-  
-  .frontBg{
-    width: 100%;
-    height: 90%;
-    position: absolute;
-    z-index: -1;
-  }
-/* front */
 
-
-
-/* img card */
-.card-img-size{
-  width: 100%;
+/* image profile */
+.commentProfile {
+  width: 50px;
   height: auto;
 }
-/* img card */
-
-
-
-
-
-
-
-
 /* image profile */
-.commentProfile{
-width: 50px;
-height: auto;
-}
-/* image profile */
-
