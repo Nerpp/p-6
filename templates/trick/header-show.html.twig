@@ -1,12 +1,15 @@
-{# <div class="container" id="headerShow"  > 
-	<div class="row" 
-		<div class="col-12 bgShow">
+<div class="container"  > 
+	
 			{% if trick.image[0].source != false %}
+			<div class="col-12  bgShow">
 				<img class="img-fluid bgShow" src="{{ asset("images/"~trick.image[0].source) }}" alt="Responsive image">
+			<div>
 			{% else %}
+			<div class="col-1 text-center bgShow">
 				<img class="img-fluid bgShow" src="{{ asset("/images/bgDefault.jpg") }}" alt="Responsive image">
+			</div>
 			{% endif %}
-		</div>
+		
 		
 		<div class="col-12 text-right">
 			<a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
@@ -21,32 +24,4 @@
 			<h1>{{ trick.name }}</h1>
 		</div>
 
-	</div>
-</div> #}
-
-<div class="container front">
-	<div class=" ">
-		<div class=" mb-auto">
-			<img class="img-responsive bgShow" src="{{ asset("/images/bgDefault.jpg") }}" alt="Responsive image">
-		</div>
-
-		<div class="d-none d-md-block text-center">
-			<h1 class="title-font display-5 ">Votre plateforme communautaire de snowboarding Snowtricks</h1>
-		</div>
-		<div class="d-md-none text-center">
-			<h5 class="title-font display-5 ">Votre plateforme communautaire de snowboarding Snowtricks</h5>
-		</div>
-
-		<div class="d-none d-md-block mt-auto text-right">
-			<a href="#cardTrick">
-				<i class="fas fa-arrow-down fa-5x"></i>
-			</a>
-		</div>
-
-		<div class="d-md-none mt-auto text-right">
-			<a href="#cardTrick">
-				<i class="fas fa-arrow-down fa-3x"></i>
-			</a>
-		</div>
-	</div>
 </div>
