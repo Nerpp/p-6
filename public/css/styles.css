@@ -1,68 +1,79 @@
+
 /* font */
-h1{
-  font-family: 'Quicksand', sans-serif;
+h1 {
+  font-family: "Quicksand", sans-serif;
 }
 
-.title-font{
-  font-family: 'Do Hyeon', sans-serif;
+.title-font {
+  font-family: "Do Hyeon", sans-serif;
 }
 
-.nav-link{
-  font-family: 'Oxygen', sans-serif;
+.nav-link {
+  font-family: "Oxygen", sans-serif;
 }
 /* font */
 
 /* navbar */
-.navbar
-{
-  background-color: #E5E8E8;
-  padding: 3%;
+.navbar {
+  background-color: #e5e8e8;
+  padding: 1%;
+}
+/* navbar */
 
+/* footer */
+#footerS{
+  margin-top: 0;
+  margin-bottom: 0rem;
+  height: 5rem;
+}
+/* footer */
+
+
+#headerFront{
+  height: 90vh
+}
+
+.flex-padding{
+  width: 100%;
+}
+
+.positionHeader{
+  width: 100%;
+  height: 90%;
+  position: absolute;
+  z-index: -1;
+}
+
+
+/* front */
+
+.card {
+  width: 18rem;
 }
 /* front */
 
-/* image front */
-#front{
-  height: 100vh;
- 
+.card-img-top{
+width: 100%;
+height: 10rem;
+object-fit: f;
 }
 
-.bg{
-  width: 100%;
-  height: auto;
-  position: absolute;
-  z-index: -1;
-}
-/* image front */
 
-/* position affichage front */
-.position{
-  z-index: 1;
-}
-/* position affichage front */
 
-/* img card */
-.card-img-size{
-  width: 100%;
-  height: auto;
-}
-/* img card */
 
-/* img show */
-#headerShow{
-  min-height: 100vh;
+
+/* show */
+#headerShow{ 
+  height: 50vh;
 }
 
-.bgShow{
-  width: 100%;
-  height: auto;
-  position: absolute;
-  z-index: -1;
-}
+
+/* show */
 
 /* image profile */
-.commentProfile{
-width: 50px;
-height: auto;
+.commentProfile {
+  width: 50px;
+  height: auto;
 }
 /* image profile */
+

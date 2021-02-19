@@ -13,40 +13,45 @@ use App\Services\Cleaner;
 
 class FrontController extends AbstractController
 {
+    protected $_iLength;
+    protected $_iBdd;
   
+    public function __construct()
+    {
+        $this->pagination = new Pagination;
+    }
+
     /**
      * @Route("/", name="front_index")
      */
-    public function index(TrickRepository $tricksRepository,Pagination $pagination)
+    public function index(TrickRepository $tricksRepository)
     {
         $clean = new Cleaner();
         dump($clean->delAccent('étè éà'));
 
-        $bdd = count($tricksRepository->findAll());
-        
-        $length = $pagination->tricksPagination(0,$bdd);
+        $this->_iBdd = count($tricksRepository->findAll());
+        $this->_iLength = $this->pagination->tricksPagination(0,$this->_iBdd);
+
 
         return $this->render('front/index.html.twig', [
-            'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit=$length,$offset=null),
+            'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit=$this->_iLength,$offset=null),
+            'pagination' => $this->_iBdd,
         ]);
     }
 
      /**
      * @Route("/extended", name="front_pagination", methods={"GET","POST"})
      */
-    public function pagination(TrickRepository $tricksRepository,Request $request,Pagination $pagination)
+    public function pagination(TrickRepository $tricksRepository,Request $request)
     {
-        $bdd = count($tricksRepository->findAll());
+        $this->_iBdd = count($tricksRepository->findAll());
         $paging = $request->query->get('length');
-
-        if($paging !==  null){
-            $length = $pagination->tricksPagination($paging,$bdd);
-        }else{
-            $length = $pagination->tricksPagination(0,$bdd);
-        }
+ 
+       $this->_iLength = !is_null($paging)?$this->pagination->tricksPagination($paging,$this->_iBdd):$this->pagination->tricksPagination(0,$this->_iBdd);
 
         return $this->render('front/index.html.twig', [
-            'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit= $length,$offset=null),
+            'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit= $this->_iLength,$offset=null),
+            'pagination' => $this->_iBdd,
         ]);
     }
 
