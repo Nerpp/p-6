@@ -1,4 +1,4 @@
-<div class="d-none d-md-block">
+{# <div class="d-none d-md-block">
 	<div class="container-fluid mt-auto pDisplay">
 
 		<div class="col shadow bg-secondary text-white" id="footerS">
@@ -36,5 +36,40 @@
 				</div>
 			{% endif %}
 		</div>
+	</div>
+</div> #}
+
+
+<div class="d-none d-md-block">
+	<div class="d-flex justify-content-start shadow bg-secondary text-white">
+		<p>@copyright Aurélien Regi 2021</p>
+	</div>
+</div>
+
+<div class="d-block d-md-none">
+	<div class="d-flex flex-wrap justify-content-around">
+
+		<a href="{{ path('front_index') }}" class="btn btn-primary">
+			<i class="fas fa-home"></i>
+		</a>
+
+		<a href="{{ path('trick_new') }}" class="btn btn-primary">
+			<i class="fas fa-bookmark"></i>
+		</a>
+
+
+		{% if app.user %}
+
+			<a href="{{ path('app_logout') }}" class="btn btn-primary">
+				<i class="fas fa-sign-out-alt"></i>
+			</a>
+
+		{% else %}
+
+			<a href="{{ path('app_login') }}" class="btn btn-primary">
+				<i class="fas fa-sign-in-alt"></i>
+			</a>
+
+		{% endif %}
 	</div>
 </div>
