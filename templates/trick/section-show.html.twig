@@ -1,14 +1,41 @@
-<div class="container pt-5">
-	<div class="row">
-		<div class="d-flex flex-wrap justify-content-md-center justify-content-lg-start">
-			{% for images in trick.image  %}
-				<div class="mx-2"><img class="card-img-top" src="{{ asset("images/"~images.source) }}"></div>
-			{% endfor %}
-			{% for videos in trick.video  %}
-				<div class="mx-2">
-					<iframe class="card-img-top" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
+<div class="d-none d-md-block text-center">
+	<div class="container pt-5">
+		<div class="row">
+			<div class="d-flex flex-wrap justify-content-start">
+				{% for images in trick.image  %}
+					<div class="mx-2"><img class="card-img-top" src="{{ asset("images/"~images.source) }}"></div>
+				{% endfor %}
+				{% for videos in trick.video  %}
+					<div class="mx-2">
+						<iframe class="card-img-top" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="d-md-none">
+	<div class="container pt-5">
+		<div class="row">
+			<div class="d-flex flex-wrap justify-content-center">
+				<div class="">
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+						See Media
+					</button>
 				</div>
-			{% endfor %}
+				<div class="collapse" id="collapseExample">
+
+					{% for images in trick.image  %}
+						<div class="pt-3"><img class="card-img-top" src="{{ asset("images/"~images.source) }}"></div>
+					{% endfor %}
+					{% for videos in trick.video  %}
+						<div class="pt-3">
+							<iframe class="card-img-top" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -22,10 +49,10 @@
 </div>
 
 <div class="container pt-5">
-	<div class="d-flex flex-row justify-content-between">
+	<div class="d-flex flex-wrap justify-content-between">
 		<div>
-			<strong>Crée le :</strong>
-			{{ trick.createdAt ? trick.createdAt|date('d-m-Y H:i') : '' }}
+			<strong>Groupe :</strong>
+			{{ trick.groupe.name }}
 		</div>
 		<div>
 			<strong>Crée le :</strong>
