@@ -1,141 +1,113 @@
-{# <div class="row justify-content-center">
-
-	<div class="col-3">
-		<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-			<div class="carousel-inner">
-				{% for images in trick.image  %}
-
-					{% if(loop.index == '1') %}
-						<div class="carousel-item active">
-							<img class="d-block" src="{{ asset("images/"~images.source) }}" alt="First slide">
-						</div>
-					{% else %}
-						<div class="carousel-item">
-							<img class="d-block" src="{{ asset("images/"~images.source) }}" alt="Second slide">
-						</div>
-					{% endif %}
-				{% endfor %}
-
-			</div>
-			<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="sr-only">Previous</span>
-			</a>
-			<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="sr-only">Next</span>
-			</a>
+<div class="container pt-5">
+	<div class="row">
+		<div class="d-flex flex-wrap justify-content-md-center justify-content-lg-start">
+			{% for images in trick.image  %}
+				<div class="mx-2"><img class="card-img-top" src="{{ asset("images/"~images.source) }}"></div>
+			{% endfor %}
+			{% for videos in trick.video  %}
+				<div class="mx-2">
+					<iframe class="card-img-top" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
+				</div>
+			{% endfor %}
 		</div>
-
 	</div>
 </div>
 
-
-<div class="row">
-	{% for videos in trick.video  %}
-		<div class="col-4">
-			<iframe width="300" height="300" src="{{ videos.url}}" frameborder="0" allow=" picture-in-picture"></iframe>
+<div class="container pt-5">
+	<div class="d-flex flex-row justify-content-center">
+		<div>
+			<p>{{ trick.description }}</p>
 		</div>
-	{% endfor %}
-</div>
-
-
-
-<div class="row justify-content-center">
-	<div class="col-6">
-		<p>{{ trick.description }}</p>
 	</div>
 </div>
 
-<div class="row  justify-content-center">
-	<div class="col-3">
-		<p>
-			<strong>
-				Groupe :
-			</strong>
-			{{ trick.groupe.name }}
-		</p>
-	</div>
-	<div class="col-3">
-		<p>
+<div class="container pt-5">
+	<div class="d-flex flex-row justify-content-between">
+		<div>
 			<strong>Crée le :</strong>
 			{{ trick.createdAt ? trick.createdAt|date('d-m-Y H:i') : '' }}
-		</p>
-	</div>
-
-	{% if trick.updateAt != trick.createdAt %}
-		<div class="col-3">
-			<p>
+		</div>
+		<div>
+			<strong>Crée le :</strong>
+			{{ trick.createdAt ? trick.createdAt|date('d-m-Y H:i') : '' }}
+		</div>
+		<div>
+			{% if trick.updateAt != trick.createdAt %}
 				<strong>Mis à jour :</strong>
 				{{ trick.updateAt|date('d-m-Y H:i') }}
-			</p>
-		</div>
-	{% endif %}
-</div>
-
-<div class="row justify-content-between">
-	<div class="col-4">
-		<p>
-			<a href="{{ path('front_index') }}">back to accueil</a>
-			{% if app.user==trick.user %}
-				<a href="{{ path('trick_edit', {'id': trick.id}) }}">
-					| edit</a>
 			{% endif %}
-		</p>
-	</div>
-
-	{% if app.user==trick.user %}
-		<div class="col-2">
-			{{ include('trick/_delete_form.html.twig') }}
 		</div>
-	{% endif %}
+	</div>
 </div>
 
 {% if (app.user) %}
-	<div class="row justify-content-center p-3">
-		<div class="col-2">
-
-			{{ form_start(formComments) }}
-			<label for="" class="">
-				<img src="{{ asset("images/"~app.user.image.source ) }}" class="commentProfile">
-			</label>
+	<div class="container pt-5">
+		<hr class="mb-5">
+		{{ form_start(formComments) }}
+		<div class="d-flex flex-wrap justify-content-center">
+			<div class="align-self-center"><img src="{{ asset("images/"~app.user.image.source ) }}" class="commentProfile"></div>
+			<div class="commentWidth">{{ form_widget(formComments.comment,{'attr': {'placeholder': "Commenter en tant que "~app.user.name,'class':'form-control p-2'  }}) }}</div>
+			<div class="align-self-center mx-2">
+				<button type="submit">Ajouter un commentaire</button>
+			</div>
 		</div>
-		<div class="col-6">
-			{{ form_widget(formComments.comment,{'attr': {'placeholder': "Commenter en tant que "~app.user.name,'class':'form-control p-2'  }}) }}
-
-		</div>
-		<div class="col-3">
-			<button type="submit">Ajouter un commentaire</button>
-			{{ form_end(formComments) }}
-		</div>
+		{{ form_end(formComments) }}
+		<hr class="mt-5">
 	</div>
 {% endif %}
 
-<div class="row">
-	<div class="col-12">
-		{% if(trick.comments|length > 1) %}
-			<p>{{ trick.comments|length }}
-				Commentaires</p>
-		{% else %}
-			<p>{{ trick.comments|length }}
-				Commentaire</p>
+
+<div class="container pt-5">
+	<div class="row justify-content-center">
+		<div class="pb-3">
+			{% if(trick.comments|length > 1) %}
+				<p>{{ trick.comments|length }}
+					Commentaires</p>
+			{% else %}
+				<p>{{ trick.comments|length }}
+					Commentaire</p>
+			{% endif %}
+		</div>
+		<div class="d-flex flex-column pt-4">
+			{% for comment in comments  %}
+				<div class="d-flex flex-wrap pt-1">
+					<div class="m-1">
+						<p><img src="{{ asset("images/"~comment.user.image.source ) }}" class="commentProfile"></p>
+					</div>
+					<div class="align-self-center m-1">
+						<p>
+							<strong>{{ comment.user.name }}</strong>
+						</p>
+					</div>
+					<div class="align-self-center m-1">
+						<p>
+							<i>{{ comment.creationdate|date('d-m-Y H:i') }}</i> :
+						</p>
+					</div>
+					<div class="align-self-center m-1">
+						<p>{{ comment.comment }}</p>
+					</div>
+					
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+
+<div class="container pt-4">
+	<div class="d-flex justify-content-center pb-5">
+		{% if (comments|length <= trick.comments|length) %}
+			<div class="">
+				<a href="{{ path('trick_show',{'length':comments|length , 'slug': trick.slug }) }}" class="btn btn-primary">Load more</a>
+			</div>
 		{% endif %}
 	</div>
 </div>
 
-{% for comment in comments  %}
-	<div col="col-12">
-		<p>
-			<img src="{{ asset("images/"~comment.user.image.source ) }}" class="commentProfile"><strong>{{ comment.user.name }}</strong> le 
-			<i>{{ comment.creationdate|date('d-m-Y H:i') }}</i>
-			:
-			{{ comment.comment }}
-		</p>
-	</div>
-{% endfor %}
 
-{% if (comments|length <= trick.comments|length) %}
-		<div class="col-12 text-center">
-			<a href="{{ path('trick_show',{'length':comments|length , 'slug': trick.slug }) }}" class="btn btn-primary">Load more</a>
-		</div>
-	{% endif %} #}
+
+
+
+		
+				

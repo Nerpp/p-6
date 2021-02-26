@@ -194,10 +194,12 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="trick_delete", methods={"DELETE"})
+     * @Route("/{slug}/delete", name="trick_delete")
      */
+    // public function delete(Request $request, Trick $trick): Response
     public function delete(Request $request, Trick $trick): Response
     {
+        dd($trick);
         $user = $this->getUser();
         $userTrick = $trick->getUser();
         if ($user === $userTrick) {

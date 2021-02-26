@@ -15,7 +15,7 @@
 							<a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
 								<i class="fas fa-edit"></i>
 							</a>
-							<a href="{{ path('trick_delete', {'id': trick.id}) }}" class="btn btn-danger" onclick="confirmation()">
+							 <a href="{{ path('trick_delete', {'slug': trick.slug}) }}" class="btn btn-danger" onclick="confirmation()">
 								<i class="far fa-trash-alt"></i>
 							</a>
 						{% endif %}

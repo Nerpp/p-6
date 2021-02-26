@@ -1,27 +1,33 @@
-<div class="container"  > 
-	
-			{% if trick.image[0].source != false %}
-			<div class="col-12  bgShow">
-				<img class="img-fluid bgShow" src="{{ asset("images/"~trick.image[0].source) }}" alt="Responsive image">
-			<div>
-			{% else %}
-			<div class="col-1 text-center bgShow">
-				<img class="img-fluid bgShow" src="{{ asset("/images/bgDefault.jpg") }}" alt="Responsive image">
-			</div>
+<div class="container" id="headerPosition">
+	<div class="row" id="headerShow">
+		{% if trick.image[0].source != false %}
+			<div class="col-12 ">
+				<img class="img-fluid positionHeaderShow" src="{{ asset("images/"~trick.image[0].source) }}" alt="Responsive image">
+				<div>
+				{% else %}
+					<div class="col-12">
+						<img class="img-fluid positionHeaderShow" src="{{ asset("/images/bgDefault.jpg") }}" alt="Responsive image">
+					</div>
 			{% endif %}
-		
-		
-		<div class="col-12 text-right">
-			<a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
-				<i class="fas fa-edit"></i>
-			</a>
-			<a href="{{ path('trick_delete', {'id': trick.id}) }}" class="btn btn-danger">
-				<i class="far fa-trash-alt"></i>
-			</a>
-		</div>
 
-		<div class="col-12 text-center">
-			<h1>{{ trick.name }}</h1>
-		</div>
 
+			<div class="col-12 text-right p-2">
+				<a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
+					<i class="fas fa-edit"></i>
+				</a>
+				<a href="{{ path('trick_delete', {'slug': trick.slug}) }}" class="btn btn-danger">
+					<i class="far fa-trash-alt"></i>
+				</a>
+			</div>
+
+			<div class="col-12 text-center test">
+				<h1>{{ trick.name }}</h1>
+			</div>
+		</div>
+	</div>
 </div>
+
+
+
+
+
