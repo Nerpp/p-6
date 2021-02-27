@@ -27,6 +27,7 @@ class TrickController extends AbstractController
     {
         $this->clean = new Cleaner;
         $this->adminVideo = new VideoAdmin;
+        $this->pagination = new Pagination;
     }
 
     
@@ -63,7 +64,6 @@ class TrickController extends AbstractController
                 $trick->addImage($image);
             }
 
-            //TODO del v for embed
             foreach ($trick->getVideo() as $video) {
                 $video =  $this->adminVideo->addEmbed($video);
                 $entityManager->persist($video);
@@ -87,7 +87,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}", name="trick_show", methods={"GET","POST"})
      */
-    public function show(Trick $trick, Request $request, Comments $comment,CommentsRepository $commentsRepository,Pagination $pagination): Response
+    public function show(Trick $trick, Request $request, Comments $comment,CommentsRepository $commentsRepository): Response
     {
         $form = $this->createForm(CommentsType::class, $comment);
         $form->handleRequest($request);
@@ -104,9 +104,9 @@ class TrickController extends AbstractController
         $paging = $request->query->get('length');
 
         if($paging !==  null){
-            $length = $pagination->commentsPagination($paging,$bdd);
+            $length = $this->pagination->commentsPagination($paging,$bdd);
         }else{
-            $length = $pagination->commentsPagination(0,$bdd);
+            $length = $this->pagination->commentsPagination(0,$bdd);
         }
 
         return $this->render('trick/show.html.twig', [
@@ -120,7 +120,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}/edit", name="trick_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Trick $trick,CommentsRepository $commentsRepository,Pagination $pagination): Response
+    public function edit(Request $request, Trick $trick,CommentsRepository $commentsRepository): Response
     {
         $user = $this->getUser();
         
@@ -130,7 +130,7 @@ class TrickController extends AbstractController
            
 
             if ($form->isSubmitted() && $form->isValid()) {
-                // dd($request,$trick);
+                
                 $entityManager = $this->getDoctrine()->getManager();
                 $files = $form->get('image')->getData();
                 
@@ -184,7 +184,7 @@ class TrickController extends AbstractController
         }
 
         $bdd = count($commentsRepository->findAll());
-        $length = $pagination->commentsPagination(0,$bdd);
+        $length = $this->pagination->commentsPagination(0,$bdd);
         
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
@@ -196,13 +196,10 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}/delete", name="trick_delete")
      */
-    // public function delete(Request $request, Trick $trick): Response
     public function delete(Request $request, Trick $trick): Response
     {
-        dd($trick);
         $user = $this->getUser();
-        $userTrick = $trick->getUser();
-        if ($user === $userTrick) {
+        if ($user) {
             if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($trick);
@@ -216,20 +213,54 @@ class TrickController extends AbstractController
     /**
      * @Route("image/{id}/delete", name="image_delete")
      */
-    public function deleteImage(Request $request, Image $image): Response
+    public function deleteImage(Request $request, Image $image, Trick $trick,CommentsRepository $commentsRepository,Comments $comment): Response
     {
-        $data = json_decode($request->getContent(), true);
-        if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
-            $nom = $image->getSource();
-            unlink($this->getParameter('images_directory') . '/' . $nom);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($image);
-            $entityManager->flush();
-            return new JsonResponse(['success' => 1]);
-        } else {
-            return new JsonResponse(['error' => 'Token invalid'], 400);
+        
+        // $data = json_decode($request->getContent(), true);
+        // dump($request);
+        // if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
+        //     $nom = $image->getSource();
+        //     unlink($this->getParameter('images_directory') . '/' . $nom);
+        //     $entityManager = $this->getDoctrine()->getManager();
+        //     $entityManager->remove($image);
+        //     $entityManager->flush();
+        //     return new JsonResponse(['success' => 1]);
+        // } else {
+        //     return new JsonResponse(['error' => 'Token invalid'], 400);
+        // }
+
+        dd($request->query->get('idTrick'));
+
+        $user = $this->getUser();
+
+        if ($user) {
+            if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
+                $nom = $image->getSource();
+                unlink($this->getParameter('images_directory') . '/' . $nom);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($image);
+                $entityManager->flush();
+            }
         }
 
-        return $this->redirectToRoute('front_index');
+        $bdd = count($commentsRepository->findAll());
+        $paging = $request->query->get('length');
+
+        if($paging !==  null){
+            $length = $this->pagination->commentsPagination($paging,$bdd);
+        }else{
+            $length = $this->pagination->commentsPagination(0,$bdd);
+        }
+
+        $form = $this->createForm(CommentsType::class, $comment);
+
+        return $this->render('trick/show.html.twig', [
+            'trick' => $trick,
+            'comments' => $commentsRepository->findBy(array(),array('id'=> 'ASC'),$limit=$length,$offset=null),
+            'formComments' => $form->createView(),
+
+        ]);
     }
+
+    
 }
