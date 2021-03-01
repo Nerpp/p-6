@@ -31,7 +31,7 @@ class Trick
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Groups::class, inversedBy="tricks",cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity=Groups::class, inversedBy="tricks")
      */
     private $groupe;
 
@@ -41,7 +41,6 @@ class Trick
     private $image;
 
     /**
-     * element mod par moi pour corriger bug cascade fk sans succés
      * @ORM\ManyToMany(targetEntity=Video::class, cascade={"persist"})
      */
     private $video;
@@ -62,7 +61,7 @@ class Trick
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="trick",cascade={"remove"})
      */
     private $comments;
 

@@ -19,6 +19,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+
 
 
 class TrickController extends AbstractController
@@ -172,15 +174,7 @@ class TrickController extends AbstractController
             }
            
         }else{
-        $comment = new Comments();
-        $form = $this->createForm(CommentsType::class, $comment);
-        $form->handleRequest($request);
-        $user = $this->getUser();
-            return $this->render('trick/show.html.twig', [
-                'trick' => $trick,
-                'formComments' => $form->createView(),
-    
-            ]); 
+            return $this->redirectToRoute('front_index');
         }
 
         $bdd = count($commentsRepository->findAll());
@@ -200,38 +194,48 @@ class TrickController extends AbstractController
     {
         $user = $this->getUser();
         if ($user) {
-            if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
+           
+            // if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
+                
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($trick);
                 $entityManager->flush();
-            }
+            // }
+        }
+       
+        return $this->redirectToRoute('front_index');
+    }
+
+     /**
+     * @Route("image/{id}/delete", name="image_delete")
+     */
+    public function deleteImage(Request $request, Image $image): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
+            $nom = $image->getSource();
+            unlink($this->getParameter('images_directory') . '/' . $nom);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($image);
+            $entityManager->flush();
+            return new JsonResponse(['success' => 1]);
+        } else {
+            return new JsonResponse(['error' => 'Token invalid'], 400);
         }
 
         return $this->redirectToRoute('front_index');
     }
 
     /**
-     * @Route("image/{id}/delete", name="image_delete")
+     * @Route("imageShow/{id}/delete", name="image_delete_Show")
+     * 
      */
-    public function deleteImage(Request $request, Image $image, Trick $trick,CommentsRepository $commentsRepository,Comments $comment): Response
+    public function deleteImageShow(Request $request,Image $image,CommentsRepository $commentsRepository): Response
     {
-        
-        // $data = json_decode($request->getContent(), true);
-        // dump($request);
-        // if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
-        //     $nom = $image->getSource();
-        //     unlink($this->getParameter('images_directory') . '/' . $nom);
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->remove($image);
-        //     $entityManager->flush();
-        //     return new JsonResponse(['success' => 1]);
-        // } else {
-        //     return new JsonResponse(['error' => 'Token invalid'], 400);
-        // }
-
-        dd($request->query->get('idTrick'));
-
+       
         $user = $this->getUser();
+
+        $image->getTrick();
 
         if ($user) {
             if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
@@ -242,7 +246,7 @@ class TrickController extends AbstractController
                 $entityManager->flush();
             }
         }
-
+        
         $bdd = count($commentsRepository->findAll());
         $paging = $request->query->get('length');
 
@@ -252,10 +256,12 @@ class TrickController extends AbstractController
             $length = $this->pagination->commentsPagination(0,$bdd);
         }
 
+        $comment = new Comments();
         $form = $this->createForm(CommentsType::class, $comment);
+        $form->handleRequest($request);
 
         return $this->render('trick/show.html.twig', [
-            'trick' => $trick,
+            // 'trick' => $trick,
             'comments' => $commentsRepository->findBy(array(),array('id'=> 'ASC'),$limit=$length,$offset=null),
             'formComments' => $form->createView(),
 
