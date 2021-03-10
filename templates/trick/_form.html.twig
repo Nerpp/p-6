@@ -16,9 +16,9 @@
 	<div class="form-group">
 		<label for="name">Images</label>
 
-		{% if(trick.image) %}
+		{% if(trick.images) %}
 			<div class="row">
-				{% for image in  trick.image %}
+				{% for image in  trick.images %}
 					<div class="col-3 col-xs-6 border p-5 text-center">
 						<img src="{{ "../../images/"~image.source }}" class="image-thumbnail" style="width: 150px; height: 150px;">
 						<a href="{{ path('image_delete',{'id':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="rounded">
@@ -28,7 +28,7 @@
 				{% endfor %}
 			</div>
 			{% set i=1 %}
-			{% for image in trick.image %}
+			{% for image in trick.images %}
 				<input type="hidden" value="{{ image.source }}" name="{{ i }}">
 				{% set i=i+1 %}
 			{% endfor %}

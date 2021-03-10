@@ -59,9 +59,14 @@ class User implements UserInterface
     private $surname;
 
     /**
-     * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Images::class, mappedBy="user", cascade={"persist", "remove"})
      */
-    private $image;
+    private $images;
+
+    // /**
+    //  * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
+    //  */
+    // private $image;
 
 
 
@@ -235,14 +240,36 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getImage(): ?Image
+    // public function getImage(): ?Image
+    // {
+    //     return $this->image;
+    // }
+
+    // public function setImage(?Image $image): self
+    // {
+    //     $this->image = $image;
+
+    //     return $this;
+    // }
+
+    public function getImages(): ?Images
     {
-        return $this->image;
+        return $this->images;
     }
 
-    public function setImage(?Image $image): self
+    public function setImages(?Images $images): self
     {
-        $this->image = $image;
+        // unset the owning side of the relation if necessary
+        if ($images === null && $this->images !== null) {
+            $this->images->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($images !== null && $images->getUser() !== $this) {
+            $images->setUser($this);
+        }
+
+        $this->images = $images;
 
         return $this;
     }

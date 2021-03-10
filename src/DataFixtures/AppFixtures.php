@@ -6,7 +6,7 @@ use App\Entity\Trick;
 use App\Entity\Groups;
 use App\Entity\User;
 use App\Entity\Comments;
-use App\Entity\Image;
+use App\Entity\Images;
 use App\Entity\Video;
 use App\Services\Cleaner;
 use Doctrine\ORM\EntityManagerInterface;
@@ -228,7 +228,7 @@ class AppFixtures extends Fixture
 
             $gender = $gender[rand(0, count($gender) - 1)];
 
-            $image = new Image();
+            $image = new Images();
             $image->setSource($gender['image']);
             $manager->persist($image);
 
@@ -238,7 +238,7 @@ class AppFixtures extends Fixture
             $lastName = $faker->lastName();
             $email = $firstname . '.' . $lastName . '@' . $faker->freeEmailDomain;
             $user->setEmail($email)
-                ->setImage($image)
+                ->setImages($image)
                 ->setPassword($this->encoder->encodePassword($user, "123456"))
                 ->setName($firstname)
                 ->setSurname($lastName);
@@ -274,7 +274,7 @@ class AppFixtures extends Fixture
              ];
 
 
-                $image = new Image();
+                $image = new Images();
                 $image->setSource($images[rand(0, count($images) - 1)]);
                 $manager->persist($image);
 

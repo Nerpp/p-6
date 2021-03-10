@@ -32,7 +32,6 @@ class FrontController extends AbstractController
         $this->_iBdd = count($tricksRepository->findAll());
         $this->_iLength = $this->pagination->tricksPagination(0,$this->_iBdd);
 
-
         return $this->render('front/index.html.twig', [
             'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit=$this->_iLength,$offset=null),
             'pagination' => $this->_iBdd,
@@ -54,6 +53,4 @@ class FrontController extends AbstractController
             'pagination' => $this->_iBdd,
         ]);
     }
-
-
 }
