@@ -2,7 +2,7 @@
 	<div class="container pt-5">
 		<div class="row">
 			<div class="d-flex flex-wrap justify-content-start">
-				{% for images in trick.image  %}
+				{% for images in trick.images  %}
 					<div class="d-flex flex-column">
 						<div class="mx-2"><img class="card-img-top" src="{{ asset("images/"~images.source) }}"></div>
 						<div class="d-flex flex-row justify-content-end pt-2">
@@ -12,7 +12,7 @@
 								</a>
 							</div>
 							<div class="mr-2">
-								<a href="{{ path('image_delete_Show', {'id': images.id , 'trickId': trick.id }) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
+								<a href="{{ path('image_delete_Show', {'id': images.id }) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
 									<i class="far fa-trash-alt"></i>
 								</a>
 							</div>
@@ -56,7 +56,7 @@
 				</div>
 				<div class="collapse" id="collapseMedia">
 
-					{% for images in trick.image  %}
+					{% for images in trick.images  %}
 						<div class="pt-3"><img class="card-img-top" src="{{ asset("images/"~images.source) }}"></div>
 					{% endfor %}
 					{% for videos in trick.video  %}
@@ -102,7 +102,7 @@
 		<hr class="mb-5">
 		{{ form_start(formComments) }}
 		<div class="d-flex flex-wrap justify-content-center">
-			<div class="align-self-center"><img src="{{ asset("images/"~app.user.image.source ) }}" class="commentProfile"></div>
+			<div class="align-self-center"><img src="{{ asset("images/"~app.user.images.source ) }}" class="commentProfile"></div>
 			<div class="commentWidth">{{ form_widget(formComments.comment,{'attr': {'placeholder': "Commenter en tant que "~app.user.name,'class':'form-control p-2'  }}) }}</div>
 			<div class="align-self-center mx-2">
 				<button type="submit">Ajouter un commentaire</button>
@@ -129,7 +129,7 @@
 			{% for comment in comments  %}
 				<div class="d-flex flex-wrap pt-1">
 					<div class="m-1">
-						<p><img src="{{ asset("images/"~comment.user.image.source ) }}" class="commentProfile"></p>
+						<p><img src="{{ asset("images/"~comment.user.images.source ) }}" class="commentProfile"></p>
 					</div>
 					<div class="align-self-center m-1">
 						<p>

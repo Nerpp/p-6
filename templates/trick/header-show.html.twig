@@ -1,8 +1,8 @@
 <div class="container" id="headerPosition">
 	<div class="row" id="headerShow">
-		{% if trick.image[0].source != false %}
+		{% if trick.images[0].source != false %}
 			<div class="col-12 ">
-				<img class="img-fluid positionHeaderShow" src="{{ asset("images/"~trick.image[0].source) }}" alt="Responsive image">
+				<img class="img-fluid positionHeaderShow" src="{{ asset("images/"~trick.images[0].source) }}" alt="Responsive image">
 				<div>
 				{% else %}
 					<div class="col-12">

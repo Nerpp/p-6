@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Comments;
-use App\Entity\Image;
 use App\Entity\Video;
 use App\Entity\Trick;
+use App\Entity\Images;
 use App\Form\CommentsType;
 use App\Form\TrickType;
 use App\Repository\CommentsRepository;
@@ -19,7 +19,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+
+
+
 
 
 
@@ -32,9 +34,9 @@ class TrickController extends AbstractController
         $this->pagination = new Pagination;
     }
 
-    
-    /**
-     * @Route("/new", name="trick_new", methods={"GET","POST"})
+
+     /**
+      * @Route("/new", name="trick_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -49,8 +51,9 @@ class TrickController extends AbstractController
             foreach ($files as $image) {
 
                 $filename =  $this->clean->delAccent($trick->getName());
-                
+               
                 $filename = $filename . "_" . md5(uniqid()) . "." . $image->guessExtension();
+                
                 if ($image) {
                     try {
                         $image->move(
@@ -61,9 +64,12 @@ class TrickController extends AbstractController
                         // ... handle exception if something happens during file upload
                     }
                 }
-                $image = new Image();
+                $image = new Images();
+                
                 $image->setSource($filename);
+                
                 $trick->addImage($image);
+
             }
 
             foreach ($trick->getVideo() as $video) {
@@ -152,7 +158,7 @@ class TrickController extends AbstractController
                         }
                     }
 
-                    $image = new Image();
+                    $image = new Images();
                     $image->setSource($filename);
                     $trick->setSlug($this->clean->delAccent($trick->getName()));
                     $trick->addImage($image);
@@ -209,7 +215,7 @@ class TrickController extends AbstractController
      /**
      * @Route("image/{id}/delete", name="image_delete")
      */
-    public function deleteImage(Request $request, Image $image): Response
+    public function deleteImage(Request $request, Images $image): Response
     {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
@@ -230,14 +236,25 @@ class TrickController extends AbstractController
      * @Route("imageShow/{id}/delete", name="image_delete_Show")
      * 
      */
-    public function deleteImageShow(Request $request,Image $image,CommentsRepository $commentsRepository): Response
+    // public function deleteImageShow(Request $request,Image $image,CommentsRepository $commentsRepository): Response
+    public function deleteImageShow(Request $request,int $id): Response
     {
+       $imageRepository = $this->getDoctrine()->getRepository(Image::class);
        
-        $user = $this->getUser();
+       $image = $imageRepository->findOneBy(['id' => $id]);
 
-        $image->getTrick();
+       
+        // $user = $this->getUser();
 
-        if ($user) {
+        $trickRepository = $this->getDoctrine()->getRepository(Trick::class);
+
+        $trick = $trickRepository->findOneBy(['image' => $image]);
+        
+        // $trick = $image->getTrick();
+
+        dd($image,$trick);
+
+        // if ($user) {
             if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
                 $nom = $image->getSource();
                 unlink($this->getParameter('images_directory') . '/' . $nom);
@@ -245,27 +262,12 @@ class TrickController extends AbstractController
                 $entityManager->remove($image);
                 $entityManager->flush();
             }
-        }
+        // }
         
-        $bdd = count($commentsRepository->findAll());
-        $paging = $request->query->get('length');
+        // $this->redirectToRoute('trick_show', []);
 
-        if($paging !==  null){
-            $length = $this->pagination->commentsPagination($paging,$bdd);
-        }else{
-            $length = $this->pagination->commentsPagination(0,$bdd);
-        }
+        $this->redirectToRoute('front_index');
 
-        $comment = new Comments();
-        $form = $this->createForm(CommentsType::class, $comment);
-        $form->handleRequest($request);
-
-        return $this->render('trick/show.html.twig', [
-            // 'trick' => $trick,
-            'comments' => $commentsRepository->findBy(array(),array('id'=> 'ASC'),$limit=$length,$offset=null),
-            'formComments' => $form->createView(),
-
-        ]);
     }
 
     
