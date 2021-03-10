@@ -24,7 +24,8 @@ h1 {
 
 /* footer */
 #footer{
-  
+  /* position: absolute; */
+  bottom: 0;
   width: 100%;
   height: 10%;
 }
@@ -35,6 +36,9 @@ h1 {
   height: 93vh
 }
 
+#header{
+  height: 80vh
+}
 
 
 .flex-padding{
