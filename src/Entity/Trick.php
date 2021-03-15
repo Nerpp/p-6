@@ -66,7 +66,7 @@ class Trick
     private $slug;
 
     /**
-     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="trick",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="trick",cascade={"remove","persist"})
      */
     private $images;
 

@@ -64,8 +64,6 @@ height: 10rem;
 
 /* front */
 
-
-
 /* show */
 
 
@@ -106,6 +104,10 @@ hr {
 
 hr:after {
   background: #fff;
+}
+
+.btn_collapse{
+margin-left: 50%;
 }
 
 /* image profile */

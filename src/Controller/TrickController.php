@@ -40,6 +40,7 @@ class TrickController extends AbstractController
      */
     public function new(Request $request): Response
     {
+       
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
@@ -95,8 +96,9 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}", name="trick_show", methods={"GET","POST"})
      */
-    public function show(Trick $trick, Request $request, Comments $comment,CommentsRepository $commentsRepository): Response
+    public function show(Trick $trick, Request $request,CommentsRepository $commentsRepository): Response
     {
+        $comment = new Comments();
         $form = $this->createForm(CommentsType::class, $comment);
         $form->handleRequest($request);
         $user = $this->getUser();
@@ -119,7 +121,7 @@ class TrickController extends AbstractController
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'comments' => $commentsRepository->findBy(array(),array('id'=> 'ASC'),$limit=$length,$offset=null),
+            'comments' => $commentsRepository->findBy(["trick" => $trick],['id'=> 'ASC'],$limit=$length,$offset=null),
             'formComments' => $form->createView(),
 
         ]);
