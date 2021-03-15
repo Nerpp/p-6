@@ -23,7 +23,7 @@ class Images
     private $source;
 
     /**
-     * @ORM\ManyToOne(targetEntity=trick::class, inversedBy="images")
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="images", cascade={"persist"})
      */
     private $trick;
 
@@ -81,22 +81,7 @@ class Images
         return $this;
     }
 
-    // /**
-    //  * @return mixed
-    //  */
-    // public function getImage()
-    // {
-    //     return $this->image;
-    // }
-
-      /**
-       * @param mixed $image
-       */
-    //  public function setImage($image): void
-    //  {
-    //      $this->image = $image;
-    //  }
-
+    
      public function __toString() {
          return $this->source;
      }
