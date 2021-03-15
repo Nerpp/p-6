@@ -5,7 +5,7 @@ namespace App\Services;
 class Pagination
 {
     const maximalTrick = 15;
-    const maximalCom = 5;
+    const maximalCom = 10;
 
     public function tricksPagination(int $iLenDis, int $iBdd)
     {
