@@ -27,6 +27,14 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/reset", name="app_pass_reset")
+     */   
+    public function resetPasssword()
+    {
+        return $this->render('security/reset.html.twig');
+    }
+
+    /**
      * @Route("/logout", name="app_logout")
      */
     public function logout()

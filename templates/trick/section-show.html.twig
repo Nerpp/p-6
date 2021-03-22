@@ -88,7 +88,7 @@
 			{{ trick.createdAt ? trick.createdAt|date('d-m-Y H:i') : '' }}
 		</div>
 		<div>
-			{% if trick.updateAt != trick.createdAt %}
+			{% if trick.updateAt > trick.createdAt %}
 				<strong>Mis à jour :</strong>
 				{{ trick.updateAt|date('d-m-Y H:i') }}
 			{% endif %}

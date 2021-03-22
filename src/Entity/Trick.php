@@ -73,12 +73,13 @@ class Trick
 
     public function __construct()
     {
-        $this->image = new ArrayCollection();
+        
         $this->video = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updateAt = new \DateTime();
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->image = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -258,6 +259,5 @@ class Trick
 
         return $this;
     }
-
     
 }
