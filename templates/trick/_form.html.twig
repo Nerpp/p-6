@@ -24,6 +24,7 @@
 						<a href="{{ path('image_delete',{'id':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="rounded">
 							<i class="fa fa-trash text-danger"></i>
 						</a>
+                    {{ form_widget(form.featured, {'attr':{'class':'form-control form-control-lg'}}) }}
 					</div>
 				{% endfor %}
 			</div>
