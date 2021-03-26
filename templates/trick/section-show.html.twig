@@ -12,7 +12,7 @@
 								</a>
 							</div>
 							<div class="mr-2">
-								<a href="{{ path('image_delete_Show', {'id': images.id }) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
+								<a href="{{ path('image_delete_show', {'id': images.id }) }}" data-delete data-token="{{ csrf_token('delete'~images.id) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
 									<i class="far fa-trash-alt"></i>
 								</a>
 							</div>
@@ -32,7 +32,7 @@
 									</a>
 								</div>
 								<div class="">
-									<a href="{{ path('image_delete', {'id': videos.id}) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
+									<a href="{{ path('image_delete_show', {'id': videos.id}) }}"  class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
 										<i class="far fa-trash-alt"></i>
 									</a>
 								</div>

@@ -13,6 +13,7 @@ use App\Repository\TrickRepository;
 use App\Services\Cleaner;
 use App\Services\Pagination;
 use App\Services\VideoAdmin;
+use Proxies\__CG__\App\Entity\Image;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -217,8 +218,9 @@ class TrickController extends AbstractController
      /**
      * @Route("image/{id}/delete", name="image_delete")
      */
-    public function deleteImage(Request $request, Images $image): Response
+    public function deleteImage(Request $request): Response
     {
+       $image = new Image();
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
             $nom = $image->getSource();
@@ -235,40 +237,35 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("imageShow/{id}/delete", name="image_delete_Show")
+     * @Route("imageShow/{id}/delete", name="image_delete_show", methods={"GET","POST"})
      * 
      */
     // public function deleteImageShow(Request $request,Image $image,CommentsRepository $commentsRepository): Response
     public function deleteImageShow(Request $request,int $id): Response
     {
-       $imageRepository = $this->getDoctrine()->getRepository(Image::class);
-       
-       $image = $imageRepository->findOneBy(['id' => $id]);
+    
+        $user = $this->getUser();
 
-       
-        // $user = $this->getUser();
+        if ($user) {
+            $imageRepository = $this->getDoctrine()->getRepository(Images::class);
+            $image = $imageRepository->findOneBy(['id' => $id]);
+            
+            $trick = $image->getTrick();
 
-        $trickRepository = $this->getDoctrine()->getRepository(Trick::class);
-
-        $trick = $trickRepository->findOneBy(['image' => $image]);
-        
-        // $trick = $image->getTrick();
-
-        dd($image,$trick);
-
-        // if ($user) {
             if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
+
+                dd('test');
                 $nom = $image->getSource();
                 unlink($this->getParameter('images_directory') . '/' . $nom);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($image);
                 $entityManager->flush();
+              return  $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
             }
-        // }
+           
+        }
         
-        // $this->redirectToRoute('trick_show', []);
-
-        $this->redirectToRoute('front_index');
+       return $this->redirectToRoute('front_index');
 
     }
 

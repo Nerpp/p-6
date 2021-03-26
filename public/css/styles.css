@@ -33,7 +33,8 @@ h1 {
 
 /* front */
 #headerFront{
-  height: 93vh
+  height: 93vh;
+  
 }
 
 #header{
@@ -66,32 +67,38 @@ height: 10rem;
 
 /* show */
 
-
 #headerPosition{
   padding-top: 10%;
 }
 
 .headerShow{ 
-  height: 30vh;
+  height: 50vh;
   
+}
+
+.imgShow{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1; 
+}
+
+.optionShow{
+  position: absolute;
+  z-index: 1; 
+}
+
+.titleShow{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 0; 
 }
 
 element.style {
   object-fit: cover;
 }
 
-.positionHeaderShow{
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: -1;
-  
-}
-
-.posTitleShow{
-  padding-top: 50%;
-  padding-bottom: 50%;
-}
 
 hr {
   border: none;
