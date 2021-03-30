@@ -19,7 +19,7 @@
 		{% if(trick.images) %}
 			<div class="row">
 				{% for image in  trick.images %}
-					<div class="d-flex flex-row flex-wrap col-3 border m-2">
+					<div class="d-flex flex-row flex-wrap col-12 col-xl-3 border m-2">
 						<div class="">
 							<img src="{{ "../../images/"~image.source }}" class="image-thumbnail" style="width: 150px; height: 150px;">
 						</div>
@@ -71,69 +71,71 @@
 
 {# Voici le script en question : #}
 <script type="text/javascript">
-	$(document).ready(function () {
-var $container = $('div#trick_video');
-var index = $container.find(':input').length;
-$('#add_video').click(function (e) {
-addVideo($container);
-e.preventDefault();
-return false;
-});
-if (index == 0) {
-addVideo($container);
-} else {
-$container.children('div').each(function () {
-addDeleteLink($(this));
-});
-}
-function addVideo($container) {
-console.log($container);
-var template = $container.attr('data-prototype').replace(/__name__label__/g, 'Video n°' + (
-index + 1
-)).replace(/__name__/g, index);
-var $prototype = $(template);
-addDeleteLink($prototype);
-$container.append($prototype);
-index++;
-}
-function addDeleteLink($prototype) { // Création du lien
-var $deleteLink = $('<a href="#" style="padding-top: 2px" class="btn btn-danger">Supprimer</a>');
-// Ajout du lien
-$prototype.append($deleteLink);
-// Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
-$deleteLink.click(function (e) {
-$prototype.remove();
-e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-return false;
-});
-}
-});
+    $(document).ready(function() {
+        var $container = $('div#trick_video');
+        var index = $container.find(':input').length;
+        $('#add_video').click(function(e) {
+            addVideo($container);
+            e.preventDefault();
+            return false;
+        });
+        if (index == 0) {
+            addVideo($container);
+        } else {
+            $container.children('div').each(function() {
+                addDeleteLink($(this));
+            });
+        }
+        function addVideo($container) {
+            console.log($container);
+            var template = $container.attr('data-prototype')
+                .replace(/__name__label__/g, 'Video n°' + (index+1))
+                .replace(/__name__/g,        index)
+            ;
+            var $prototype = $(template);
+            addDeleteLink($prototype);
+            $container.append($prototype);
+            index++;
+        }
+        function addDeleteLink($prototype) {
+            // Création du lien
+            var $deleteLink = $('<a href="#" style="padding-top: 2px" class="btn btn-danger">Supprimer</a>');
+            // Ajout du lien
+            $prototype.append($deleteLink);
+            // Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
+            $deleteLink.click(function(e) {
+                $prototype.remove();
+                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+        }
+    });
 </script>
 <script>
-	let links = document.querySelectorAll("[data-delete]");
-for (link of links) {
-link.addEventListener('click', function (e) {
-e.preventDefault();
-if (confirm("Voulez-vous supprimer cet image")) {
-fetch(this.getAttribute("href"), {
-method: "DELETE",
-headers: {
-"X-Requested-With": "XMLHttpRequest",
-"Content-Type": "application/json"
-},
-body: JSON.stringify(
-{"_token": this.dataset.token}
-)
-}).then(response => response.json()).then(data => {
-if (data.success) {
-this.parentElement.remove();
-} else {
-alert(data.error)
-}
-}).catch(e => alert(e))
-}
-})
-}
+    let links=document.querySelectorAll("[data-delete]");
+    for(link of links){
+        link.addEventListener('click', function(e){
+            e.preventDefault();
+            if(confirm("Voulez-vous supprimer cet image")){
+                fetch(this.getAttribute("href"),{
+                    method:"DELETE",
+                    headers:{
+                        "X-Requested-With":"XMLHttpRequest",
+                        "Content-Type":"application/json"
+                    },
+                    body: JSON.stringify({"_token": this.dataset.token})
+                }).then(
+                    response=>response.json()
+                ).then(data=>{
+                    if(data.success){
+                        this.parentElement.remove();
+                    }else{
+                        alert(data.error)
+                    }
+                }).catch(e=>alert(e))
+            }
+        })
+    }
 </script>
 
 

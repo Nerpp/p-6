@@ -10,6 +10,7 @@ use App\Form\CommentsType;
 use App\Form\TrickType;
 use App\Repository\ImagesRepository;
 use App\Repository\CommentsRepository;
+use App\Repository\VideoRepository;
 use App\Repository\TrickRepository;
 use App\Services\Cleaner;
 use App\Services\Pagination;
@@ -196,17 +197,15 @@ class TrickController extends AbstractController
     /**
      * @Route("image_principale/{id}", name="image_featured")
      */
-    public function changeFeature(Request $request, int $id, ImagesRepository $imageRepository, TrickRepository $trickRepository):Response
+    public function changeFeature(Request $request, int $id, ImagesRepository $imageRepository):Response
     {
 
         $img = $imageRepository
             ->find($id);
 
-        $trick = $trickRepository
-            ->findOneBy(['id' => $img->getTrick()]);
+        $trick = $img->getTrick();
 
-        $images = $trick->getImages();
-        foreach ($images as $image) {
+        foreach ($trick->getImages() as $image) {
             
             if ($image->getId() === $id) {
                 $image->setFeatured(true);
@@ -266,10 +265,8 @@ class TrickController extends AbstractController
      * @Route("imageShow/{id}/delete", name="image_delete_show", methods={"GET","POST"})
      * 
      */
-    // public function deleteImageShow(Request $request,Image $image,CommentsRepository $commentsRepository): Response
     public function deleteImageShow(Request $request,int $id): Response
     {
-    
         $user = $this->getUser();
 
         if ($user) {
@@ -278,22 +275,44 @@ class TrickController extends AbstractController
             
             $trick = $image->getTrick();
 
-            if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
+            // if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
 
-                dd('test');
                 $nom = $image->getSource();
                 unlink($this->getParameter('images_directory') . '/' . $nom);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($image);
                 $entityManager->flush();
+
               return  $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
-            }
-           
+            // }   
         }
         
        return $this->redirectToRoute('front_index');
 
     }
 
+    /**
+     * @Route("videos/{id}/delete", name="video_delete_show")
+     */
+    public function deleteVideoShow(Request $request,int $id,VideoRepository $videoRepository):Response
+    {
+        $user = $this->getUser();
+
+        if ($user) {
+
+            dd($id);
+            
+        }
+        return $this->redirectToRoute('front_index');
+    }
+
+    /**
+     * @Route("image/{id}/edit", name="image_edit")
+     */
+    public function editImage(Request $request, int $id, ImagesRepository $imageRepository)
+    {
+
+
+    }
     
 }

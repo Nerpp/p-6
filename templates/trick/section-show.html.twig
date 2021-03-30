@@ -3,41 +3,46 @@
 		<div class="row">
 			<div class="d-flex flex-wrap justify-content-start">
 				{% for images in trick.images  %}
-					<div class="d-flex flex-column">
-						<div class="mx-2"><img class="card-img-top" src="{{ asset("images/"~images.source) }}"></div>
-						<div class="d-flex flex-row justify-content-end pt-2">
+					<div class="col-3 d-flex flex-column p-3">
+						<div class="">
+							<img class="card-img-top" src="{{ asset("images/"~images.source) }}">
+						</div>
+						{% if app.user %}						
+						<div class="d-flex flex-row justify-content-end pt-1 ">
 							<div class="mx-1">
 								<a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
 									<i class="fas fa-edit"></i>
 								</a>
 							</div>
-							<div class="mr-2">
+							<div class="">
 								<a href="{{ path('image_delete_show', {'id': images.id }) }}" data-delete data-token="{{ csrf_token('delete'~images.id) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
 									<i class="far fa-trash-alt"></i>
 								</a>
 							</div>
 						</div>
+						{% endif %}
 					</div>
+					
 				{% endfor %}
 				{% for videos in trick.video  %}
-					<div class="mx-2">
-						<div class="d-flex flex-column">
-							<div>
-								<iframe class="card-img-top" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
+					<div class="col-3 d-flex flex-column p-3">
+						<div>
+							<iframe class="card-img-top" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
+						</div>
+						{% if app.user %}	
+						<div class="d-flex flex-row justify-content-end">
+							<div class="mx-1">
+								<a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
+									<i class="fas fa-edit"></i>
+								</a>
 							</div>
-							<div class="d-flex flex-row justify-content-end">
-								<div class="mx-1">
-									<a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
-										<i class="fas fa-edit"></i>
-									</a>
-								</div>
-								<div class="">
-									<a href="{{ path('image_delete_show', {'id': videos.id}) }}"  class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
-										<i class="far fa-trash-alt"></i>
-									</a>
-								</div>
+							<div class="">
+								<a href="{{ path('video_delete_show', {'id': videos.id}) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
+									<i class="far fa-trash-alt"></i>
+								</a>
 							</div>
 						</div>
+						{% endif %}
 					</div>
 				{% endfor %}
 			</div>
@@ -137,13 +142,14 @@
 					</div>
 					<div class="align-self-center m-1">
 						<p>
-							<i>{{ comment.creationdate|date('d-m-Y H:i') }}</i> :
+							<i>{{ comment.creationdate|date('d-m-Y H:i') }}</i>
+							:
 						</p>
 					</div>
 					<div class="align-self-center m-1">
 						<p>{{ comment.comment }}</p>
 					</div>
-					
+
 				</div>
 			{% endfor %}
 		</div>
@@ -160,10 +166,3 @@
 		{% endif %}
 	</div>
 </div>
-
-
-
-
-
-		
-				
