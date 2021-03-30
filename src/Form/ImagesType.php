@@ -3,8 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Images;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Validator\Constraints\IsTrue;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -40,14 +39,7 @@ class ImagesType extends AbstractType
                 ]
             ]
         )
-        ->add('featured', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Selectionner l\'image de présentation',
-                    ]),
-                ],
-            ])
+        
     ;
     }
 

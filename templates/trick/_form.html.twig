@@ -19,12 +19,28 @@
 		{% if(trick.images) %}
 			<div class="row">
 				{% for image in  trick.images %}
-					<div class="col-3 col-xs-6 border p-3 text-center">
-						<img src="{{ "../../images/"~image.source }}" class="image-thumbnail" style="width: 150px; height: 150px;">
-						<a href="{{ path('image_delete',{'id':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="rounded">
-							<i class="fa fa-trash text-danger"></i>
-						</a>
-                    {{ form_widget(form.featured, {'attr':{'class':'form-control form-control-lg'}}) }}
+					<div class="d-flex flex-row flex-wrap col-3 border m-2">
+						<div class="">
+							<img src="{{ "../../images/"~image.source }}" class="image-thumbnail" style="width: 150px; height: 150px;">
+						</div>
+						<div class="d-flex flex-column justify-content-center p-2">
+							<div class="">
+								<a href="{{ path('image_delete',{'id':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="rounded">
+									<i class="fa fa-trash text-danger"></i>
+								</a>
+							</div>
+							<div class="">
+								{% if not image.featured %}
+                                    <a href="{{ path('image_featured',{'id':image.id}) }}">
+                                    <i class="far fa-square fa-1x "></i> Image principale
+                                    </a>
+								{% else %}
+									<p>
+									<i class="fas fa-check-square fa-1x text-success"></i> Image principale
+									</p>
+								{% endif %}
+							</div>
+						</div>
 					</div>
 				{% endfor %}
 			</div>
@@ -55,72 +71,71 @@
 
 {# Voici le script en question : #}
 <script type="text/javascript">
-    $(document).ready(function() {
-        var $container = $('div#trick_video');
-        var index = $container.find(':input').length;
-        $('#add_video').click(function(e) {
-            addVideo($container);
-            e.preventDefault();
-            return false;
-        });
-        if (index == 0) {
-            addVideo($container);
-        } else {
-            $container.children('div').each(function() {
-                addDeleteLink($(this));
-            });
-        }
-        function addVideo($container) {
-            console.log($container);
-            var template = $container.attr('data-prototype')
-                .replace(/__name__label__/g, 'Video n°' + (index+1))
-                .replace(/__name__/g,        index)
-            ;
-            var $prototype = $(template);
-            addDeleteLink($prototype);
-            $container.append($prototype);
-            index++;
-        }
-        function addDeleteLink($prototype) {
-            // Création du lien
-            var $deleteLink = $('<a href="#" style="padding-top: 2px" class="btn btn-danger">Supprimer</a>');
-            // Ajout du lien
-            $prototype.append($deleteLink);
-            // Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
-            $deleteLink.click(function(e) {
-                $prototype.remove();
-                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-                return false;
-            });
-        }
-    });
+	$(document).ready(function () {
+var $container = $('div#trick_video');
+var index = $container.find(':input').length;
+$('#add_video').click(function (e) {
+addVideo($container);
+e.preventDefault();
+return false;
+});
+if (index == 0) {
+addVideo($container);
+} else {
+$container.children('div').each(function () {
+addDeleteLink($(this));
+});
+}
+function addVideo($container) {
+console.log($container);
+var template = $container.attr('data-prototype').replace(/__name__label__/g, 'Video n°' + (
+index + 1
+)).replace(/__name__/g, index);
+var $prototype = $(template);
+addDeleteLink($prototype);
+$container.append($prototype);
+index++;
+}
+function addDeleteLink($prototype) { // Création du lien
+var $deleteLink = $('<a href="#" style="padding-top: 2px" class="btn btn-danger">Supprimer</a>');
+// Ajout du lien
+$prototype.append($deleteLink);
+// Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
+$deleteLink.click(function (e) {
+$prototype.remove();
+e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+return false;
+});
+}
+});
 </script>
 <script>
-    let links=document.querySelectorAll("[data-delete]");
-    for(link of links){
-        link.addEventListener('click', function(e){
-            e.preventDefault();
-            if(confirm("Voulez-vous supprimer cet image")){
-                fetch(this.getAttribute("href"),{
-                    method:"DELETE",
-                    headers:{
-                        "X-Requested-With":"XMLHttpRequest",
-                        "Content-Type":"application/json"
-                    },
-                    body: JSON.stringify({"_token": this.dataset.token})
-                }).then(
-                    response=>response.json()
-                ).then(data=>{
-                    if(data.success){
-                        this.parentElement.remove();
-                    }else{
-                        alert(data.error)
-                    }
-                }).catch(e=>alert(e))
-            }
-        })
-    }
+	let links = document.querySelectorAll("[data-delete]");
+for (link of links) {
+link.addEventListener('click', function (e) {
+e.preventDefault();
+if (confirm("Voulez-vous supprimer cet image")) {
+fetch(this.getAttribute("href"), {
+method: "DELETE",
+headers: {
+"X-Requested-With": "XMLHttpRequest",
+"Content-Type": "application/json"
+},
+body: JSON.stringify(
+{"_token": this.dataset.token}
+)
+}).then(response => response.json()).then(data => {
+if (data.success) {
+this.parentElement.remove();
+} else {
+alert(data.error)
+}
+}).catch(e => alert(e))
+}
+})
+}
 </script>
 
 
 {{ form_end(form) }}
+
