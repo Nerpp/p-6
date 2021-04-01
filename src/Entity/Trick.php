@@ -70,6 +70,11 @@ class Trick
      */
     private $images;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick")
+     */
+    private $videos;
+
 
     public function __construct()
     {
@@ -80,6 +85,7 @@ class Trick
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->image = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -258,6 +264,14 @@ class Trick
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
     }
     
 }

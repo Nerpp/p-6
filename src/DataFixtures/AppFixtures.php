@@ -23,6 +23,7 @@ class AppFixtures extends Fixture
     public function __construct(UserPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
+        $this->cleaner = new Cleaner;
     }
 
     public function load(ObjectManager $manager)
@@ -84,10 +85,10 @@ class AppFixtures extends Fixture
                 'categorie' => 'Les rotations'
             ],
             [
-                'titre' => 'Back flips éà',
+                'titre' => 'Back flips',
                 'desciption' => 'Rotations en arrière',
                 'categorie' => 'Les rotations',
-                'slug' => 'back-flips-ea'
+                'slug' => 'back-flips'
             ],
             [
                 'titre' => 'Rodeo',
@@ -237,7 +238,7 @@ class AppFixtures extends Fixture
             $firstname = $faker->firstName($gender['gender']);
             $lastName = $faker->lastName();
             $email = $firstname . '.' . $lastName . '@' . $faker->freeEmailDomain;
-            $user->setEmail($email)
+            $user->setEmail($this->cleaner->delAccent($email))
                 ->setImages($image)
                 ->setPassword($this->encoder->encodePassword($user, "123456"))
                 ->setName($firstname)
@@ -282,20 +283,27 @@ class AppFixtures extends Fixture
                 
 
              $figure = new  Trick();
-             $clean = new Cleaner();
             
-            //  TODO delAccent
+            
+        
              $figure
                 ->setName($figureData['titre'])
-                ->setSlug($clean->delAccent($figureData['titre']))
+                ->setSlug($this->cleaner->delAccent($figureData['titre']))
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
                 ->setGroupe($allGroups[rand(0, count($allGroups) - 1)])
                 ->addImage($image)
                 ->addVideo($videosInserted[rand(0, count($videosInserted) - 1)])
                 ->setUser($allUser[rand(0, count($allUser) - 1)])
                 ->setDescription($figureData['desciption']);
+
+                
+
+
             $manager->persist($figure);
+            
             $manager->flush();
+
+            
 
             $allTricks[] = $figure;
         }

@@ -8,6 +8,7 @@ use App\Entity\Trick;
 use App\Entity\Images;
 use App\Form\CommentsType;
 use App\Form\TrickType;
+use App\Form\EditType;
 use App\Repository\ImagesRepository;
 use App\Repository\CommentsRepository;
 use App\Repository\VideoRepository;
@@ -22,19 +23,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-
-
+use Symfony\Component\Security\Core\Security;
 
 
 
 class TrickController extends AbstractController
 {
-    public function __construct()
+    private $security;
+
+    public function __construct(Security $security)
     {
         $this->clean = new Cleaner;
         $this->adminVideo = new VideoAdmin;
         $this->pagination = new Pagination;
+        $this->security = $security;
     }
 
 
@@ -47,7 +49,7 @@ class TrickController extends AbstractController
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
-        $user = $this->getUser();
+        $user = $this->security->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -124,7 +126,7 @@ class TrickController extends AbstractController
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'comments' => $commentsRepository->findBy(["trick" => $trick],['id'=> 'ASC'],$limit=$length,$offset=null),
+            'comments' => $commentsRepository->findBy(["trick" => $trick],['id'=> 'DESC'],$limit=$length,$offset=null),
             'formComments' => $form->createView(),
 
         ]);
@@ -135,7 +137,7 @@ class TrickController extends AbstractController
      */
     public function edit(Request $request, Trick $trick,CommentsRepository $commentsRepository): Response
     {
-        $user = $this->getUser();
+        $user = $this->security->getUser();
    
         if ($user) {
             $form = $this->createForm(TrickType::class, $trick);
@@ -267,7 +269,7 @@ class TrickController extends AbstractController
      */
     public function deleteImageShow(Request $request,int $id): Response
     {
-        $user = $this->getUser();
+        $user = $this->security->getUser();
 
         if ($user) {
             $imageRepository = $this->getDoctrine()->getRepository(Images::class);
@@ -291,12 +293,59 @@ class TrickController extends AbstractController
 
     }
 
+        /**
+     * @Route("image/{id}/edit", name="image_edit")
+     */
+    public function editImage(Request $request, int $id, ImagesRepository $imageRepository, TrickRepository $trickRepository)
+    {
+
+        $user = $this->security->getUser();
+
+       
+        if ($user) {
+
+            $img = $imageRepository
+            ->find($id);
+          
+            $trick = $img->getTrick();
+
+            $data = $request->query->all("filter_form");
+            $data["categories"] = $trick->getName();
+            $form = $this->createForm(EditType::class, $data);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $requested =  $request->request->get('edit');
+
+                $newTrick = $trickRepository
+                        ->find($requested['name']);
+  
+               $image = $img->setTrick($newTrick);
+               
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($image);
+                $entityManager->flush();
+
+                return  $this->redirectToRoute('trick_show', ['slug' => $newTrick->getSlug()]);
+                
+            }
+
+            return $this->render('trick/edit-image.html.twig', [
+                'image' => $img,
+                'form' => $form->createView(),
+            ]);
+ 
+        }
+        return $this->redirectToRoute('front_index');
+
+    }
+
     /**
      * @Route("videos/{id}/delete", name="video_delete_show")
      */
     public function deleteVideoShow(Request $request,int $id,VideoRepository $videoRepository):Response
     {
-        $user = $this->getUser();
+        $user = $this->security->getUser();
 
         if ($user) {
 
@@ -306,13 +355,6 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('front_index');
     }
 
-    /**
-     * @Route("image/{id}/edit", name="image_edit")
-     */
-    public function editImage(Request $request, int $id, ImagesRepository $imageRepository)
-    {
 
-
-    }
     
 }
