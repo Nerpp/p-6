@@ -301,7 +301,7 @@ class TrickController extends AbstractController
 
         $user = $this->security->getUser();
 
-       
+      
         if ($user) {
 
             $img = $imageRepository
@@ -315,6 +315,7 @@ class TrickController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                dd($request);
                 $requested =  $request->request->get('edit');
 
                 $newTrick = $trickRepository

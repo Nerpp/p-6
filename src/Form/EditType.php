@@ -21,7 +21,7 @@ class EditType extends AbstractType
         ->add('name', EntityType::class, [
             // Look for choices from the Categories entity
             'class' => Trick::class,
-            // Display as checkboxes
+            // Display as select, true for checkbox
             'expanded' => false,
             'multiple' => false,
             // The property of the Categories entity that will show up on the select (or checkboxes)
@@ -37,6 +37,13 @@ class EditType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => null,
+            // enable/disable CSRF protection for this form
+            'csrf_protection' => true,
+            // the name of the hidden HTML field that stores the token
+            'csrf_field_name' => '_token',
+            // an arbitrary string used to generate the value of the token
+            // using a different string for each form improves its security
+            'csrf_token_id'   => 'task_item',
         ]);
     }
 }
