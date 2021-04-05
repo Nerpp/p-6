@@ -315,7 +315,7 @@ class TrickController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                dd($request);
+               
                 $requested =  $request->request->get('edit');
 
                 $newTrick = $trickRepository

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Image;
+use App\Entity\Images;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\CustomAuthenticator;
@@ -45,9 +45,9 @@ class RegistrationController extends AbstractController
                     // ... handle exception if something happens during file upload
                 }
 
-                $image = new Image();
+                $image = new Images();
                 $image->setSource($newFilename);
-                $user->setImage($image);
+                $user->setImages($image);
             }
 
             $entityManager = $this->getDoctrine()->getManager();
