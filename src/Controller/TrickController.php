@@ -8,30 +8,35 @@ use App\Entity\Trick;
 use App\Entity\Images;
 use App\Form\CommentsType;
 use App\Form\TrickType;
+use App\Form\EditType;
+use App\Repository\ImagesRepository;
 use App\Repository\CommentsRepository;
+use App\Repository\VideoRepository;
 use App\Repository\TrickRepository;
 use App\Services\Cleaner;
 use App\Services\Pagination;
 use App\Services\VideoAdmin;
+use Proxies\__CG__\App\Entity\Image;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-
-
+use Symfony\Component\Security\Core\Security;
 
 
 
 class TrickController extends AbstractController
 {
-    public function __construct()
+    private $security;
+
+    public function __construct(Security $security)
     {
         $this->clean = new Cleaner;
         $this->adminVideo = new VideoAdmin;
         $this->pagination = new Pagination;
+        $this->security = $security;
     }
 
 
@@ -44,7 +49,7 @@ class TrickController extends AbstractController
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
-        $user = $this->getUser();
+        $user = $this->security->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -121,7 +126,7 @@ class TrickController extends AbstractController
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'comments' => $commentsRepository->findBy(["trick" => $trick],['id'=> 'ASC'],$limit=$length,$offset=null),
+            'comments' => $commentsRepository->findBy(["trick" => $trick],['id'=> 'DESC'],$limit=$length,$offset=null),
             'formComments' => $form->createView(),
 
         ]);
@@ -132,22 +137,20 @@ class TrickController extends AbstractController
      */
     public function edit(Request $request, Trick $trick,CommentsRepository $commentsRepository): Response
     {
-        $user = $this->getUser();
-        
+        $user = $this->security->getUser();
+   
         if ($user) {
             $form = $this->createForm(TrickType::class, $trick);
             $form->handleRequest($request);
            
-
             if ($form->isSubmitted() && $form->isValid()) {
-                
+               
                 $entityManager = $this->getDoctrine()->getManager();
                 $files = $form->get('image')->getData();
-                
+             
                 foreach ($files as $image) {
                     
                     $filename =  $this->clean->delAccent($trick->getName());
-
                     $filename = $filename . "_" . md5(uniqid()) . "." . $image->guessExtension();
                     if ($image) {
                         try {
@@ -159,7 +162,6 @@ class TrickController extends AbstractController
                             // ... handle exception if something happens during file upload
                         }
                     }
-
                     $image = new Images();
                     $image->setSource($filename);
                     $trick->setSlug($this->clean->delAccent($trick->getName()));
@@ -170,7 +172,6 @@ class TrickController extends AbstractController
                 foreach ($getVideos as $video) {
                    
                     $videoTreated = $this->adminVideo->addEmbed($video->getUrl());
-
                     $videos = new Video();
                     $videos->setUrl($videoTreated);
                     $trick->addVideo($video);
@@ -190,9 +191,34 @@ class TrickController extends AbstractController
         
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
-            'comments' => $commentsRepository->findBy(array(),array('id'=> 'ASC'),$limit=$length,$offset=null),
+            'comments' => $commentsRepository->findBy([],array('id'=> 'ASC'),$limit=$length,$offset=null),
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("image_principale/{id}", name="image_featured")
+     */
+    public function changeFeature(Request $request, int $id, ImagesRepository $imageRepository):Response
+    {
+
+        $img = $imageRepository
+            ->find($id);
+
+        $trick = $img->getTrick();
+
+        foreach ($trick->getImages() as $image) {
+            
+            if ($image->getId() === $id) {
+                $image->setFeatured(true);
+            }else{
+                $image->setFeatured(false);
+            }
+        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
+
+        return  $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
     }
 
     /**
@@ -217,8 +243,9 @@ class TrickController extends AbstractController
      /**
      * @Route("image/{id}/delete", name="image_delete")
      */
-    public function deleteImage(Request $request, Images $image): Response
+    public function deleteImage(Request $request): Response
     {
+       $image = new Image();
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
             $nom = $image->getSource();
@@ -234,43 +261,101 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('front_index');
     }
 
+  
+
     /**
-     * @Route("imageShow/{id}/delete", name="image_delete_Show")
+     * @Route("imageShow/{id}/delete", name="image_delete_show", methods={"GET","POST"})
      * 
      */
-    // public function deleteImageShow(Request $request,Image $image,CommentsRepository $commentsRepository): Response
     public function deleteImageShow(Request $request,int $id): Response
     {
-       $imageRepository = $this->getDoctrine()->getRepository(Image::class);
-       
-       $image = $imageRepository->findOneBy(['id' => $id]);
+        $user = $this->security->getUser();
 
-       
-        // $user = $this->getUser();
+        if ($user) {
+            $imageRepository = $this->getDoctrine()->getRepository(Images::class);
+            $image = $imageRepository->findOneBy(['id' => $id]);
+            
+            $trick = $image->getTrick();
 
-        $trickRepository = $this->getDoctrine()->getRepository(Trick::class);
+            // if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
 
-        $trick = $trickRepository->findOneBy(['image' => $image]);
-        
-        // $trick = $image->getTrick();
-
-        dd($image,$trick);
-
-        // if ($user) {
-            if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
                 $nom = $image->getSource();
                 unlink($this->getParameter('images_directory') . '/' . $nom);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($image);
                 $entityManager->flush();
-            }
-        // }
-        
-        // $this->redirectToRoute('trick_show', []);
 
-        $this->redirectToRoute('front_index');
+              return  $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
+            // }   
+        }
+        
+       return $this->redirectToRoute('front_index');
 
     }
+
+        /**
+     * @Route("image/{id}/edit", name="image_edit")
+     */
+    public function editImage(Request $request, int $id, ImagesRepository $imageRepository, TrickRepository $trickRepository)
+    {
+
+        $user = $this->security->getUser();
+
+      
+        if ($user) {
+
+            $img = $imageRepository
+            ->find($id);
+          
+            $trick = $img->getTrick();
+
+            $data = $request->query->all("filter_form");
+            $data["categories"] = $trick->getName();
+            $form = $this->createForm(EditType::class, $data);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+               
+                $requested =  $request->request->get('edit');
+
+                $newTrick = $trickRepository
+                        ->find($requested['name']);
+  
+               $image = $img->setTrick($newTrick);
+               
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($image);
+                $entityManager->flush();
+
+                return  $this->redirectToRoute('trick_show', ['slug' => $newTrick->getSlug()]);
+                
+            }
+
+            return $this->render('trick/edit-image.html.twig', [
+                'image' => $img,
+                'form' => $form->createView(),
+            ]);
+ 
+        }
+        return $this->redirectToRoute('front_index');
+
+    }
+
+    /**
+     * @Route("videos/{id}/delete", name="video_delete_show")
+     */
+    public function deleteVideoShow(Request $request,int $id,VideoRepository $videoRepository):Response
+    {
+        $user = $this->security->getUser();
+
+        if ($user) {
+
+            dd($id);
+            
+        }
+        return $this->redirectToRoute('front_index');
+    }
+
 
     
 }

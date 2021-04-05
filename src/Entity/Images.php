@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ImagesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+
+
 /**
  * @ORM\Entity(repositoryClass=ImagesRepository::class)
  */
@@ -32,6 +34,16 @@ class Images
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $featured = false;
+
+
+    public function __toString() {
+        return $this->source;
+    }
+
     // private $image;
 
     public function getId(): ?int
@@ -39,17 +51,12 @@ class Images
         return $this->id;
     }
 
-     /**
-      * @return mixed
-      */
+     
     public function getSource(): ?string
     {
         return $this->source;
     }
 
-     /**
-       * @param mixed $source
-       */
     public function setSource(string $source): self
     {
         $this->source = $source;
@@ -81,8 +88,18 @@ class Images
         return $this;
     }
 
+   
+    public function getFeatured(): ?bool
+    {
+        return $this->featured;
+    }
+
+    public function setFeatured(bool $featured): self
+    {
+        $this->featured = $featured;
+
+        return $this;
+    }
+
     
-     public function __toString() {
-         return $this->source;
-     }
 }

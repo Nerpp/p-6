@@ -26,9 +26,6 @@ class FrontController extends AbstractController
      */
     public function index(TrickRepository $tricksRepository)
     {
-        $clean = new Cleaner();
-        dump($clean->delAccent('étè éà'));
-
         $this->_iBdd = count($tricksRepository->findAll());
         $this->_iLength = $this->pagination->tricksPagination(0,$this->_iBdd);
 

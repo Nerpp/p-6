@@ -19,11 +19,28 @@
 		{% if(trick.images) %}
 			<div class="row">
 				{% for image in  trick.images %}
-					<div class="col-3 col-xs-6 border p-3 text-center">
-						<img src="{{ "../../images/"~image.source }}" class="image-thumbnail" style="width: 150px; height: 150px;">
-						<a href="{{ path('image_delete',{'id':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="rounded">
-							<i class="fa fa-trash text-danger"></i>
-						</a>
+					<div class="d-flex flex-row flex-wrap col-12 col-xl-3 border m-2">
+						<div class="">
+							<img src="{{ "../../images/"~image.source }}" class="image-thumbnail" style="width: 150px; height: 150px;">
+						</div>
+						<div class="d-flex flex-column justify-content-center p-2">
+							<div class="">
+								<a href="{{ path('image_delete',{'id':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="rounded">
+									<i class="fa fa-trash text-danger"></i>
+								</a>
+							</div>
+							<div class="">
+								{% if not image.featured %}
+                                    <a href="{{ path('image_featured',{'id':image.id}) }}">
+                                    <i class="far fa-square fa-1x "></i> Image principale
+                                    </a>
+								{% else %}
+									<p>
+									<i class="fas fa-check-square fa-1x text-success"></i> Image principale
+									</p>
+								{% endif %}
+							</div>
+						</div>
 					</div>
 				{% endfor %}
 			</div>
@@ -123,3 +140,4 @@
 
 
 {{ form_end(form) }}
+

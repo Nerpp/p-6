@@ -3,15 +3,25 @@
 {% block title %}Edit Trick{% endblock %}
 
 {% block header %}
-    <h1>Edit Trick</h1>
-
-   
+<div class="container">
+	<div class="d-flex justify-content-center">
+		<div class="">
+			<h1>Edit Trick</h1>
+		</div>
+	</div>
+</div>
 {% endblock %}
 
 {% block section %}
  {{ include('trick/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('front_index') }}">back to list</a>
-
-    {{ include('trick/_delete_form.html.twig') }}
+<div class="container">
+	<div class="d-flex flex-row-reverse pb-4">
+		<div class="">
+			<a href="{{ path('front_index') }}">back to list</a>
+		</div>
+		<div class="mx-5">
+			{{ include('trick/_delete_form.html.twig') }}
+		</div>
+	</div>
+</div>
 {% endblock %}
