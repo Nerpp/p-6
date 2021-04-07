@@ -66,9 +66,11 @@ class Trick
     private $images;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick",cascade={"remove","persist"})
+     * @ORM\OneToMany(targetEntity=Videos::class, mappedBy="trick",cascade={"persist", "remove"})
      */
     private $videos;
+
+    
 
 
     public function __construct()
@@ -240,22 +242,27 @@ class Trick
         return $this->videos;
     }
 
-    public function addVideos(Video $videos): self
+    public function addVideo(Videos $video): self
     {
-        if (!$this->videos->contains($videos)) {
-            $this->videos[] = $videos;
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrick($this);
         }
 
         return $this;
     }
 
-    public function removeVideos(Video $videos): self
+    public function removeVideo(Videos $video): self
     {
-        if ($this->videos->contains($videos)) {
-            $this->videos->removeElement($videos);
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
         }
 
         return $this;
     }
+
     
 }

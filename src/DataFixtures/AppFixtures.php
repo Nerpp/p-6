@@ -7,7 +7,7 @@ use App\Entity\Groups;
 use App\Entity\User;
 use App\Entity\Comments;
 use App\Entity\Images;
-use App\Entity\Video;
+use App\Entity\Videos;
 use App\Services\Cleaner;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -266,12 +266,9 @@ class AppFixtures extends Fixture
                 $image->setSource($images[rand(0, count($images) - 1)]);
                 $manager->persist($image);
                
-                $videos = new Video;
+                $videos = new Videos;
                 $videos->setUrl($videosYoutube[rand(0, count($videosYoutube) - 1)]);
                 $manager->persist($videos);
-
-
-                
 
              $figure = new  Trick();
             
@@ -281,7 +278,7 @@ class AppFixtures extends Fixture
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
                 ->setGroupe($allGroups[rand(0, count($allGroups) - 1)])
                 ->addImage($image)
-                ->addVideos($videos)
+                ->addVideo($videos)
                 ->setUser($allUser[rand(0, count($allUser) - 1)])
                 ->setDescription($figureData['desciption']);
 
@@ -291,8 +288,6 @@ class AppFixtures extends Fixture
             $manager->persist($figure);
             
             $manager->flush();
-
-            
 
             $allTricks[] = $figure;
         }

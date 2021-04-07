@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comments;
-use App\Entity\Video;
+use App\Entity\Videos;
 use App\Entity\Trick;
 use App\Entity\Images;
 use App\Form\CommentsType;
@@ -89,13 +89,13 @@ class TrickController extends AbstractController
             }
 
             $entityManager = $this->getDoctrine()->getManager();
-            $videos = new Video; 
+            $videos = new Videos; 
             foreach ($trick->getVideos() as $video) {
                 
                 $embedVideos = $this->adminVideo->addEmbed($video->getUrl());
                
                 $videos->setUrl($embedVideos);
-                $trick->addVideos($videos);
+                $trick->addVideo($videos);
                 $entityManager->persist($trick);
             }
 
@@ -187,12 +187,13 @@ class TrickController extends AbstractController
                 }
                  // $getVideos = $form->get('video')->getData();
                  $getVideos = $trick->getVideos();
+                 $videos = new Videos();
                 foreach ($getVideos as $video) {
                    
                     $videoTreated = $this->adminVideo->addEmbed($video->getUrl());
-                    $videos = new Video();
+                    
                     $videos->setUrl($videoTreated);
-                    $trick->addVideos($video);
+                    $trick->addVideo($video);
                 }
 
                 $entityManager->flush();
