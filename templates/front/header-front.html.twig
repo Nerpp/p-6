@@ -1,4 +1,13 @@
 <div class="container-fluid" >
+{% if app.session.flashbag.peek('success')|length > 0 %}
+			{% for message in app.flashes('success') %}
+			<div class="row">
+				<div class="col-12 alert alert-success text-center">
+					{{ message }}
+				</div>
+			</div>
+			{% endfor %}
+		{% endif %}
 	<div class="row" id="headerFront">
 		<div class="d-flex flex-column flex-padding">
 			<div class=" mb-auto">

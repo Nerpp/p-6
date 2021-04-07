@@ -26,7 +26,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
 
-
 class TrickController extends AbstractController
 {
     private $security;
@@ -37,13 +36,14 @@ class TrickController extends AbstractController
         $this->adminVideo = new VideoAdmin;
         $this->pagination = new Pagination;
         $this->security = $security;
+        
     }
 
 
      /**
       * @Route("/new", name="trick_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, TrickRepository $trickRepository): Response
     {
        
         $trick = new Trick();
@@ -52,7 +52,19 @@ class TrickController extends AbstractController
         $user = $this->security->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+
+            $test = $trick->getVideos();
+           
+            $check = $trickRepository
+            ->findOneBy([
+                'name' => $trick->getName(),
+            ]);
+
+            if ($check !== null) {
+                $this->addFlash('failed', 'Le trick existe déjà !');
+                return $this->redirectToRoute('trick_new');
+            }
+
             $files = $form->get('image')->getData();
             foreach ($files as $image) {
 
@@ -71,24 +83,30 @@ class TrickController extends AbstractController
                     }
                 }
                 $image = new Images();
-                
                 $image->setSource($filename);
-                
                 $trick->addImage($image);
 
             }
 
-            foreach ($trick->getVideo() as $video) {
-                $video =  $this->adminVideo->addEmbed($video);
-                $entityManager->persist($video);
+            $entityManager = $this->getDoctrine()->getManager();
+            $videos = new Video; 
+            foreach ($trick->getVideos() as $video) {
+                
+                $embedVideos = $this->adminVideo->addEmbed($video->getUrl());
+               
+                $videos->setUrl($embedVideos);
+                $trick->addVideos($videos);
+                $entityManager->persist($trick);
             }
 
-            $entityManager = $this->getDoctrine()->getManager();
+           
             $trick->setUser($user);
             $trick->setSlug($this->clean->delAccent($trick->getName()));
             $entityManager->persist($trick);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Le trick a bien été ajouté!');
+           
             return $this->redirectToRoute('front_index');
         }
 
@@ -126,7 +144,7 @@ class TrickController extends AbstractController
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'comments' => $commentsRepository->findBy(["trick" => $trick],['id'=> 'DESC'],$limit=$length,$offset=null),
+            'comments' => $commentsRepository->findBy(["trick" => $trick],['creation_date'=> 'DESC'],$limit=$length,$offset=null),
             'formComments' => $form->createView(),
 
         ]);
@@ -168,18 +186,18 @@ class TrickController extends AbstractController
                     $trick->addImage($image);
                 }
                  // $getVideos = $form->get('video')->getData();
-                 $getVideos = $trick->getVideo();
+                 $getVideos = $trick->getVideos();
                 foreach ($getVideos as $video) {
                    
                     $videoTreated = $this->adminVideo->addEmbed($video->getUrl());
                     $videos = new Video();
                     $videos->setUrl($videoTreated);
-                    $trick->addVideo($video);
+                    $trick->addVideos($video);
                 }
 
                 $entityManager->flush();
-
-                return $this->redirectToRoute('front_index');
+                $this->addFlash('success', 'Le trick a bien été modifié !');
+                return $this->redirectToRoute('trick_show',['slug' => $trick->getSlug()]);
             }
            
         }else{
@@ -236,6 +254,8 @@ class TrickController extends AbstractController
                 $entityManager->flush();
             // }
         }
+
+        $this->addFlash('success', 'Le trick a bien été supprimé !');
        
         return $this->redirectToRoute('front_index');
     }
@@ -243,21 +263,26 @@ class TrickController extends AbstractController
      /**
      * @Route("image/{id}/delete", name="image_delete")
      */
-    public function deleteImage(Request $request): Response
+    public function deleteImage(Request $request,int $id,ImagesRepository $imageRepository ): Response
     {
-       $image = new Image();
-        $data = json_decode($request->getContent(), true);
-        if ($this->isCsrfTokenValid('delete' . $image->getId(), $data['_token'])) {
-            $nom = $image->getSource();
+
+        $user = $this->security->getUser();
+
+        if($user){
+
+            $img = $imageRepository
+            ->find($id);
+
+            $nom = $img->getSource();
             unlink($this->getParameter('images_directory') . '/' . $nom);
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($image);
+            $entityManager->remove($img);
             $entityManager->flush();
-            return new JsonResponse(['success' => 1]);
-        } else {
-            return new JsonResponse(['error' => 'Token invalid'], 400);
-        }
 
+            $trick = $img->getTrick();
+            return  $this->redirectToRoute('trick_edit', ['slug' => $trick->getSlug()]);
+
+        }
         return $this->redirectToRoute('front_index');
     }
 
@@ -285,6 +310,7 @@ class TrickController extends AbstractController
                 $entityManager->remove($image);
                 $entityManager->flush();
 
+                $this->addFlash('success', 'L\'image a bien été supprimé !');
               return  $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
             // }   
         }
@@ -327,6 +353,7 @@ class TrickController extends AbstractController
                 $entityManager->persist($image);
                 $entityManager->flush();
 
+                $this->addFlash('success', 'L\'image trick a bien été edité !');
                 return  $this->redirectToRoute('trick_show', ['slug' => $newTrick->getSlug()]);
                 
             }

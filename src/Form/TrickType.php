@@ -18,7 +18,7 @@ class TrickType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('groupe')
-            ->add('video', CollectionType::class, array(
+            ->add('videos', CollectionType::class, array(
                 'entry_type'   => VideoType::class,
                 'allow_add'    => true,
                 'allow_delete' => true,

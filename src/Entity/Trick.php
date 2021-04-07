@@ -36,11 +36,6 @@ class Trick
     private $groupe;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Video::class, cascade={"persist"})
-     */
-    private $video;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -71,20 +66,17 @@ class Trick
     private $images;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick",cascade={"remove","persist"})
      */
     private $videos;
 
 
     public function __construct()
     {
-        
-        $this->video = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updateAt = new \DateTime();
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
-        $this->image = new ArrayCollection();
         $this->videos = new ArrayCollection();
     }
 
@@ -125,32 +117,6 @@ class Trick
     public function setGroupe(?Groups $groupe): self
     {
         $this->groupe = $groupe;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Video[]
-     */
-    public function getVideo(): Collection
-    {
-        return $this->video;
-    }
-
-    public function addVideo(Video $video): self
-    {
-        if (!$this->video->contains($video)) {
-            $this->video[] = $video;
-        }
-
-        return $this;
-    }
-
-    public function removeVideo(Video $video): self
-    {
-        if ($this->video->contains($video)) {
-            $this->video->removeElement($video);
-        }
 
         return $this;
     }
@@ -267,11 +233,29 @@ class Trick
     }
 
     /**
-     * @return Collection|Video[]
+     * @return Collection|Videos[]
      */
     public function getVideos(): Collection
     {
         return $this->videos;
+    }
+
+    public function addVideos(Video $videos): self
+    {
+        if (!$this->videos->contains($videos)) {
+            $this->videos[] = $videos;
+        }
+
+        return $this;
+    }
+
+    public function removeVideos(Video $videos): self
+    {
+        if ($this->videos->contains($videos)) {
+            $this->videos->removeElement($videos);
+        }
+
+        return $this;
     }
     
 }
