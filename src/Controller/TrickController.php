@@ -11,7 +11,7 @@ use App\Form\TrickType;
 use App\Form\EditType;
 use App\Repository\ImagesRepository;
 use App\Repository\CommentsRepository;
-use App\Repository\VideoRepository;
+use App\Repository\VideosRepository;
 use App\Repository\TrickRepository;
 use App\Services\Cleaner;
 use App\Services\Pagination;
@@ -187,11 +187,12 @@ class TrickController extends AbstractController
                 }
                  // $getVideos = $form->get('video')->getData();
                  $getVideos = $trick->getVideos();
-                 $videos = new Videos();
+                
                 foreach ($getVideos as $video) {
                    
                     $videoTreated = $this->adminVideo->addEmbed($video->getUrl());
-                    
+
+                    $videos = new Videos();
                     $videos->setUrl($videoTreated);
                     $trick->addVideo($video);
                 }
@@ -320,7 +321,7 @@ class TrickController extends AbstractController
 
     }
 
-        /**
+    /**
      * @Route("image/{id}/edit", name="image_edit")
      */
     public function editImage(Request $request, int $id, ImagesRepository $imageRepository, TrickRepository $trickRepository)
@@ -372,16 +373,75 @@ class TrickController extends AbstractController
     /**
      * @Route("videos/{id}/delete", name="video_delete_show")
      */
-    public function deleteVideoShow(Request $request,int $id,VideoRepository $videoRepository):Response
+    public function deleteVideoShow(Request $request,int $id,VideosRepository $videosRepository):Response
     {
         $user = $this->security->getUser();
 
         if ($user) {
 
-            dd($id);
+            $video = $videosRepository
+            ->find($id);
+
+           $entityManager = $this->getDoctrine()->getManager();
+           $entityManager->remove($video);
+           $entityManager->flush();
             
         }
+
+        $trick = $video->getTrick();
+        
+        $this->addFlash('success', 'La vidéo a bien été supprimé !');
+        return  $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
+    }
+
+
+       /**
+     * @Route("video/{id}/edit", name="video_edit")
+     */
+    public function editVideo(Request $request, int $id,VideosRepository $videosRepository , TrickRepository $trickRepository)
+    {
+
+        $user = $this->security->getUser();
+
+      
+        if ($user) {
+
+            $video =  $videosRepository
+            ->find($id);
+          
+            $trick = $video->getTrick();
+
+            $data = $request->query->all("filter_form");
+            $data["categories"] = $trick->getName();
+            $form = $this->createForm(EditType::class, $data);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+               
+                $requested =  $request->request->get('edit');
+
+                $newTrick = $trickRepository
+                        ->find($requested['name']);
+  
+               $videos = $video->setTrick($newTrick);
+               
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($videos);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'La video a bien été edité !');
+                return  $this->redirectToRoute('trick_show', ['slug' => $newTrick->getSlug()]);
+                
+            }
+
+            return $this->render('trick/edit-video.html.twig', [
+                'video' => $video,
+                'form' => $form->createView(),
+            ]);
+ 
+        }
         return $this->redirectToRoute('front_index');
+
     }
 
 
