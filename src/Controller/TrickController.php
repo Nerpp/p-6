@@ -93,7 +93,6 @@ class TrickController extends AbstractController
             foreach ($trick->getVideos() as $video) {
                 
                 $embedVideos = $this->adminVideo->addEmbed($video->getUrl());
-               
                 $videos->setUrl($embedVideos);
                 $trick->addVideo($videos);
                 $entityManager->persist($trick);
@@ -153,7 +152,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}/edit", name="trick_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Trick $trick,CommentsRepository $commentsRepository): Response
+    public function edit(Request $request, Trick $trick): Response
     {
         $user = $this->security->getUser();
    
@@ -187,17 +186,17 @@ class TrickController extends AbstractController
                 }
                  // $getVideos = $form->get('video')->getData();
                  $getVideos = $trick->getVideos();
-                
-                foreach ($getVideos as $video) {
-                   
-                    $videoTreated = $this->adminVideo->addEmbed($video->getUrl());
 
-                    $videos = new Videos();
-                    $videos->setUrl($videoTreated);
+                foreach ($getVideos as $video) {
+                   //TODO le trick n'enregistre pas la video
+                    $videoTreated = $this->adminVideo->addEmbed($video->getUrl());
+                    $video->setUrl($videoTreated);
                     $trick->addVideo($video);
+                    $entityManager->persist($trick);
                 }
 
                 $entityManager->flush();
+
                 $this->addFlash('success', 'Le trick a bien été modifié !');
                 return $this->redirectToRoute('trick_show',['slug' => $trick->getSlug()]);
             }
@@ -206,12 +205,8 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('front_index');
         }
 
-        $bdd = count($commentsRepository->findAll());
-        $length = $this->pagination->commentsPagination(0,$bdd);
-        
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
-            'comments' => $commentsRepository->findBy([],array('id'=> 'ASC'),$limit=$length,$offset=null),
             'form' => $form->createView(),
         ]);
     }
