@@ -55,7 +55,7 @@
 	</div>
 	<div class="form-row">
 		<div id="simpleform" class="form-group col-6 card-header p-2">
-			{{ form_widget(form.video) }}
+			{{ form_widget(form.videos) }}
 			<a href="#" id="add_video" class="btn btn-success float-right">Ajouter une vidéo</a>
 		</div>
 	</div>
@@ -72,7 +72,7 @@
 {# Voici le script en question : #}
 <script type="text/javascript">
     $(document).ready(function() {
-        var $container = $('div#trick_video');
+        var $container = $('div#trick_videos');
         var index = $container.find(':input').length;
         $('#add_video').click(function(e) {
             addVideo($container);
@@ -111,33 +111,6 @@
         }
     });
 </script>
-<script>
-    let links=document.querySelectorAll("[data-delete]");
-    for(link of links){
-        link.addEventListener('click', function(e){
-            e.preventDefault();
-            if(confirm("Voulez-vous supprimer cet image")){
-                fetch(this.getAttribute("href"),{
-                    method:"DELETE",
-                    headers:{
-                        "X-Requested-With":"XMLHttpRequest",
-                        "Content-Type":"application/json"
-                    },
-                    body: JSON.stringify({"_token": this.dataset.token})
-                }).then(
-                    response=>response.json()
-                ).then(data=>{
-                    if(data.success){
-                        this.parentElement.remove();
-                    }else{
-                        alert(data.error)
-                    }
-                }).catch(e=>alert(e))
-            }
-        })
-    }
-</script>
-
 
 {{ form_end(form) }}
 

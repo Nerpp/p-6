@@ -7,7 +7,7 @@ use App\Entity\Groups;
 use App\Entity\User;
 use App\Entity\Comments;
 use App\Entity\Images;
-use App\Entity\Video;
+use App\Entity\Videos;
 use App\Services\Cleaner;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -252,21 +252,8 @@ class AppFixtures extends Fixture
         $manager->flush();
 
 
-        $videosInserted = [];
-
-        for ($i = 0; $i < count($videosYoutube); $i++) {
-            $videos = new Video();
-            $videos->setUrl($videosYoutube[$i]);
-            $manager->persist($videos);
-
-            $manager->flush();
-            $videosInserted[] = $videos;
-        }
-
         $allTricks = [];
             
-        
-
         foreach ($figureDatas as $figureData) {
              $images = [
                 'tricktest_0c3c40713a358a86904b333a0af778e5.jpeg',
@@ -278,21 +265,20 @@ class AppFixtures extends Fixture
                 $image = new Images();
                 $image->setSource($images[rand(0, count($images) - 1)]);
                 $manager->persist($image);
-
-
-                
+               
+                $videos = new Videos;
+                $videos->setUrl($videosYoutube[rand(0, count($videosYoutube) - 1)]);
+                $manager->persist($videos);
 
              $figure = new  Trick();
             
-            
-        
              $figure
                 ->setName($figureData['titre'])
                 ->setSlug($this->cleaner->delAccent($figureData['titre']))
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
                 ->setGroupe($allGroups[rand(0, count($allGroups) - 1)])
                 ->addImage($image)
-                ->addVideo($videosInserted[rand(0, count($videosInserted) - 1)])
+                ->addVideo($videos)
                 ->setUser($allUser[rand(0, count($allUser) - 1)])
                 ->setDescription($figureData['desciption']);
 
@@ -302,8 +288,6 @@ class AppFixtures extends Fixture
             $manager->persist($figure);
             
             $manager->flush();
-
-            
 
             $allTricks[] = $figure;
         }
