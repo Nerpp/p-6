@@ -28,10 +28,16 @@
 			{{ form_widget(registrationForm.surname, {'attr': {'class': 'border_input'}}) }}
 		</div>
         <div class="pt-4">
-            {{ form_label(registrationForm.plainPassword,'Password') }}
+            {{ form_label(registrationForm.plainPassword.first,'Password') }}
         </div>
         <div class="">
-		{{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'border_input'}}) }}
+		{{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'border_input'}}) }}
+        </div>
+		 <div class="pt-4">
+            {{ form_label(registrationForm.plainPassword.second,'Confirm password') }}
+        </div>
+        <div class="">
+		{{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'border_input'}}) }}
         </div>
         <div class="pt-4">
            {{ form_label(registrationForm.image,'Profile image') }}

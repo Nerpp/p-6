@@ -27,8 +27,6 @@ class EditType extends AbstractType
             // The property of the Categories entity that will show up on the select (or checkboxes)
             'choice_label' => 'name' 
         ])
-        
-        
         ;
     
     }

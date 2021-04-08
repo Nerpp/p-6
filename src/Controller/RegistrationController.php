@@ -13,19 +13,34 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\Security\Core\Security;
 
 class RegistrationController extends AbstractController
 {
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     /**
      * @Route("/register", name="app_register")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, CustomAuthenticator $authenticator): Response
     {
+
+        $userCheck = $this->security->getUser();
+
+        if ($userCheck) {
+            return $this->redirectToRoute('front_index');
+        }
+
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+
             // encode the plain password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
