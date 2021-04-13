@@ -180,14 +180,16 @@ class TrickController extends AbstractController
                     $trick->setSlug($this->clean->delAccent($trick->getName()));
                     $trick->addImage($image);
                 }
-                // $getVideos = $form->get('video')->getData();
-                $getVideos = $trick->getVideos();
+
+                $getVideos = $form->get('videos')->getData();
+
+                $videos = new Videos;
 
                 foreach ($getVideos as $video) {
-                    //TODO le trick n'enregistre pas la video
+
                     $videoTreated = $this->adminVideo->addEmbed($video->getUrl());
-                    $video->setUrl($videoTreated);
-                    $trick->addVideo($video);
+                    $videos->setUrl($videoTreated);
+                    $trick->addVideo($videos);
                     $entityManager->persist($trick);
                 }
 

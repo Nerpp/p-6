@@ -63,11 +63,27 @@ class User implements UserInterface
      */
     private $images;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $Validation = false;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $validationToken;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $creation_date;
+
  
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->creation_date = new \DateTime();
     }
 
     public function getId(): ?int
@@ -253,6 +269,42 @@ class User implements UserInterface
         }
 
         $this->images = $images;
+
+        return $this;
+    }
+
+    public function getValidation(): ?bool
+    {
+        return $this->Validation;
+    }
+
+    public function setValidation(bool $Validation): self
+    {
+        $this->Validation = $Validation;
+
+        return $this;
+    }
+
+    public function getValidationToken(): ?string
+    {
+        return $this->validationToken;
+    }
+
+    public function setValidationToken(?string $validationToken): self
+    {
+        $this->validationToken = $validationToken;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creation_date;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creation_date): self
+    {
+        $this->creation_date = $creation_date;
 
         return $this;
     }
