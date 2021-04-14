@@ -13,5 +13,5 @@
 
 <p>
     <a href="http://127.0.0.1:8000/confirmation/{{ hash }}">Cliquer ici afin de confirmer votre inscription</a>
-    (Le lien est valide jusqu'au {{ expiration_date|date('F jS') }})
+    (Le lien est valide jusqu'au {{ expiration_date|format_datetime(locale='fr',pattern="EEEE dd MMMM YYYY") }})
 </p>

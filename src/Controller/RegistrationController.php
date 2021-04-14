@@ -48,18 +48,18 @@ class RegistrationController extends AbstractController
 
             $mail = $form->get('email')->getData();
 
-            if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-                $this->addFlash('failed', 'L\'email renseigné n\'est pas valide !');
-                return $this->redirectToRoute('app_register');
-            }
+            // if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+            //     $this->addFlash('failed', 'L\'email renseigné n\'est pas valide !');
+            //     return $this->redirectToRoute('app_register');
+            // }
 
-            $pattern = "#[?,;./:§!%µ*¨^£$\¤{}()[\]\-\|`_\\@&~\#]#";
+            // $pattern = "#[?,;./:§!%µ*¨^£$\¤{}()[\]\-\|`_\\@&~\#]#";
 
-            if (!preg_match($pattern, $form->get('plainPassword')->getData())) {
+            // if (!preg_match($pattern, $form->get('plainPassword')->getData())) {
 
-                $this->addFlash('failed', 'Les caracteres speciaux doivent être utilisé  !');
-                return $this->redirectToRoute('app_register');
-            }
+            //     $this->addFlash('failed', 'Les caracteres speciaux doivent être utilisé  !');
+            //     return $this->redirectToRoute('app_register');
+            // }
 
             // encode the plain password
             $user->setPassword(
