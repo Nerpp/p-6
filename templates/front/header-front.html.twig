@@ -1,19 +1,19 @@
-<div class="container-fluid" >
-{% if app.session.flashbag.peek('success')|length > 0 %}
-			{% for message in app.flashes('success') %}
-			<div class="row">
-				<div class="col-12 alert alert-success text-center">
-					{{ message }}
-				</div>
+<div class="container-fluid">
+
+	{% for message in app.flashes('success') %}
+		<div class="row">
+			<div class="col-12 alert alert-success text-center">
+				{{ message }}
 			</div>
-			{% endfor %}
-		{% endif %}
+		</div>
+	{% endfor %}
+
 	<div class="row" id="headerFront">
 		<div class="d-flex flex-column flex-padding">
 			<div class=" mb-auto">
 				<img class="img-fluid positionHeader" src="{{ asset("/images/bgDefault.jpg") }}" alt="Responsive image">
 			</div>
-			
+
 			<div class="d-none d-md-block text-center">
 				<h1 class="title-font display-5 ">Votre plateforme communautaire de snowboarding Snowtricks</h1>
 			</div>
@@ -34,7 +34,4 @@
 		</div>
 	</div>
 </div>
-
-
-
 

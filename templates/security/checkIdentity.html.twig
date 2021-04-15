@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Verification Email
+{% endblock %}
+
+
+{% block header %}
+<div class="container text-center pt-3">
+<div class="flex-row ">
+	<h1>Verification Email<h1>
+	</div>
+</div>
+{% endblock %}
+
+{% block section %}
+	<div class="container">
+		<div class="flex-row flex-column text-center justify-content-center" id="header">
+			{% if app.session.flashbag.peek('failed')|length > 0 %}
+				{% for message in app.flashes('failed') %}
+					<div class="">
+						<div class="col-12 alert alert-danger text-center">
+							{{ message }}
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+
+			{{ form_start(form) }}
+			{# {{ form_row(form.email) }} #}
+
+			<div class="pt-4">
+				{{ form_label(form.email) }}
+			</div>
+			<div class="">
+				{{ form_widget(form.email, {'attr': {'class': 'border_input'}}) }}
+			</div>
+			<div class="pt-5">
+			<button type="submit" class="btn btn-primary">Demande pour réinitialiser le mot de passe</button>
+			</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}
+
+

@@ -26,9 +26,9 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * 
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message = "Un email valide est obligatoire")
      * @Assert\Email(
-     *     message = "The email '{{ value }}' is not a valid email."
+     *     message = "L\'email '{{ value }}' n'est pas valide."
      * )
      * 
      */
@@ -44,6 +44,7 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      * 
      * @Assert\Regex("#[?,;./:§!%µ*¨^£$\¤{}()[\]\-\|`_\\@&~\#]#",
+     *  match=false,
      *  message="Votre mot de passe doit contenir un caractere special"
      * )
      *
@@ -89,6 +90,11 @@ class User implements UserInterface
      * @ORM\Column(type="datetime")
      */
     private $creation_date;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $reset_date;
 
  
     public function __construct()
@@ -317,6 +323,18 @@ class User implements UserInterface
     public function setCreationDate(\DateTimeInterface $creation_date): self
     {
         $this->creation_date = $creation_date;
+
+        return $this;
+    }
+
+    public function getResetDate(): ?\DateTimeInterface
+    {
+        return $this->reset_date;
+    }
+
+    public function setResetDate(?\DateTimeInterface $reset_date): self
+    {
+        $this->reset_date = $reset_date;
 
         return $this;
     }

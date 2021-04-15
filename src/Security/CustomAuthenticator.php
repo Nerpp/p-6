@@ -69,6 +69,12 @@ class CustomAuthenticator extends AbstractFormLoginAuthenticator implements Pass
 
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
 
+        $checkValiation = $user->getValidation();
+
+        if (!$checkValiation) {
+            throw new CustomUserMessageAuthenticationException('Email not valid.');
+        }
+
         if (!$user) {
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
