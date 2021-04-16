@@ -31,7 +31,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(MailerInterface $mailer, Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, CustomAuthenticator $authenticator): Response
+    public function register(MailerInterface $mailer, Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
 
         $userCheck = $this->security->getUser();
@@ -69,6 +69,9 @@ class RegistrationController extends AbstractController
                 )
             );
             $imageFile = $form->get('image')->getData();
+
+            $image = new Images();
+
             if ($imageFile) {
                 $newFilename = uniqid() . '.' . $imageFile->guessExtension();
                 try {
@@ -79,11 +82,13 @@ class RegistrationController extends AbstractController
                 } catch (FileException $e) {
                     // ... handle exception if something happens during file upload
                 }
-
-                $image = new Images();
                 $image->setSource($newFilename);
-                $user->setImages($image);
+                
+            }else{
+                $image->setSource('defaultAvatar.jpg');
             }
+
+            $user->setImages($image);
 
             $validation = random_int(100000, 9999999);
             $hash = md5($validation);
@@ -120,15 +125,6 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('front_index');
     
-
-            // a voir plus tard dans la partie confirmation
-
-            // return $guardHandler->authenticateUserAndHandleSuccess(
-            //     $user,
-            //     $request,
-            //     $authenticator,
-            //     'main' // firewall name in security.yaml
-            // );
         }
 
         return $this->render('registration/register.html.twig', [
@@ -140,7 +136,7 @@ class RegistrationController extends AbstractController
      /**
      * @Route("/confirmation/{token}", name="app_confirmation" )
      */
-    public function confirmPass($token, UserRepository $users)
+    public function confirmPass($token, UserRepository $users,Request $request,GuardAuthenticatorHandler $guardHandler, CustomAuthenticator $authenticator):Response
     {
         $user = $users->findOneBy(['validationToken' => $token]);
 
@@ -167,8 +163,13 @@ class RegistrationController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('success', 'Utilisateur activé avec succès !');
-
-        return $this->redirectToRoute('front_index');
+        
+            return $guardHandler->authenticateUserAndHandleSuccess(
+                $user,
+                $request,
+                $authenticator,
+                'main' // firewall name in security.yaml
+            );
 
     }
 }

@@ -5,44 +5,43 @@
 				{% for images in trick.images  %}
 					<div class="d-flex flex-column p-3">
 						<div class="">
-							<img class="" src="{{ asset("images/"~images.source) }}">
+							<img class="show" src="{{ asset("images/"~images.source) }}">
 						</div>
-						{% if app.user %}						
-						<div class="d-flex flex-row justify-content-end pt-1 ">
-							<div class="mx-1">
-								<a href="{{ path('image_edit', {'id': images.id }) }}" class="btn btn-primary">
-									<i class="fas fa-edit"></i>
-								</a>
+						{% if app.user %}
+							<div class="d-flex flex-row justify-content-end pt-1 ">
+								<div class="mx-1">
+									<a href="{{ path('image_edit', {'id': images.id }) }}" class="btn btn-primary">
+										<i class="fas fa-edit"></i>
+									</a>
+								</div>
+								<div class="">
+									<a href="{{ path('image_delete_show', {'id': images.id }) }}" data-delete data-token="{{ csrf_token('delete'~images.id) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
+										<i class="far fa-trash-alt"></i>
+									</a>
+								</div>
 							</div>
-							<div class="">
-								<a href="{{ path('image_delete_show', {'id': images.id }) }}" data-delete data-token="{{ csrf_token('delete'~images.id) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
-									<i class="far fa-trash-alt"></i>
-								</a>
-							</div>
-						</div>
 						{% endif %}
 					</div>
-					
 				{% endfor %}
-				
+
 				{% for videos in trick.videos  %}
-					<div class="col-3 d-flex flex-column p-3">
-						<div>
-							<iframe class="" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
+					<div class="d-flex flex-column p-3">
+						<div class="">
+							<iframe class="show" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
 						</div>
-						{% if app.user %}	
-						<div class="d-flex flex-row justify-content-end">
-							<div class="mx-1">
-								<a href="{{ path('video_edit', {'id': videos.id}) }}" class="btn btn-primary">
-									<i class="fas fa-edit"></i>
-								</a>
+						{% if app.user %}
+							<div class="d-flex flex-row justify-content-end pt-1 ">
+								<div class="mx-1">
+									<a href="{{ path('video_edit', {'id': videos.id}) }}" class="btn btn-primary">
+										<i class="fas fa-edit"></i>
+									</a>
+								</div>
+								<div class="">
+									<a href="{{ path('video_delete_show', {'id': videos.id}) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
+										<i class="far fa-trash-alt"></i>
+									</a>
+								</div>
 							</div>
-							<div class="">
-								<a href="{{ path('video_delete_show', {'id': videos.id}) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
-									<i class="far fa-trash-alt"></i>
-								</a>
-							</div>
-						</div>
 						{% endif %}
 					</div>
 				{% endfor %}
@@ -62,7 +61,9 @@
 				</div>
 				<div class="collapse" id="collapseMedia">
 					{% for images in trick.images  %}
-						<div class="pt-3"><img class="card-img-top" src="{{ asset("images/"~images.source) }}"></div>
+						<div class="pt-3">
+							<img class="card-img-top" src="{{ asset("images/"~images.source) }}">
+						</div>
 					{% endfor %}
 					{% for videos in trick.videos  %}
 						<div class="pt-3">
@@ -132,30 +133,20 @@
 		</div>
 		<div class="d-flex flex-column pt-4">
 			{% for comment in comments  %}
-				<div class="d-flex flex-wrap pt-1">
-					<div class="m-1">
-						<p><img src="{{ asset("images/"~comment.user.images.source ) }}" class="commentProfile"></p>
-					</div>
-					<div class="align-self-center m-1">
-						<p>
-							<strong>{{ comment.user.name }}</strong>
-						</p>
-					</div>
-					<div class="align-self-center m-1">
-						<p>
-							<i>{{ comment.creationdate|date('d-m-Y H:i') }}</i>
-							:
-						</p>
-					</div>
-					<div class="align-self-center m-1">
-						<p>{{ comment.comment }}</p>
-					</div>
-
+				<div class="ml-2">
+					<p>
+						<img src="{{ asset("images/"~comment.user.images.source ) }}" class="commentProfile">
+						<strong>{{ comment.user.name }}</strong>
+						<i>{{ comment.creationdate|date('d-m-Y H:i') }}</i>
+						:
+						{{ comment.comment }}
+					</p>
 				</div>
 			{% endfor %}
 		</div>
 	</div>
 </div>
+
 
 
 <div class="container pt-4">
@@ -167,3 +158,4 @@
 		{% endif %}
 	</div>
 </div>
+

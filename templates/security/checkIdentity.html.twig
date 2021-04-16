@@ -15,7 +15,6 @@
 {% block section %}
 	<div class="container">
 		<div class="flex-row flex-column text-center justify-content-center" id="header">
-			{% if app.session.flashbag.peek('failed')|length > 0 %}
 				{% for message in app.flashes('failed') %}
 					<div class="">
 						<div class="col-12 alert alert-danger text-center">
@@ -23,10 +22,8 @@
 						</div>
 					</div>
 				{% endfor %}
-			{% endif %}
-
+				
 			{{ form_start(form) }}
-			{# {{ form_row(form.email) }} #}
 
 			<div class="pt-4">
 				{{ form_label(form.email) }}

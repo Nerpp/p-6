@@ -44,7 +44,12 @@ class TrickController extends AbstractController
      */
     public function new(Request $request, TrickRepository $trickRepository): Response
     {
+        $user = $this->security->getUser();
 
+        if (!$user) {
+            $this->addFlash('failed', 'Vous devez être conecté pour créer un trick !');
+            return $this->redirectToRoute('app_login');
+        }
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
@@ -148,7 +153,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}/edit", name="trick_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Trick $trick): Response
+    public function edit(Request $request, Trick $trick,VideosRepository $videosRepository): Response
     {
         $user = $this->security->getUser();
 
@@ -188,9 +193,17 @@ class TrickController extends AbstractController
                 foreach ($getVideos as $video) {
 
                     $videoTreated = $this->adminVideo->addEmbed($video->getUrl());
-                    $videos->setUrl($videoTreated);
-                    $trick->addVideo($videos);
-                    $entityManager->persist($trick);
+                    $checkVideo = $videosRepository
+                    ->findOneBy([
+                        'url' =>$video->getUrl(),
+                    ]);
+                   
+                    if ($checkVideo === null) {
+                        $video->setUrl($videoTreated);
+                        $trick->addVideo($video);
+                        $entityManager->persist($trick);
+                    }
+                  
                 }
 
                 $entityManager->flush();

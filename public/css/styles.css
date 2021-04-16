@@ -57,10 +57,14 @@ h1 {
   width: 18rem;
 }
 
-
 .card-img-top{
 width: 100%;
 height: 10rem;
+}
+
+.show{
+  width: 18rem;
+  height: 10rem;
 }
 
 /* front */
