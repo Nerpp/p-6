@@ -3,15 +3,20 @@ html{
 }
 /* font */
 h1 {
-  font-family: "Quicksand", sans-serif;
+  font-family: 'Pacifico', cursive;
 }
 
 .title-font {
-  font-family: "Do Hyeon", sans-serif;
+  font-family: 'Snowburst One', cursive;
 }
 
 .nav-link {
-  font-family: "Oxygen", sans-serif;
+  font-family: 'Roboto', sans-serif;
+}
+
+p{
+  text-justify: inter-word;
+  font-family: 'Montserrat', sans-serif;
 }
 /* font */
 
@@ -34,7 +39,6 @@ h1 {
 /* front */
 #headerFront{
   height: 93vh;
-  
 }
 
 #header{
@@ -71,6 +75,7 @@ height: 10rem;
 
 /* show */
 
+
 #headerPosition{
   padding-top: 10%;
 }
@@ -78,6 +83,7 @@ height: 10rem;
 .headerShow{ 
   height: 50vh;
 }
+
 
 .imgShow{
   width: 100%;
@@ -98,7 +104,7 @@ height: 10rem;
   z-index: 0; 
 }
 
-element.style {
+.element.style {
   object-fit: cover;
 }
 

@@ -1,51 +1,50 @@
 <div class="container" id="headerPosition">
-	<div class="row">
-	{% if app.session.flashbag.peek('success')|length > 0 %}
-			{% for message in app.flashes('success') %}
-				<div class="col-12 alert alert-success text-center ml-3">
-					{{ message }}
-				</div>
-			{% endfor %}
-		{% endif %}
-		<div class="col-12 d-flex flex-row headerShow">
-			<div class="">
-				{% if trick.images is empty %}
 
-					<img class="img-fluid imgShow" src="{{ asset("/images/bgDefault.jpg") }}" alt="{{ trick.name }}">
+	{% for message in app.flashes('success') %}
+		<div class="col-12 alert alert-success text-center ml-3">
+			{{ message }}
+		</div>
+	{% endfor %}
 
-				{% else %}
-					{% set break = false %}
-					{% for image in trick.images %}
-						{% if image.featured %}
-							<img class="img-fluid imgShow" src="{{ asset("images/"~image.source) }}" alt="{{ trick.name }}">
-							{% set break = true %}
-						{% endif %}
-					{% endfor %}
-					{% if not break %}
-						<img class="img-fluid imgShow" src="{{ asset("images/"~trick.images[0].source) }}" alt="{{ trick.name }}">
+	<div class="row col-12 headerShow">
+		<div class="">
+			{% if trick.images is empty %}
+
+				<img class="img-fluid imgShow" src="{{ asset("/images/bgDefault.jpg") }}" alt="{{ trick.name }}">
+
+			{% else %}
+				{% set break = false %}
+				{% for image in trick.images %}
+					{% if image.featured %}
+						<img class="img-fluid imgShow" src="{{ asset("images/"~image.source) }}" alt="{{ trick.name }}">
+						{% set break = true %}
 					{% endif %}
+				{% endfor %}
+				{% if not break %}
+					<img class="img-fluid imgShow" src="{{ asset("images/"~trick.images[0].source) }}" alt="{{ trick.name }}">
 				{% endif %}
-			</div>
-
-			<div class="col-12 d-flex justify-content-center align-items-center titleShow ">
-				<h1>{{ trick.name }}</h1>
-			</div>
-			{% if app.user %}
-
-				<div class="col-12 d-flex justify-content-end optionShow">
-					<div class="p-2">
-						<a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
-							<i class="fas fa-edit"></i>
-						</a>
-					</div>
-					<div class="p-2">
-						<a href="{{ path('trick_delete', {'slug': trick.slug}) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
-							<i class="far fa-trash-alt"></i>
-						</a>
-					</div>
-				</div>
 			{% endif %}
 		</div>
+
+		<div class="col-12 d-flex justify-content-center align-items-center titleShow ">
+			<h1>{{ trick.name }}</h1>
+		</div>
+		{% if app.user %}
+
+			<div class="col-12 d-flex justify-content-end optionShow">
+				<div class="p-2">
+					<a href="{{ path('trick_edit', {'slug': trick.slug}) }}" class="btn btn-primary">
+						<i class="fas fa-edit"></i>
+					</a>
+				</div>
+				<div class="p-2">
+					<a href="{{ path('trick_delete', {'slug': trick.slug}) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
+						<i class="far fa-trash-alt"></i>
+					</a>
+				</div>
+			</div>
+		{% endif %}
 	</div>
+
 </div>
 

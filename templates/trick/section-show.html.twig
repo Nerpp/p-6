@@ -51,26 +51,22 @@
 </div>
 
 <div class="d-md-none">
-	<div class="container pt-5">
+	<div class="container p-5">
+		<div class="text-center">
+			<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#media">See Media</button>
+		</div>
 		<div class="row">
-			<div class="d-flex flex-wrap justify-content-center">
-				<div class="col-12 btn_collapse">
-					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseMedia" aria-expanded="false" aria-controls="collapseMedia">
-						See Media
-					</button>
-				</div>
-				<div class="collapse" id="collapseMedia">
-					{% for images in trick.images  %}
-						<div class="pt-3">
-							<img class="card-img-top" src="{{ asset("images/"~images.source) }}">
-						</div>
-					{% endfor %}
-					{% for videos in trick.videos  %}
-						<div class="pt-3">
-							<iframe class="card-img-top" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
-						</div>
-					{% endfor %}
-				</div>
+			<div id="media" class="collapse">
+				{% for images in trick.images  %}
+					<div class="col-12 pt-3">
+						<img class="show" src="{{ asset("images/"~images.source) }}">
+					</div>
+				{% endfor %}
+				{% for videos in trick.videos  %}
+					<div class="col-12 pt-3">
+						<iframe class="show" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
+					</div>
+				{% endfor %}
 			</div>
 		</div>
 	</div>
@@ -85,7 +81,7 @@
 </div>
 
 <div class="container pt-5">
-	<div class="d-flex flex-wrap justify-content-between">
+	<div class="d-flex flex-nowrap justify-content-between text center">
 		<div>
 			<strong>Groupe :</strong>
 			{{ trick.groupe.name }}
@@ -158,4 +154,3 @@
 		{% endif %}
 	</div>
 </div>
-
