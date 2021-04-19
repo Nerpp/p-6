@@ -53,13 +53,13 @@ class RegistrationController extends AbstractController
             //     return $this->redirectToRoute('app_register');
             // }
 
-            // $pattern = "#[?,;./:§!%µ*¨^£$\¤{}()[\]\-\|`_\\@&~\#]#";
+            $pattern = "#[?,;./:§!%µ*¨^£$\¤{}()[\]\-\|`_\\@&~\#]#";
 
-            // if (!preg_match($pattern, $form->get('plainPassword')->getData())) {
+            if (!preg_match($pattern, $form->get('plainPassword')->getData())) {
 
-            //     $this->addFlash('failed', 'Les caracteres speciaux doivent être utilisé  !');
-            //     return $this->redirectToRoute('app_register');
-            // }
+                $this->addFlash('failed', 'Les caracteres speciaux doivent être utilisé  !');
+                return $this->redirectToRoute('app_register');
+            }
 
             // encode the plain password
             $user->setPassword(

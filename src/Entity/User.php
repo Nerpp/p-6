@@ -43,8 +43,8 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * 
-     * @Assert\Regex("/[?,;./:§!%µ*¨^£$\¤{}()[\]\-\|`_\\@&~\#]/",
-     *  match=false,
+     * @Assert\Regex(
+     *     pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{6,}$/",
      *  message="Votre mot de passe doit contenir un caractere special"
      * )
      *
@@ -72,7 +72,9 @@ class User implements UserInterface
     private $surname;
 
     /**
-     * @ORM\OneToOne(targetEntity=Images::class, mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Images::class, mappedBy="user", cascade={"persist"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * 
      */
     private $images;
 
