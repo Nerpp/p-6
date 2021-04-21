@@ -53,7 +53,7 @@ class SecurityController extends AbstractController
                 ]);
 
             if ($checkUser === null || $checkUser->getValidation() === false) {
-                $this->addFlash('failed', 'Cette adresse e-mail est inconnue');
+                $this->addFlash('failed', 'Unknow email');
                 return $this->redirectToRoute('app_login');
             }
 
@@ -79,7 +79,7 @@ class SecurityController extends AbstractController
             try {
                 $mailer->send($email);
             } catch (TransportExceptionInterface $e) {
-                $this->addFlash('failed', 'Un problème est survenue veuillez réessayer ultèrieurement !');
+                $this->addFlash('failed', 'Can try again later !');
                 return $this->redirectToRoute('app_login');
             }
 
@@ -91,7 +91,7 @@ class SecurityController extends AbstractController
             $entityManager->persist($checkUser);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Vous avez recu un message dans vôtre boite mail, verifier votre dossier spam si vous le voyez pas !');
+            $this->addFlash('success', 'Check your email, a message is came or your spam in case of !');
 
             return $this->redirectToRoute('front_index');
         }
@@ -120,7 +120,7 @@ class SecurityController extends AbstractController
         $interval = (int)$interval->format('%R%a');
 
         if ($interval >> 2) {
-            throw $this->createNotFoundException('Vous devez redemander un email afin de changer votre mot de passe !');
+            throw $this->createNotFoundException('You must ask an other email, this identifiant is not valid anymore  !');
         }
 
         return $this->redirectToRoute('app_reset_password',['token'=> $token]);
@@ -142,7 +142,7 @@ class SecurityController extends AbstractController
             $user = $users->findOneBy(['validationToken' => $token]);
 
             if(!$user){
-                throw $this->createNotFoundException('Cet utilisateur n\'existe pas');
+                throw $this->createNotFoundException('Unknow user');
             }
 
             $email = (new TemplatedEmail())
@@ -162,7 +162,7 @@ class SecurityController extends AbstractController
         try {
             $mailer->send($email);
         } catch (TransportExceptionInterface $e) {
-            $this->addFlash('failed', 'Un problème est survenue veuillez réessayer ultèrieurement !');
+            $this->addFlash('failed', 'Bloody fate a problem happened, can you try it again later !');
             return $this->redirectToRoute('app_login');
         }
 
@@ -180,8 +180,8 @@ class SecurityController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-
-            $this->addFlash('success', 'Vous avez réinitialiser votre mot de passe avec succés, vous pouvez vous connecter à nouveau !');
+ 
+            $this->addFlash('success', 'Congrats your password is resetted, welcome back !');
            
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,

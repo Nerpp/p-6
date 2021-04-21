@@ -361,7 +361,7 @@ class TrickController extends AbstractController
                 $entityManager->persist($image);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'L\'image trick a bien été edité !');
+                $this->addFlash('success', 'Sucess image is edited !');
                 return  $this->redirectToRoute('trick_show', ['slug' => $newTrick->getSlug()]);
             }
 
@@ -392,7 +392,7 @@ class TrickController extends AbstractController
 
         $trick = $video->getTrick();
 
-        $this->addFlash('success', 'La vidéo a bien été supprimé !');
+        $this->addFlash('success', 'Success Video deleted !');
         return  $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
     }
 
@@ -435,7 +435,7 @@ class TrickController extends AbstractController
                 $entityManager->persist($videos);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'La video a bien été edité !');
+                $this->addFlash('success', 'Sucess video edited !');
                 return  $this->redirectToRoute('trick_show', ['slug' => $newTrick->getSlug()]);
             }
 

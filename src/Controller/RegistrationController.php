@@ -57,7 +57,7 @@ class RegistrationController extends AbstractController
 
             if (!preg_match($pattern, $form->get('plainPassword')->getData())) {
 
-                $this->addFlash('failed', 'Les caracteres speciaux doivent être utilisé  !');
+                $this->addFlash('failed', 'Special characters must be used  !');
                 return $this->redirectToRoute('app_register');
             }
 
@@ -113,7 +113,7 @@ class RegistrationController extends AbstractController
             try {
                 $mailer->send($email);
             } catch (TransportExceptionInterface $e) {
-                $this->addFlash('failed', 'Un problème est survenue lors de l\'enregistrement veuillez réessayer ultèrieurement !');
+                $this->addFlash('failed', 'Bloody fate, a problem happened, can you try again later !');
                 return $this->redirectToRoute('app_register');
             }
 
@@ -121,7 +121,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Utilisateur crée, vous avez recu un message dans vôtre boite mail, verifier votre dossier spam si vous le voyez pas !');
+            $this->addFlash('success', 'Congrat an user is born, would you check your email for confirm it !');
 
             return $this->redirectToRoute('front_index');
     
@@ -143,7 +143,7 @@ class RegistrationController extends AbstractController
 
         if(!$user){
             // On renvoie une erreur 404
-            throw $this->createNotFoundException('Cet utilisateur n\'existe pas');
+            throw $this->createNotFoundException('Unknow user');
         }
 
         $now = new \DateTime();
@@ -152,7 +152,7 @@ class RegistrationController extends AbstractController
 
         if ($interval >> 2) {
 
-            throw $this->createNotFoundException('La validation du compte à expiré, vous devez vous enregistrer à nouveau !');
+            throw $this->createNotFoundException('Bloody fate, the confirmation is out of concern, can you try again !');
         }
 
         $user->setValidationToken(null);
@@ -162,7 +162,7 @@ class RegistrationController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Utilisateur activé avec succès !');
+        $this->addFlash('success', 'Congrats that was the last step, Welcome among us  !');
         
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
