@@ -56,24 +56,25 @@
 			<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#media">See Media</button>
 		</div>
 		<div class="row">
-			<div id="media" class="collapse">
+			{# <div id="media" class="collapse"> #}
 				{% for images in trick.images  %}
-					<div class="col-12 pt-3">
-						<img class="show" src="{{ asset("images/"~images.source) }}">
+					<div id="media" class="col-12 collapse">
+						<img class="show pt-3" src="{{ asset("images/"~images.source) }}">
 					</div>
 				{% endfor %}
 				{% for videos in trick.videos  %}
-					<div class="col-12 pt-3">
-						<iframe class="show" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
+					<div id="media" class="col-12 collapse">
+						<iframe class="show pt-3" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
 					</div>
 				{% endfor %}
-			</div>
+
+			{# </div> #}
 		</div>
 	</div>
 </div>
 
 <div class="container pt-5">
-	<div class="d-flex flex-row justify-content-center">
+	<div class="d-flex flex-row justify-content-center text-center">
 		<div>
 			<p>{{ trick.description }}</p>
 		</div>

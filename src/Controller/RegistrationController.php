@@ -80,7 +80,8 @@ class RegistrationController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+                    $this->addFlash('failed', 'Bloody fate, a problem happened, can you try again later !');
+                    return $this->redirectToRoute('app_register');
                 }
                 $image->setSource($newFilename);
                 
