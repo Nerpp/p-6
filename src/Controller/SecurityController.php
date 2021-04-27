@@ -138,11 +138,19 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $user = $users->findOneBy(['validationToken' => $token]);
 
             if(!$user){
                 throw $this->createNotFoundException('Unknow user');
+            }
+
+            $pattern = "#[?,;./:§!%µ*¨^£$\¤{}()[\]\-\|`_\\@&~\#]#";
+
+            if (!preg_match($pattern, $form->get('plainPassword')->getData())) {
+
+                $this->addFlash('failed', 'Special characters must be used  !');
+                return $this->redirectToRoute('app_reset_password',['token' =>$token]);
             }
 
             $email = (new TemplatedEmail())

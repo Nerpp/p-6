@@ -48,10 +48,6 @@ class RegistrationController extends AbstractController
 
             $mail = $form->get('email')->getData();
 
-            // if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-            //     $this->addFlash('failed', 'L\'email renseigné n\'est pas valide !');
-            //     return $this->redirectToRoute('app_register');
-            // }
 
             $pattern = "#[?,;./:§!%µ*¨^£$\¤{}()[\]\-\|`_\\@&~\#]#";
 
