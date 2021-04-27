@@ -14,8 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use App\Security\CustomAuthenticator;
+
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class SecurityController extends AbstractController
 {
@@ -24,6 +23,7 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+       
         if ($this->getUser()) {
             return $this->redirectToRoute('front_index');
         }
@@ -131,7 +131,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/reset/{token}", name="app_reset_password" )
      */
-    public function resetPass($token, UserRepository $users,Request $request,MailerInterface $mailer,UserPasswordEncoderInterface $passwordEncoder,GuardAuthenticatorHandler $guardHandler, CustomAuthenticator $authenticator)
+    public function resetPass($token, UserRepository $users,Request $request,MailerInterface $mailer,UserPasswordEncoderInterface $passwordEncoder)
     {
         $data = $request->query->all("filter_form");
         $form = $this->createForm(ResetPasswordType::class, $data);
@@ -183,12 +183,7 @@ class SecurityController extends AbstractController
  
             $this->addFlash('success', 'Congrats your password is resetted, welcome back !');
            
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
+            return $this->redirectToRoute('app_login');
             
         }
 

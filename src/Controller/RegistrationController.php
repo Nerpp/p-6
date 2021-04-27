@@ -137,7 +137,7 @@ class RegistrationController extends AbstractController
      /**
      * @Route("/confirmation/{token}", name="app_confirmation" )
      */
-    public function confirmPass($token, UserRepository $users,Request $request,GuardAuthenticatorHandler $guardHandler, CustomAuthenticator $authenticator):Response
+    public function confirmPass($token, UserRepository $users,Request $request):Response
     {
         $user = $users->findOneBy(['validationToken' => $token]);
 
@@ -165,12 +165,6 @@ class RegistrationController extends AbstractController
 
         $this->addFlash('success', 'Congrats that was the last step, Welcome among us  !');
         
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
-
+        return $this->redirectToRoute('app_login');
     }
 }
