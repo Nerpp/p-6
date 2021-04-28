@@ -47,7 +47,7 @@ class TrickController extends AbstractController
         $user = $this->security->getUser();
 
         if (!$user) {
-            $this->addFlash('failed', 'Vous devez être conecté pour créer un trick !');
+            $this->addFlash('failed', 'You must be connected for create a trick !');
             return $this->redirectToRoute('app_login');
         }
         $trick = new Trick();
@@ -81,7 +81,8 @@ class TrickController extends AbstractController
                             $filename
                         );
                     } catch (FileException $e) {
-                        // ... handle exception if something happens during file upload
+                        $this->addFlash('failed', 'An error happened with the image !');
+                        return $this->redirectToRoute('trick_new');
                     }
                 }
                 $image = new Images();
