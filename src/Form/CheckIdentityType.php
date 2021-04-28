@@ -2,33 +2,18 @@
 
 namespace App\Form;
 
-use App\Entity\Trick;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
-
-
-class EditType extends AbstractType
+class CheckIdentityType extends AbstractType
 {
-
-  
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('name', EntityType::class, [
-            // Look for choices from the Categories entity
-            'class' => Trick::class,
-            // Display as select, true for checkbox
-            'expanded' => false,
-            'multiple' => false,
-            // The property of the Categories entity that will show up on the select (or checkboxes)
-            'choice_label' => 'name' 
-        ])
+        ->add('email', EmailType::class)
         ;
-    
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -45,4 +30,3 @@ class EditType extends AbstractType
         ]);
     }
 }
-

@@ -73,6 +73,14 @@ class CustomAuthenticator extends AbstractFormLoginAuthenticator implements Pass
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
+        
+        $checkValiation = $user->getValidation();
+
+        if (!$checkValiation) {
+            throw new CustomUserMessageAuthenticationException('Email not valid.');
+        }
+
+       
 
         return $user;
     }

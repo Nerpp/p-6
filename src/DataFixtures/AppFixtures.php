@@ -242,7 +242,9 @@ class AppFixtures extends Fixture
                 ->setImages($image)
                 ->setPassword($this->encoder->encodePassword($user, "123456"))
                 ->setName($firstname)
-                ->setSurname($lastName);
+                ->setSurname($lastName)
+                ->setValidation(1)
+                ;
             $manager->persist($user);
 
             $allUser[] = $user;

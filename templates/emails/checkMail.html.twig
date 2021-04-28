@@ -1,0 +1,18 @@
+<h1>Bonjour {{ username }}!</h1>
+
+<p>
+    Nous avons reçu une demande de changement de mot de passe, si vous n'avez pas effectué cette démarche, vous pouvez ignorer ce message .
+</p>
+
+<p>
+    <a href="http://127.0.0.1:8000/checked/{{ hash }}">Cliquer ici afin de changer votre mot de passe</a>
+    (Le lien est valide jusqu'au {{ expiration_date|format_datetime(locale='fr',pattern="EEEE dd MMMM YYYY") }})
+</p>
+
+<p>
+    Cordialement,
+</p>
+
+<p>
+ <strong>SnowTricks</strong> 
+</p>

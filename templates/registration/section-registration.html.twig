@@ -1,16 +1,24 @@
-{% for flashError in app.flashes('verify_email_error') %}
-	<div class="alert alert-danger" role="alert">{{ flashError }}</div>
+{% for label, messages in app.flashes %}
+	{% for message in messages %}
+	<div class="container">
+		<div class="text-center alert alert-danger">
+			{{ message }}
+		</div>
+	</div>
+	{% endfor %}
 {% endfor %}
+
 
 <div class="container " id="header">
 	<div class="d-flex flex-row justify-content-center text-center border border-dark">
 
+		
 		{{ form_start(registrationForm) }}
-		{# <div class="pt-2">
-            <p>Email</p>
-		</div> #}
         <div class="pt-4">
 		  {{ form_label(registrationForm.email) }}
+		</div>
+		<div class="">
+		{{ form_errors(registrationForm.email)}}
 		</div>
 		<div class="">
 		  {{ form_widget(registrationForm.email, {'attr': {'class': 'border_input'}}) }}
@@ -19,19 +27,37 @@
             {{ form_label(registrationForm.name) }}
 		</div>
 		<div class="">
+			{{ form_errors(registrationForm.name)}}
+		</div>
+		<div class="">
 			 {{ form_widget(registrationForm.name, {'attr': {'class': 'border_input'}}) }}
 		</div>
         <div class="pt-4">
             {{ form_label(registrationForm.surname) }}
 		</div>
 		<div class="">
+		{{ form_errors(registrationForm.surname)}}
+		</div>
+		<div class="">
 			{{ form_widget(registrationForm.surname, {'attr': {'class': 'border_input'}}) }}
 		</div>
         <div class="pt-4">
-            {{ form_label(registrationForm.plainPassword,'Password') }}
+            {{ form_label(registrationForm.plainPassword.first,'Password') }}
         </div>
+		<div class="">
+			{{ form_errors(registrationForm.plainPassword.first)}}
+		</div>
         <div class="">
-		{{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'border_input'}}) }}
+		{{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'border_input'}}) }}
+        </div>
+		 <div class="pt-4">
+            {{ form_label(registrationForm.plainPassword.second,'Confirm password') }}
+        </div>
+		<div class="">
+			{{ form_errors(registrationForm.plainPassword.second)}}
+		</div>
+        <div class="">
+		{{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'border_input'}}) }}
         </div>
         <div class="pt-4">
            {{ form_label(registrationForm.image,'Profile image') }}
@@ -46,8 +72,3 @@
 		{{ form_end(registrationForm)}}
 	</div>
 </div>
-
-
-{# <div class="">
-			{{ form_row(registrationForm.agreeTerms) }}
-		</div> #}

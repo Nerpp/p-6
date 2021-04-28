@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -24,6 +25,12 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * 
+     * @Assert\NotBlank(message = "Un email valide est obligatoire")
+     * @Assert\Email(
+     *     message = "L\'email '{{ value }}' n'est pas valide."
+     * )
+     * 
      */
     private $email;
 
@@ -35,6 +42,12 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * 
+     * @Assert\Regex(
+     *     pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{6,}$/",
+     *  message="Votre mot de passe doit contenir un caractere special"
+     * )
+     *
      */
     private $password;
 
@@ -59,15 +72,38 @@ class User implements UserInterface
     private $surname;
 
     /**
-     * @ORM\OneToOne(targetEntity=Images::class, mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Images::class, mappedBy="user", cascade={"persist"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * 
      */
     private $images;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $Validation = false;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $validationToken;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $creation_date;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $reset_date;
 
  
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->creation_date = new \DateTime();
     }
 
     public function getId(): ?int
@@ -253,6 +289,54 @@ class User implements UserInterface
         }
 
         $this->images = $images;
+
+        return $this;
+    }
+
+    public function getValidation(): ?bool
+    {
+        return $this->Validation;
+    }
+
+    public function setValidation(bool $Validation): self
+    {
+        $this->Validation = $Validation;
+
+        return $this;
+    }
+
+    public function getValidationToken(): ?string
+    {
+        return $this->validationToken;
+    }
+
+    public function setValidationToken(?string $validationToken): self
+    {
+        $this->validationToken = $validationToken;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creation_date;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creation_date): self
+    {
+        $this->creation_date = $creation_date;
+
+        return $this;
+    }
+
+    public function getResetDate(): ?\DateTimeInterface
+    {
+        return $this->reset_date;
+    }
+
+    public function setResetDate(?\DateTimeInterface $reset_date): self
+    {
+        $this->reset_date = $reset_date;
 
         return $this;
     }
