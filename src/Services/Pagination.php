@@ -10,7 +10,7 @@ class Pagination
     {
         $lenght = $iBdd - $iLenDis;
 
-        if ($lenght >= self::MAXIMALTRICK ) {
+        if ($lenght >= self::MAXIMALTRICK) {
             return self::MAXIMALTRICK + $iLenDis;
         }elseif ($lenght >> 0 && $lenght << self::MAXIMALTRICK) {
             return $iLenDis + $lenght;
@@ -23,9 +23,9 @@ class Pagination
     {
         $lenght = $iBdd - $iLenDis;
 
-        if ($lenght >= self::MAXIMALCOM ) {
+        if ($lenght >= self::MAXIMALCOM) {
             return self::MAXIMALCOM + $iLenDis;
-        }elseif ($lenght >> 0 && $lenght << self::MAXIMALCOM ) {
+        }elseif ($lenght >> 0 && $lenght << self::MAXIMALCOM) {
             return $iLenDis + $lenght;
         }elseif ($lenght <= 0) {
             return $iBdd;
