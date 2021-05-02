@@ -2,6 +2,7 @@ html {
   height: 100%;
 }
 /* font */
+
 h1 {
   font-family: 'Pacifico', cursive;
 }
@@ -14,29 +15,34 @@ h1 {
   font-family: 'Roboto', sans-serif;
 }
 
-p{
+p  {
   text-justify: inter-word;
   font-family: 'Montserrat', sans-serif;
 }
+
 /* font */
 
 /* navbar */
+
 .navbar {
   background-color: #e5e8e8;
   padding: 1%;
 }
+
 /* navbar */
 
 /* footer */
+
 #footer {
-  /* position: absolute; */
   bottom: 0;
   width: 100%;
   height: 10%;
 }
+
 /* footer */
 
 /* front */
+
 #headerFront {
   height: 93vh;
 }
@@ -74,7 +80,6 @@ height: 10rem;
 /* front */
 
 /* show */
-
 
 #headerPosition {
   padding-top: 10%;
@@ -127,10 +132,12 @@ margin-left: 50%;
 }
 
 /* image profile */
+
 .commentProfile {
   width: 50px;
   height: auto;
 }
+
 /* image profile */
 
 .commentWidth{
@@ -138,7 +145,6 @@ width: 50%;
 }
 
 /* show */
-
 
 .border_input {
   border-top: none;
