@@ -50,7 +50,6 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
         $user = $this->security->getUser();
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $check = $trickRepository
@@ -65,7 +64,6 @@ class TrickController extends AbstractController
 
             $files = $form->get('image')->getData();
             foreach ($files as $image) {
-
                 $filename =  $this->clean->delAccent($trick->getName());
 
                 $filename = $filename . "_" . md5(uniqid()) . "." . $image->guessExtension();
@@ -89,7 +87,6 @@ class TrickController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $videos = new Videos;
             foreach ($trick->getVideos() as $video) {
-
                 $embedVideos = $this->adminVideo->addEmbed($video->getUrl());
                 $videos->setUrl($embedVideos);
                 $trick->addVideo($videos);
@@ -141,7 +138,7 @@ class TrickController extends AbstractController
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'comments' => $commentsRepository->findBy(["trick" => $trick], ['creation_date' => 'DESC'],  $length,  null),
+            'comments' => $commentsRepository->findBy(["trick" => $trick], ['creation_date' => 'DESC'], $length, null),
             'formComments' => $form->createView(),
 
         ]);
@@ -150,7 +147,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}/edit", name="trick_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Trick $trick,VideosRepository $videosRepository): Response
+    public function edit(Request $request, Trick $trick, VideosRepository $videosRepository): Response
     {
         $user = $this->security->getUser();
 
@@ -185,10 +182,7 @@ class TrickController extends AbstractController
 
                 $getVideos = $form->get('videos')->getData();
 
-                $videos = new Videos;
-
                 foreach ($getVideos as $video) {
-
                     $videoTreated = $this->adminVideo->addEmbed($video->getUrl());
                     $checkVideo = $videosRepository
                     ->findOneBy([
@@ -199,12 +193,10 @@ class TrickController extends AbstractController
                         $video->setUrl($videoTreated);
                         $trick->addVideo($video);
                         $entityManager->persist($trick);
-                    }
-                  
+                    } 
                 }
 
                 $entityManager->flush();
-
                 $this->addFlash('success', 'Le trick a bien été modifié !');
                 return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
             }
@@ -221,7 +213,7 @@ class TrickController extends AbstractController
     /**
      * @Route("image_principale/{id}", name="image_featured")
      */
-    public function changeFeature(Request $request, int $id, ImagesRepository $imageRepository): Response
+    public function changeFeature(int $id, ImagesRepository $imageRepository): Response
     {
         $user = $this->security->getUser();
 
@@ -249,17 +241,13 @@ class TrickController extends AbstractController
     /**
      * @Route("/{slug}/delete", name="trick_delete")
      */
-    public function delete(Request $request, Trick $trick): Response
+    public function delete(Trick $trick): Response
     {
         $user = $this->getUser();
         if ($user) {
-
-            // if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($trick);
             $entityManager->flush();
-            // }
         }
 
         $this->addFlash('success', 'Le trick a bien été supprimé !');
@@ -270,13 +258,11 @@ class TrickController extends AbstractController
     /**
      * @Route("image/{id}/delete", name="image_delete")
      */
-    public function deleteImage(Request $request, int $id, ImagesRepository $imageRepository): Response
+    public function deleteImage(int $id, ImagesRepository $imageRepository): Response
     {
 
         $user = $this->security->getUser();
-
         if ($user) {
-
             $img = $imageRepository
                 ->find($id);
 
@@ -298,27 +284,21 @@ class TrickController extends AbstractController
      * @Route("imageShow/{id}/delete", name="image_delete_show", methods={"GET","POST"})
      * 
      */
-    public function deleteImageShow(Request $request, int $id): Response
+    public function deleteImageShow(int $id): Response
     {
         $user = $this->security->getUser();
 
         if ($user) {
             $imageRepository = $this->getDoctrine()->getRepository(Images::class);
             $image = $imageRepository->findOneBy(['id' => $id]);
-
             $trick = $image->getTrick();
-
-            // if ($this->isCsrfTokenValid('delete' . $image->getId(), $request->request->get('_token'))) {
-
             $nom = $image->getSource();
             unlink($this->getParameter('images_directory') . '/' . $nom);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($image);
             $entityManager->flush();
-
             $this->addFlash('success', 'L\'image a bien été supprimé !');
             return  $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
-            // }   
         }
 
         return $this->redirectToRoute('front_index');
@@ -334,30 +314,22 @@ class TrickController extends AbstractController
 
 
         if ($user) {
-
             $img = $imageRepository
                 ->find($id);
-
             $trick = $img->getTrick();
-
             $data = $request->query->all("filter_form");
             $data["categories"] = $trick->getName();
             $form = $this->createForm(EditType::class, $data);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-
                 $requested =  $request->request->get('edit');
-
                 $newTrick = $trickRepository
                     ->find($requested['name']);
-
                 $image = $img->setTrick($newTrick);
-
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($image);
                 $entityManager->flush();
-
                 $this->addFlash('success', 'Sucess image is edited !');
                 return  $this->redirectToRoute('trick_show', ['slug' => $newTrick->getSlug()]);
             }
@@ -373,28 +345,20 @@ class TrickController extends AbstractController
     /**
      * @Route("videos/{id}/delete", name="video_delete_show")
      */
-    public function deleteVideoShow(Request $request, int $id, VideosRepository $videosRepository): Response
+    public function deleteVideoShow(int $id, VideosRepository $videosRepository): Response
     {
         $user = $this->security->getUser();
-
         if ($user) {
-
             $video = $videosRepository
                 ->find($id);
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($video);
             $entityManager->flush();
-       
-
-        $trick = $video->getTrick();
-
-        $this->addFlash('success', 'Success Video deleted !');
-        return  $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
-    }
-
-    return $this->redirectToRoute('front_index');
-
+            $trick = $video->getTrick();
+            $this->addFlash('success', 'Success Video deleted !');
+            return  $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
+        }
+        return $this->redirectToRoute('front_index');
     }
 
 
@@ -405,10 +369,7 @@ class TrickController extends AbstractController
     {
 
         $user = $this->security->getUser();
-
-
         if ($user) {
-
             $video =  $videosRepository
                 ->find($id);
 
