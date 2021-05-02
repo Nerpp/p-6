@@ -82,7 +82,7 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('front_index');
         }
         return $this->render('security/checkIdentity.html.twig', [
-            'form' => $form->createView(), 
+            'form' => $form->createView(),
         ]);
     }
 
@@ -120,11 +120,10 @@ class SecurityController extends AbstractController
             if (!$user) {
                 throw $this->createNotFoundException('Unknow user');
             }
-            
+
             $pattern = "#[?,;./:§!%µ*¨^£$\¤{}()[\]\-\|`_\\@&~\#]#";
 
             if (!preg_match($pattern, $form->get('plainPassword')->getData())) {
-
                 $this->addFlash('failed', 'Special characters must be used  !');
                 return $this->redirectToRoute('app_reset_password', ['token' => $token]);
             }
