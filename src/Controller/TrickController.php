@@ -193,7 +193,7 @@ class TrickController extends AbstractController
                         $video->setUrl($videoTreated);
                         $trick->addVideo($video);
                         $entityManager->persist($trick);
-                    } 
+                    }
                 }
 
                 $entityManager->flush();
@@ -211,21 +211,21 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("image_principale/{id}", name="image_featured")
+     * @Route("image_principale/{idSeeked}", name="image_featured")
      */
-    public function changeFeature(int $id, ImagesRepository $imageRepository): Response
+    public function changeFeature(int $idSeeked, ImagesRepository $imageRepository): Response
     {
         $user = $this->security->getUser();
 
         if ($user) {
             $img = $imageRepository
-                ->find($id);
+                ->find($idSeeked);
 
             $trick = $img->getTrick();
 
             foreach ($trick->getImages() as $image) {
 
-                if ($image->getId() === $id) {
+                if ($image->getId() === $idSeeked) {
                     $image->setFeatured(true);
                 } else {
                     $image->setFeatured(false);
@@ -256,15 +256,15 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("image/{id}/delete", name="image_delete")
+     * @Route("image/{idDelete}/delete", name="image_delete")
      */
-    public function deleteImage(int $id, ImagesRepository $imageRepository): Response
+    public function deleteImage(int $idDelete, ImagesRepository $imageRepository): Response
     {
 
         $user = $this->security->getUser();
         if ($user) {
             $img = $imageRepository
-                ->find($id);
+                ->find($idDelete);
 
             $nom = $img->getSource();
             unlink($this->getParameter('images_directory') . '/' . $nom);
@@ -281,16 +281,16 @@ class TrickController extends AbstractController
 
 
     /**
-     * @Route("imageShow/{id}/delete", name="image_delete_show", methods={"GET","POST"})
+     * @Route("imageShow/{idDelete}/delete", name="image_delete_show", methods={"GET","POST"})
      * 
      */
-    public function deleteImageShow(int $id): Response
+    public function deleteImageShow(int $idDelete): Response
     {
         $user = $this->security->getUser();
 
         if ($user) {
             $imageRepository = $this->getDoctrine()->getRepository(Images::class);
-            $image = $imageRepository->findOneBy(['id' => $id]);
+            $image = $imageRepository->findOneBy(['id' => $idDelete]);
             $trick = $image->getTrick();
             $nom = $image->getSource();
             unlink($this->getParameter('images_directory') . '/' . $nom);
