@@ -1,21 +1,20 @@
 <?php
 namespace App\Services;
 
-
 class Pagination
 {
-    const maximalTrick = 15;
-    const maximalCom = 10;
+    const MAXIMALTRICK = 15;
+    const MAXIMALCOM = 10;
 
     public function tricksPagination(int $iLenDis, int $iBdd)
     {
         $lenght = $iBdd - $iLenDis;
 
-        if ($lenght >= self::maximalTrick) {
-            return self::maximalTrick + $iLenDis;
-        }elseif ($lenght >> 0 && $lenght << self::maximalTrick) {
+        if ($lenght >= self::MAXIMALTRICK) {
+            return self::MAXIMALTRICK + $iLenDis;
+        }elseif ($lenght >> 0 && $lenght << self::MAXIMALTRICK) {
             return $iLenDis + $lenght;
-        }elseif($lenght <= 0){
+        }elseif($lenght <= 0) {
             return $iBdd;
         }
     }
@@ -24,13 +23,12 @@ class Pagination
     {
         $lenght = $iBdd - $iLenDis;
 
-        if ($lenght >= self::maximalCom) {
-            return self::maximalCom + $iLenDis;
-        }elseif ($lenght >> 0 && $lenght << self::maximalCom) {
+        if ($lenght >= self::MAXIMALCOM) {
+            return self::MAXIMALCOM + $iLenDis;
+        }elseif ($lenght >> 0 && $lenght << self::MAXIMALCOM) {
             return $iLenDis + $lenght;
-        }elseif($lenght <= 0){
+        }elseif($lenght <= 0) {
             return $iBdd;
         }
     }
-    
 }
