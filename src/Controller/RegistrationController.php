@@ -115,7 +115,6 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'Congrat an user is born, would you check your email for confirm it !');
             return $this->redirectToRoute('front_index');
-    
         }
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
@@ -129,7 +128,7 @@ class RegistrationController extends AbstractController
     public function confirmPass($token, UserRepository $users):Response
     {
         $user = $users->findOneBy(['validationToken' => $token]);
-        if (!$user){
+        if (!$user) {
             // On renvoie une erreur 404
             throw $this->createNotFoundException('Unknow user');
         }
