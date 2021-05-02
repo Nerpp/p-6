@@ -343,14 +343,14 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("videos/{id}/delete", name="video_delete_show")
+     * @Route("videos/{idDelete}/delete", name="video_delete_show")
      */
-    public function deleteVideoShow(int $id, VideosRepository $videosRepository): Response
+    public function deleteVideoShow(int $idDelete, VideosRepository $videosRepository): Response
     {
         $user = $this->security->getUser();
         if ($user) {
             $video = $videosRepository
-                ->find($id);
+                ->find($idDelete);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($video);
             $entityManager->flush();
@@ -363,15 +363,15 @@ class TrickController extends AbstractController
 
 
     /**
-     * @Route("video/{id}/edit", name="video_edit")
+     * @Route("video/{idEdit}/edit", name="video_edit")
      */
-    public function editVideo(Request $request, int $id, VideosRepository $videosRepository, TrickRepository $trickRepository)
+    public function editVideo(Request $request, int $idEdit, VideosRepository $videosRepository, TrickRepository $trickRepository)
     {
 
         $user = $this->security->getUser();
         if ($user) {
             $video =  $videosRepository
-                ->find($id);
+                ->find($idEdit);
 
             $trick = $video->getTrick();
 
