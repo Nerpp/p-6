@@ -16,15 +16,12 @@ use App\Repository\TrickRepository;
 use App\Services\Cleaner;
 use App\Services\Pagination;
 use App\Services\VideoAdmin;
-use Proxies\__CG__\App\Entity\Image;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
-
 
 class TrickController extends AbstractController
 {
@@ -37,7 +34,6 @@ class TrickController extends AbstractController
         $this->pagination = new Pagination;
         $this->security = $security;
     }
-
 
     /**
      * @Route("/new", name="trick_new", methods={"GET","POST"})
@@ -145,7 +141,7 @@ class TrickController extends AbstractController
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'comments' => $commentsRepository->findBy(["trick" => $trick], ['creation_date' => 'DESC'], $limit = $length, $offset = null),
+            'comments' => $commentsRepository->findBy(["trick" => $trick], ['creation_date' => 'DESC'],  $length,  null),
             'formComments' => $form->createView(),
 
         ]);
