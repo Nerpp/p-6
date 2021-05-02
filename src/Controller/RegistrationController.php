@@ -81,10 +81,9 @@ class RegistrationController extends AbstractController
                     return $this->redirectToRoute('app_register');
                 }
                 $image->setSource($newFilename);
-                
             }
 
-            if(!$imageFile){
+            if (!$imageFile){
                 $image->setSource('defaultAvatar.jpg');
             }
 
@@ -127,10 +126,10 @@ class RegistrationController extends AbstractController
      /**
      * @Route("/confirmation/{token}", name="app_confirmation" )
      */
-    public function confirmPass($token, UserRepository $users,Request $request):Response
+    public function confirmPass($token, UserRepository $users):Response
     {
         $user = $users->findOneBy(['validationToken' => $token]);
-        if(!$user){
+        if (!$user){
             // On renvoie une erreur 404
             throw $this->createNotFoundException('Unknow user');
         }
