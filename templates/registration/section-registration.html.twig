@@ -1,0 +1,74 @@
+{% for label, messages in app.flashes %}
+	{% for message in messages %}
+	<div class="container">
+		<div class="text-center alert alert-danger">
+			{{ message }}
+		</div>
+	</div>
+	{% endfor %}
+{% endfor %}
+
+
+<div class="container " id="header">
+	<div class="d-flex flex-row justify-content-center text-center border border-dark">
+
+		
+		{{ form_start(registrationForm) }}
+        <div class="pt-4">
+		  {{ form_label(registrationForm.email) }}
+		</div>
+		<div class="">
+		{{ form_errors(registrationForm.email)}}
+		</div>
+		<div class="">
+		  {{ form_widget(registrationForm.email, {'attr': {'class': 'border_input'}}) }}
+        </div>
+        <div class="pt-4">
+            {{ form_label(registrationForm.name) }}
+		</div>
+		<div class="">
+			{{ form_errors(registrationForm.name)}}
+		</div>
+		<div class="">
+			 {{ form_widget(registrationForm.name, {'attr': {'class': 'border_input'}}) }}
+		</div>
+        <div class="pt-4">
+            {{ form_label(registrationForm.surname) }}
+		</div>
+		<div class="">
+		{{ form_errors(registrationForm.surname)}}
+		</div>
+		<div class="">
+			{{ form_widget(registrationForm.surname, {'attr': {'class': 'border_input'}}) }}
+		</div>
+        <div class="pt-4">
+            {{ form_label(registrationForm.plainPassword.first,'Password') }}
+        </div>
+		<div class="">
+			{{ form_errors(registrationForm.plainPassword.first)}}
+		</div>
+        <div class="">
+		{{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'border_input'}}) }}
+        </div>
+		 <div class="pt-4">
+            {{ form_label(registrationForm.plainPassword.second,'Confirm password') }}
+        </div>
+		<div class="">
+			{{ form_errors(registrationForm.plainPassword.second)}}
+		</div>
+        <div class="">
+		{{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'border_input'}}) }}
+        </div>
+        <div class="pt-4">
+           {{ form_label(registrationForm.image,'Profile image') }}
+        </div>
+		<div class="">
+			{{ form_widget(registrationForm.image) }}
+		</div>
+		
+		<div class="pt-5 pb-1">
+			<button type="submit" class="btn btn-primary">Create an account</button>
+		</div>
+		{{ form_end(registrationForm)}}
+	</div>
+</div>

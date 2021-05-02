@@ -1,59 +1,78 @@
 <div class="col-lg-9 col-md-10 mx-auto jumbotron bg-dark text-white">
-    {{ form_start(form, {'attr':{'id':'trigger'}}) }}
+	{{ form_start(form, {'attr':{'id':'trigger'}}) }}
 
-    <div class="form-group">
-        <label for="name">Nom du Trick</label>
-        {{ form_widget(form.name, {'attr':{'class':'form-control form-control-lg'}}) }}
-    </div>
-    <div class="form-group">
-        <label for="name">Description</label>
-        {{ form_widget(form.description, {'attr':{'class':'form-control form-control-lg'}}) }}
-    </div>
-    <div class="form-group">
-        <label for="name">Groupe</label>
-        {{ form_widget(form.groupe, {'attr':{'class':'form-control form-control-lg p-2'}}) }}
-    </div>
-    <div class="form-group">
-        <label for="name">Images</label>
+	<div class="form-group">
+		<label for="name">Nom du Trick</label>
+		{{ form_widget(form.name, {'attr':{'class':'form-control form-control-lg'}}) }}
+	</div>
+	<div class="form-group">
+		<label for="name">Description</label>
+		{{ form_widget(form.description, {'attr':{'class':'form-control form-control-lg'}}) }}
+	</div>
+	<div class="form-group">
+		<label for="name">Groupe</label>
+		{{ form_widget(form.groupe, {'attr':{'class':'form-control form-control-lg p-1'}}) }}
+	</div>
+	<div class="form-group">
+		<label for="name">Images</label>
 
-        {% if(trick.image) %}
-            <div class="row">
-                {% for image in  trick.image %}
-                    <div class="col-3 col-xs-6 border p-5 text-center">
-                        <img src="{{ "../../images/"~image.source }}"  class="image-thumbnail" style="width: 150px; height: 150px;">
-                        <a href="{{ path('image_delete',{'id':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="rounded"><i class="fa fa-trash text-danger"></i></a>
-                    </div>
-                {% endfor %}
-            </div>
-            {% set i=1 %}
-            {% for image in trick.image %}
-                <input type="hidden" value="{{ image.source }}" name="{{ i }}">
-                {% set i=i+1 %}
-            {% endfor %}
-        {% endif %}
+		{% if(trick.images) %}
+			<div class="row">
+				{% for image in  trick.images %}
+					<div class="d-flex flex-row flex-wrap col-12 col-xl-3 border m-2">
+						<div class="">
+							<img src="{{ "../../images/"~image.source }}" class="image-thumbnail" style="width: 150px; height: 150px;">
+						</div>
+						<div class="d-flex flex-column justify-content-center p-2">
+							<div class="">
+								<a href="{{ path('image_delete',{'idDelete':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="rounded">
+									<i class="fa fa-trash text-danger"></i>
+								</a>
+							</div>
+							<div class="">
+								{% if not image.featured %}
+                                    <a href="{{ path('image_featured',{'idSeeked':image.id}) }}">
+                                    	<i class="far fa-square fa-1x "></i> Image principale
+                                    </a>
+								{% else %}
+									<p>
+										<i class="fas fa-check-square fa-1x text-success"></i> Image principale
+									</p>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			{% set i=1 %}
+			{% for image in trick.images %}
+				<input type="hidden" value="{{ image.source }}" name="{{ i }}">
+				{% set i=i+1 %}
+			{% endfor %}
+		{% endif %}
 
-        {{ form_widget(form.image, {'attr':{'class':'form-control form-control-lg mt-2'}}) }}
-    </div>
-    <div class="form-row">
-        <div id="simpleform" class="form-group col-6 card-header p-2">
-            {{ form_widget(form.video) }}
-            <a href="#" id="add_video" class="btn btn-success float-right">Ajouter une vidéo</a>
-        </div>
-    </div>
+		{{ form_widget(form.image, {'attr':{'class':'form-control form-control-lg mt-2'}}) }}
+	</div>
+	<div class="form-row">
+		<div id="simpleform" class="form-group col-6 card-header p-2">
+			{{ form_widget(form.videos) }}
+			<a href="#" id="add_video" class="btn btn-success float-right">Ajouter une vidéo</a>
+		</div>
+	</div>
 
-    <div class="form-group">
-        <button class="btn btn-warning btn-big mt-2 float-right">{{ button_label|default('Enregistrer') }}</button>
-    </div>
-    <br/><br/>
+	<div class="form-group">
+		<button class="btn btn-warning btn-big mt-2 float-right">{{ button_label|default('Enregistrer') }}</button>
+	</div>
+	<br/><br/>
 
 </div>
-</div>
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
 {# Voici le script en question : #}
 <script type="text/javascript">
     $(document).ready(function() {
-        var $container = $('div#trick_video');
+        var $container = $('div#trick_videos');
         var index = $container.find(':input').length;
         $('#add_video').click(function(e) {
             addVideo($container);
@@ -92,32 +111,6 @@
         }
     });
 </script>
-<script>
-    let links=document.querySelectorAll("[data-delete]");
-    for(link of links){
-        link.addEventListener('click', function(e){
-            e.preventDefault();
-            if(confirm("Voulez-vous supprimer cet image")){
-                fetch(this.getAttribute("href"),{
-                    method:"DELETE",
-                    headers:{
-                        "X-Requested-With":"XMLHttpRequest",
-                        "Content-Type":"application/json"
-                    },
-                    body: JSON.stringify({"_token": this.dataset.token})
-                }).then(
-                    response=>response.json()
-                ).then(data=>{
-                    if(data.success){
-                        this.parentElement.remove();
-                    }else{
-                        alert(data.error)
-                    }
-                }).catch(e=>alert(e))
-            }
-        })
-    }
-</script>
-
 
 {{ form_end(form) }}
+

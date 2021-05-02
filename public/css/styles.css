@@ -1,52 +1,151 @@
+html {
+  height: 100%;
+}
 /* font */
-h1{
-  font-family: 'Quicksand', sans-serif;
+
+h1 {
+  font-family: "Pacifico", cursive;
 }
 
-.title-font{
-  font-family: 'Do Hyeon', sans-serif;
+.title-font {
+  font-family: "Snowburst One", cursive;
 }
 
-.nav-link{
-  font-family: 'Oxygen', sans-serif;
+.nav-link {
+  font-family: "Roboto", sans-serif;
 }
+
+p {
+  text-justify: inter-word;
+  font-family: "Montserrat", sans-serif;
+}
+
 /* font */
 
 /* navbar */
-.navbar
-{
-  background-color:  	#00008B;
-  padding: 3%;
 
+.navbar {
+  background-color: #e5e8e8;
+  padding: 1%;
 }
+
+/* navbar */
+
+/* footer */
+
+#footer {
+  bottom: 0;
+  width: 100%;
+  height: 10%;
+}
+
+/* footer */
+
 /* front */
 
-/* image front */
-/* TODO fixer l'url de l'image */
-#front-image{
-  height: 90vh;
-  
-  /* background-color: lightblue; */
+#headerFront {
+  height: 93vh;
 }
-/* image front */
 
-/* card */
-.card{
+#header {
+  height: 80vh;
+}
+
+.flex-padding {
+  width: 100%;
+}
+
+.positionHeader {
+  width: 100%;
+  height: 93%;
+  position: absolute;
+  z-index: -1;
+}
+
+.card {
   width: 18rem;
 }
-/* card */
+
+.card-img-top {
+  width: 100%;
+  height: 10rem;
+}
+
+.show {
+  width: 18rem;
+  height: 10rem;
+}
+
+/* front */
+
+/* show */
+
+#headerPosition {
+  padding-top: 10%;
+}
+
+.headerShow {
+  height: 50vh;
+}
+
+.imgShow {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+}
+
+.optionShow {
+  position: absolute;
+  z-index: 1;
+}
+
+.titleShow {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 0;
+}
+
+.element.style {
+  object-fit: cover;
+}
+
+hr {
+  border: none;
+  border-top: 3px double #333;
+  color: #333;
+  overflow: visible;
+  text-align: center;
+  height: 5px;
+}
+
+hr:after {
+  background: #fff;
+}
+
+.btn_collapse {
+  margin-left: 50%;
+}
 
 /* image profile */
-.commentProfile{
-width: 50px;
-height: auto;
+
+.commentProfile {
+  width: 50px;
+  height: auto;
 }
+
 /* image profile */
 
-
-
-/* Image background trick show */
-#imgBackground{
-  background-repeat: no-repeat;
+.commentWidth {
+  width: 50%;
 }
-/* Image background trick show */
+
+/* show */
+
+.border_input {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid blue;
+}

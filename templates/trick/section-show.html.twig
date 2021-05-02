@@ -1,0 +1,155 @@
+<div class="d-none d-md-block text-center">
+	<div class="container pt-5">
+		<div class="row">
+			<div class="d-flex flex-wrap justify-content-center">
+				{% for images in trick.images  %}
+					<div class="d-flex flex-column p-3">
+						<div class="">
+							<img class="show" src="{{ asset("images/"~images.source) }}">
+						</div>
+						{% if app.user %}
+							<div class="d-flex flex-row justify-content-end pt-1 ">
+								<div class="mx-1">
+									<a href="{{ path('image_edit', {'id': images.id }) }}" class="btn btn-primary">
+										<i class="fas fa-edit"></i>
+									</a>
+								</div>
+								<div class="">
+									<a href="{{ path('image_delete_show', {'idDelete': images.id }) }}" data-delete data-token="{{ csrf_token('delete'~images.id) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
+										<i class="far fa-trash-alt"></i>
+									</a>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+				{% endfor %}
+
+				{% for videos in trick.videos  %}
+					<div class="d-flex flex-column p-3">
+						<div class="">
+							<iframe class="show" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
+						</div>
+						{% if app.user %}
+							<div class="d-flex flex-row justify-content-end pt-1 ">
+								<div class="mx-1">
+									<a href="{{ path('video_edit', {'idEdit': videos.id}) }}" class="btn btn-primary">
+										<i class="fas fa-edit"></i>
+									</a>
+								</div>
+								<div class="">
+									<a href="{{ path('video_delete_show', {'idDelete': videos.id}) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
+										<i class="far fa-trash-alt"></i>
+									</a>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="d-md-none">
+	<div class="container p-5">
+		<div class="text-center">
+			<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#media">See Media</button>
+		</div>
+		<div class="row">
+			{% for images in trick.images  %}
+				<div id="media" class="col-12 collapse">
+					<img class="show pt-3" src="{{ asset("images/"~images.source) }}">
+				</div>
+			{% endfor %}
+			{% for videos in trick.videos  %}
+				<div id="media" class="col-12 collapse">
+					<iframe class="show pt-3" src="{{ videos.url}}" frameborder="0" allow="picture-in-picture"></iframe>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+
+<div class="container pt-5">
+	<div class="d-flex flex-row justify-content-center text-center">
+		<div>
+			<p>{{ trick.description }}</p>
+		</div>
+	</div>
+</div>
+
+<div class="container pt-5">
+	<div class="d-flex flex-nowrap justify-content-between text center">
+		<div>
+			<strong>Groupe :</strong>
+			{{ trick.groupe.name }}
+		</div>
+		<div>
+			<strong>Crée le :</strong>
+			{{ trick.createdAt ? trick.createdAt|date('d-m-Y H:i') : '' }}
+		</div>
+		<div>
+			{% if trick.updateAt > trick.createdAt %}
+				<strong>Mis à jour :</strong>
+				{{ trick.updateAt|date('d-m-Y H:i') }}
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% if (app.user) %}
+	<div class="container pt-5">
+		<hr class="mb-5">
+		{{ form_start(formComments) }}
+		<div class="d-flex flex-wrap justify-content-center">
+			<div class="align-self-center"><img src="{{ asset("images/"~app.user.images.source ) }}" class="commentProfile"></div>
+			<div class="commentWidth">{{ form_widget(formComments.comment,{'attr': {'placeholder': "Commenter en tant que "~app.user.name,'class':'form-control p-2'  }}) }}</div>
+			<div class="align-self-center mx-2">
+				<button type="submit">Ajouter un commentaire</button>
+			</div>
+		</div>
+		{{ form_end(formComments) }}
+		<hr class="mt-5">
+	</div>
+{% endif %}
+
+
+<div class="container pt-5">
+	<div class="row justify-content-center">
+		<div class="pb-3">
+			{% if(trick.comments|length > 1) %}
+				<p>{{ trick.comments|length }}
+					Commentaires</p>
+			{% else %}
+				<p>{{ trick.comments|length }}
+					Commentaire</p>
+			{% endif %}
+		</div>
+		<div class="d-flex flex-column pt-4">
+			{% for comment in comments  %}
+				<div class="ml-2">
+					<p>
+						<img src="{{ asset("images/"~comment.user.images.source ) }}" class="commentProfile">
+						<strong>{{ comment.user.name }}</strong>
+						<i>{{ comment.creationdate|date('d-m-Y H:i') }}</i>
+						:
+						{{ comment.comment }}
+					</p>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+
+
+<div class="container pt-4">
+	<div class="d-flex justify-content-center pb-5">
+		{% if (comments|length != trick.comments|length) %}
+			<div class="">
+				<a href="{{ path('trick_show',{'length':comments|length , 'slug': trick.slug }) }}" class="btn btn-primary">Load more</a>
+			</div>
+		{% endif %}
+	</div>
+</div>

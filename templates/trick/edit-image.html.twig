@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Image
+{% endblock %}
+
+{% block header %}
+	<div class="container">
+		<div class="d-flex justify-content-center">
+			<div class="p-3">
+				<h1>Edit Image</h1>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block section %}
+
+	<div class="container">
+		<div class="d-flex flex-column headerShow">
+			<div class="col-12">
+				<img class="img-fluid imgShow" src="{{ asset("images/"~image.source) }}">
+			</div>
+		</div>
+
+		<div class="col-12 p-5">
+			<p>
+				Changer l'image de catégorie :
+			</p>
+			{{ form_start(form, {'attr':{'id':'trigger'}}) }}
+			{{ form_widget(form.name, {'attr':{'class':'form-control form-control-lg'}}) }}
+
+		</div>
+
+		<div class="d-flex flex-row justify-content-between pb-4 align-items-center">
+			<div class="">
+				<a href="{{ path('trick_show',{'slug': image.trick.slug }) }}">Back</a>
+			</div>
+			<div class="form-group">
+				<button class="btn btn-warning btn-big ">{{ button_label|default('Update') }}</button>
+
+			</div>
+			<div class="">
+				<a href="{{ path('image_delete_show', {'id': image.id }) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
+					<i class="far fa-trash-alt"></i>
+				</a>
+			</div>
+			{{ form_end(form) }}
+		</div>
+
+	</div>
+
+
+{% endblock %}
+

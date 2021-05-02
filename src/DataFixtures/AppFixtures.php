@@ -6,8 +6,9 @@ use App\Entity\Trick;
 use App\Entity\Groups;
 use App\Entity\User;
 use App\Entity\Comments;
-use App\Entity\Image;
-use App\Entity\Video;
+use App\Entity\Images;
+use App\Entity\Videos;
+use App\Services\Cleaner;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Faker;
@@ -22,12 +23,7 @@ class AppFixtures extends Fixture
     public function __construct(UserPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
-    }
-
-    public function delAccent(string $var)
-    {
-        setlocale(LC_ALL,'fr_FR.UTF-8');
-       return iconv('UTF-8','ASCII//TRANSLIT',$var);
+        $this->cleaner = new Cleaner;
     }
 
     public function load(ObjectManager $manager)
@@ -89,10 +85,10 @@ class AppFixtures extends Fixture
                 'categorie' => 'Les rotations'
             ],
             [
-                'titre' => 'Back flips éà',
+                'titre' => 'Back flips',
                 'desciption' => 'Rotations en arrière',
                 'categorie' => 'Les rotations',
-                'slug' => 'back-flips-ea'
+                'slug' => 'back-flips'
             ],
             [
                 'titre' => 'Rodeo',
@@ -120,6 +116,68 @@ class AppFixtures extends Fixture
                 'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
                 'categorie' => 'Les grabs'
             ],
+            
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ]
+            ,
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ],
+            [
+                'titre' => 'Stalefish',
+                'desciption' => ' Figure aérienne où l’athlète saisit la carre côté talons derrière la jambe arrière avec la main arrière pendant que la jambe arrière est redressée.',
+                'categorie' => 'Les grabs'
+            ]
         ];
 
         $videosYoutube = [
@@ -127,7 +185,8 @@ class AppFixtures extends Fixture
             'https://www.youtube.com/embed/0uGETVnkujA',
             'https://www.youtube.com/embed/G9qlTInKbNE',
             'https://www.youtube.com/embed/8AWdZKMTG3U',
-            'https://www.youtube.com/embed/SQyTWk7OxSI'
+            'https://www.youtube.com/embed/SQyTWk7OxSI',
+            'https://www.youtube.com/embed/V9xuy-rVj9w',
         ];
 
         $randComments = [
@@ -170,7 +229,7 @@ class AppFixtures extends Fixture
 
             $gender = $gender[rand(0, count($gender) - 1)];
 
-            $image = new Image();
+            $image = new Images();
             $image->setSource($gender['image']);
             $manager->persist($image);
 
@@ -179,11 +238,13 @@ class AppFixtures extends Fixture
             $firstname = $faker->firstName($gender['gender']);
             $lastName = $faker->lastName();
             $email = $firstname . '.' . $lastName . '@' . $faker->freeEmailDomain;
-            $user->setEmail($email)
-                ->setImage($image)
+            $user->setEmail($this->cleaner->delAccent($email))
+                ->setImages($image)
                 ->setPassword($this->encoder->encodePassword($user, "123456"))
                 ->setName($firstname)
-                ->setSurname($lastName);
+                ->setSurname($lastName)
+                ->setValidation(1)
+                ;
             $manager->persist($user);
 
             $allUser[] = $user;
@@ -193,20 +254,8 @@ class AppFixtures extends Fixture
         $manager->flush();
 
 
-        $videosInserted = [];
-
-        for ($i = 0; $i < count($videosYoutube); $i++) {
-            $videos = new Video();
-            $videos->setUrl($videosYoutube[$i]);
-            $manager->persist($videos);
-
-            $manager->flush();
-            $videosInserted[] = $videos;
-        }
-
         $allTricks = [];
             
-
         foreach ($figureDatas as $figureData) {
              $images = [
                 'tricktest_0c3c40713a358a86904b333a0af778e5.jpeg',
@@ -215,26 +264,31 @@ class AppFixtures extends Fixture
              ];
 
 
-                $image = new Image();
+                $image = new Images();
                 $image->setSource($images[rand(0, count($images) - 1)]);
                 $manager->persist($image);
-
-
-                
+               
+                $videos = new Videos;
+                $videos->setUrl($videosYoutube[rand(0, count($videosYoutube) - 1)]);
+                $manager->persist($videos);
 
              $figure = new  Trick();
             
-             
              $figure
                 ->setName($figureData['titre'])
-                ->setSlug($this->delAccent($figureData['titre']))
+                ->setSlug($this->cleaner->delAccent($figureData['titre']))
                 ->setCreatedAt($faker->dateTimeInInterval('-30 days', '+5 days'))
                 ->setGroupe($allGroups[rand(0, count($allGroups) - 1)])
                 ->addImage($image)
-                ->addVideo($videosInserted[rand(0, count($videosInserted) - 1)])
+                ->addVideo($videos)
                 ->setUser($allUser[rand(0, count($allUser) - 1)])
                 ->setDescription($figureData['desciption']);
+
+                
+
+
             $manager->persist($figure);
+            
             $manager->flush();
 
             $allTricks[] = $figure;

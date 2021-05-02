@@ -1,0 +1,15 @@
+<h1>Bienvenue {{ username }}!</h1>
+
+<p>
+    Vous étes enregistrés en tant que  {{ username }} patience c'est la derniére étape de votre enregistrement,
+</p>
+
+
+<p>
+    Merci de votre intêret pour la communauté de snowboard, <strong>Snowtricks</strong>.  
+</p>
+
+<p>
+    <a href="http://127.0.0.1:8000/confirmation/{{ hash }}">Cliquer ici afin de confirmer votre inscription</a>
+    (Le lien est valide jusqu'au {{ expiration_date|format_datetime(locale='fr',pattern="EEEE dd MMMM YYYY") }})
+</p>

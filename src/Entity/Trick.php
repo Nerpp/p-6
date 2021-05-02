@@ -31,20 +31,9 @@ class Trick
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Groups::class, inversedBy="tricks",cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity=Groups::class, inversedBy="tricks")
      */
     private $groupe;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Image::class, cascade={"persist"})
-     */
-    private $image;
-
-    /**
-     * element mod par moi pour corriger bug cascade fk sans succés
-     * @ORM\ManyToMany(targetEntity=Video::class, cascade={"persist"})
-     */
-    private $video;
 
     /**
      * @ORM\Column(type="datetime")
@@ -62,7 +51,7 @@ class Trick
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="trick",cascade={"remove"})
      */
     private $comments;
 
@@ -71,14 +60,26 @@ class Trick
      */
     private $slug;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Images::class, mappedBy="trick",cascade={"remove","persist"})
+     */
+    private $images;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Videos::class, mappedBy="trick",cascade={"persist", "remove"})
+     */
+    private $videos;
+
+    
+
 
     public function __construct()
     {
-        $this->image = new ArrayCollection();
-        $this->video = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updateAt = new \DateTime();
         $this->comments = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -118,58 +119,6 @@ class Trick
     public function setGroupe(?Groups $groupe): self
     {
         $this->groupe = $groupe;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Image[]
-     */
-    public function getImage(): Collection
-    {
-        return $this->image;
-    }
-
-    public function addImage(Image $image): self
-    {
-        if (!$this->image->contains($image)) {
-            $this->image[] = $image;
-        }
-
-        return $this;
-    }
-
-    public function removeImage(Image $image): self
-    {
-        if ($this->image->contains($image)) {
-            $this->image->removeElement($image);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Video[]
-     */
-    public function getVideo(): Collection
-    {
-        return $this->video;
-    }
-
-    public function addVideo(Video $video): self
-    {
-        if (!$this->video->contains($video)) {
-            $this->video[] = $video;
-        }
-
-        return $this;
-    }
-
-    public function removeVideo(Video $video): self
-    {
-        if ($this->video->contains($video)) {
-            $this->video->removeElement($video);
-        }
 
         return $this;
     }
@@ -251,6 +200,66 @@ class Trick
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Images[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Images $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getTrick() === $this) {
+                $image->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Videos[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Videos $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Videos $video): self
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
+        }
 
         return $this;
     }

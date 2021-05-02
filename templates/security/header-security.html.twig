@@ -1,0 +1,20 @@
+<div class="container">
+	{% for message in app.flashes('failed') %}
+		<div class="row">
+			<div class="col-12 alert alert-danger text-center">
+				{{ message }}
+			</div>
+		</div>
+	{% endfor %}
+	{% for message in app.flashes('success') %}
+		<div class="row">
+			<div class="col-12 alert alert-success text-center">
+				{{ message }}
+			</div>
+		</div>
+	{% endfor %}
+	<div class="text-center pt-4">
+		<h1>Login</h1>
+	</div>
+</div>
+
