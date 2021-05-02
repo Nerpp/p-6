@@ -8,14 +8,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-use App\Services\Cleaner;
-
-
 class FrontController extends AbstractController
 {
-    protected $_iLength;
-    protected $_iBdd;
-  
+    protected $iLength;
+    protected $iBdd;
+
     public function __construct()
     {
         $this->pagination = new Pagination;
@@ -26,27 +23,26 @@ class FrontController extends AbstractController
      */
     public function index(TrickRepository $tricksRepository)
     {
-        $this->_iBdd = count($tricksRepository->findAll());
-        $this->_iLength = $this->pagination->tricksPagination(0,$this->_iBdd);
+        $this->iBdd = count($tricksRepository->findAll());
+        $this->iLength = $this->pagination->tricksPagination(0, $this->_iBdd);
 
         return $this->render('front/index.html.twig', [
-            'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit=$this->_iLength,$offset=null),
+            'tricks' => $tricksRepository->findBy(array(), array('id' => 'ASC'), $this->_iLength, null),
             'pagination' => $this->_iBdd,
         ]);
     }
 
-     /**
+    /**
      * @Route("/extended", name="front_pagination", methods={"GET","POST"})
      */
-    public function pagination(TrickRepository $tricksRepository,Request $request)
+    public function pagination(TrickRepository $tricksRepository, Request $request)
     {
-        $this->_iBdd = count($tricksRepository->findAll());
+        $this->iBdd = count($tricksRepository->findAll());
         $paging = $request->query->get('length');
- 
-       $this->_iLength = !is_null($paging)?$this->pagination->tricksPagination($paging,$this->_iBdd):$this->pagination->tricksPagination(0,$this->_iBdd);
+        $this->iLength = !is_null($paging) ? $this->pagination->tricksPagination($paging, $this->_iBdd) : $this->pagination->tricksPagination(0, $this->_iBdd);
 
         return $this->render('front/index.html.twig', [
-            'tricks' => $tricksRepository->findBy(array(),array('id'=> 'ASC'),$limit= $this->_iLength,$offset=null),
+            'tricks' => $tricksRepository->findBy(array(), array('id' => 'ASC'), $this->_iLength, null),
             'pagination' => $this->_iBdd,
         ]);
     }
