@@ -17,8 +17,6 @@ class ResetPasswordType extends AbstractType
     {
         $builder
         ->add('plainPassword',RepeatedType::class, [
-            // instead of being set onto the object directly,
-            // this is read and encoded in the controller
             'type' => PasswordType::class,
             'invalid_message' => 'The password fields must match.',
             'options' => ['attr' => ['class' => 'password-field']],
@@ -34,7 +32,6 @@ class ResetPasswordType extends AbstractType
                 new Length([
                     'min' => 6,
                     'minMessage' => 'Your password should be at least {{ limit }} characters',
-                    // max length allowed by Symfony for security reasons
                     'max' => 4096,
                 ]),
             ],

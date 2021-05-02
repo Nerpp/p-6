@@ -1,56 +1,61 @@
-html{
+html {
   height: 100%;
 }
 /* font */
+
 h1 {
-  font-family: 'Pacifico', cursive;
+  font-family: "Pacifico", cursive;
 }
 
 .title-font {
-  font-family: 'Snowburst One', cursive;
+  font-family: "Snowburst One", cursive;
 }
 
 .nav-link {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
-p{
+p {
   text-justify: inter-word;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
+
 /* font */
 
 /* navbar */
+
 .navbar {
   background-color: #e5e8e8;
   padding: 1%;
 }
+
 /* navbar */
 
 /* footer */
-#footer{
-  /* position: absolute; */
+
+#footer {
   bottom: 0;
   width: 100%;
   height: 10%;
 }
+
 /* footer */
 
 /* front */
-#headerFront{
+
+#headerFront {
   height: 93vh;
 }
 
-#header{
-  height: 80vh
+#header {
+  height: 80vh;
 }
 
-
-.flex-padding{
+.flex-padding {
   width: 100%;
 }
 
-.positionHeader{
+.positionHeader {
   width: 100%;
   height: 93%;
   position: absolute;
@@ -61,12 +66,12 @@ p{
   width: 18rem;
 }
 
-.card-img-top{
-width: 100%;
-height: 10rem;
+.card-img-top {
+  width: 100%;
+  height: 10rem;
 }
 
-.show{
+.show {
   width: 18rem;
   height: 10rem;
 }
@@ -75,39 +80,36 @@ height: 10rem;
 
 /* show */
 
-
-#headerPosition{
+#headerPosition {
   padding-top: 10%;
 }
 
-.headerShow{ 
+.headerShow {
   height: 50vh;
 }
 
-
-.imgShow{
+.imgShow {
   width: 100%;
   height: 100%;
   position: absolute;
-  z-index: -1; 
+  z-index: -1;
 }
 
-.optionShow{
+.optionShow {
   position: absolute;
-  z-index: 1; 
+  z-index: 1;
 }
 
-.titleShow{
+.titleShow {
   width: 100%;
   height: 100%;
   position: absolute;
-  z-index: 0; 
+  z-index: 0;
 }
 
 .element.style {
   object-fit: cover;
 }
-
 
 hr {
   border: none;
@@ -122,25 +124,26 @@ hr:after {
   background: #fff;
 }
 
-.btn_collapse{
-margin-left: 50%;
+.btn_collapse {
+  margin-left: 50%;
 }
 
 /* image profile */
+
 .commentProfile {
   width: 50px;
   height: auto;
 }
+
 /* image profile */
 
-.commentWidth{
-width: 50%;
+.commentWidth {
+  width: 50%;
 }
 
 /* show */
 
-
-.border_input{
+.border_input {
   border-top: none;
   border-left: none;
   border-right: none;

@@ -8,13 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
-
-
 class EditType extends AbstractType
 {
 
-  
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -25,10 +21,9 @@ class EditType extends AbstractType
             'expanded' => false,
             'multiple' => false,
             // The property of the Categories entity that will show up on the select (or checkboxes)
-            'choice_label' => 'name' 
+            'choice_label' => 'name',
         ])
         ;
-    
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -44,5 +39,6 @@ class EditType extends AbstractType
             'csrf_token_id'   => 'task_item',
         ]);
     }
+    
 }
 

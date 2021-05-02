@@ -25,18 +25,18 @@
 						</div>
 						<div class="d-flex flex-column justify-content-center p-2">
 							<div class="">
-								<a href="{{ path('image_delete',{'id':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="rounded">
+								<a href="{{ path('image_delete',{'idDelete':image.id}) }}" data-delete data-token="{{ csrf_token('delete'~image.id) }}" class="rounded">
 									<i class="fa fa-trash text-danger"></i>
 								</a>
 							</div>
 							<div class="">
 								{% if not image.featured %}
-                                    <a href="{{ path('image_featured',{'id':image.id}) }}">
-                                    <i class="far fa-square fa-1x "></i> Image principale
+                                    <a href="{{ path('image_featured',{'idSeeked':image.id}) }}">
+                                    	<i class="far fa-square fa-1x "></i> Image principale
                                     </a>
 								{% else %}
 									<p>
-									<i class="fas fa-check-square fa-1x text-success"></i> Image principale
+										<i class="fas fa-check-square fa-1x text-success"></i> Image principale
 									</p>
 								{% endif %}
 							</div>

@@ -45,7 +45,8 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "squizlabs/php_codesniffer": "3.*",
+        "fzaninotto/faker": "^1.9",
+        "squizlabs/php_codesniffer": "*",
         "symfony/browser-kit": "^5.1",
         "symfony/css-selector": "^5.1",
         "symfony/debug-bundle": "^5.1",
@@ -53,7 +54,6 @@
         "symfony/phpunit-bridge": "^5.1",
         "symfony/stopwatch": "^5.1",
         "symfony/var-dumper": "^5.1",
-        "fzaninotto/faker": "^1.9",
         "symfony/web-profiler-bundle": "^5.1"
     },
     "config": {
