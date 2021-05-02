@@ -4,20 +4,20 @@ html {
 /* font */
 
 h1 {
-  font-family: 'Pacifico', cursive;
+  font-family: "Pacifico", cursive;
 }
 
 .title-font {
-  font-family: 'Snowburst One', cursive;
+  font-family: "Snowburst One", cursive;
 }
 
 .nav-link {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
-p  {
+p {
   text-justify: inter-word;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 /* font */
@@ -48,9 +48,8 @@ p  {
 }
 
 #header {
-  height: 80vh
+  height: 80vh;
 }
-
 
 .flex-padding {
   width: 100%;
@@ -68,8 +67,8 @@ p  {
 }
 
 .card-img-top {
-width: 100%;
-height: 10rem;
+  width: 100%;
+  height: 10rem;
 }
 
 .show {
@@ -85,34 +84,32 @@ height: 10rem;
   padding-top: 10%;
 }
 
-.headerShow { 
+.headerShow {
   height: 50vh;
 }
-
 
 .imgShow {
   width: 100%;
   height: 100%;
   position: absolute;
-  z-index: -1; 
+  z-index: -1;
 }
 
 .optionShow {
   position: absolute;
-  z-index: 1; 
+  z-index: 1;
 }
 
 .titleShow {
   width: 100%;
   height: 100%;
   position: absolute;
-  z-index: 0; 
+  z-index: 0;
 }
 
 .element.style {
   object-fit: cover;
 }
-
 
 hr {
   border: none;
@@ -128,7 +125,7 @@ hr:after {
 }
 
 .btn_collapse {
-margin-left: 50%;
+  margin-left: 50%;
 }
 
 /* image profile */
@@ -140,8 +137,8 @@ margin-left: 50%;
 
 /* image profile */
 
-.commentWidth{
-width: 50%;
+.commentWidth {
+  width: 50%;
 }
 
 /* show */
