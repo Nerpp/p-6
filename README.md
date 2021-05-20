@@ -17,7 +17,7 @@ Git Clone 'lien ssh ou https'
 Composer update
 ```
 
-##Installation de la Base de donnée
+## Installation de la Base de donnée
 
 A la base du projet ouvrer le fichier `.env`
 
@@ -49,7 +49,7 @@ Cmd:
 php bin/console doctrine:fixtures:load
 ```
 
-##Configurer l'envoit d'email
+## Configurer l'envoit d'email
 
 Le projet est configuré pour fonctionner avec Gmail, ⚠ il est déconseillé de le conserver en production voir la documention 
 <a href="https://symfony.com/doc/current/mailer.html">Doc Symfony</a>
