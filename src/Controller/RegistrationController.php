@@ -68,8 +68,11 @@ class RegistrationController extends AbstractController
                 )
             );
             $imageFile = $form->get('image')->getData();
+            
             $image = new Images();
+           
             if ($imageFile) {
+              
                 $newFilename = uniqid() . '.' . $imageFile->guessExtension();
                 try {
                     $imageFile->move(
@@ -81,6 +84,8 @@ class RegistrationController extends AbstractController
                     return $this->redirectToRoute('app_register');
                 }
                 $image->setSource($newFilename);
+            }else{
+                $image->setSource('defaultAvatar');
             }
 
             if (!$imageFile){

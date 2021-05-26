@@ -40,7 +40,7 @@
 
 			</div>
 			<div class="">
-				<a href="{{ path('video_delete_show', {'id': video.id }) }}" data-delete data-token="{{ csrf_token('delete'~video.id) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
+				<a href="{{ path('video_delete_show', {'idDelete': video.id }) }}" data-delete data-token="{{ csrf_token('delete'~video.id) }}" class="btn btn-danger" onclick="return confirm('Cette action est définitive !!!');">
 					<i class="far fa-trash-alt"></i>
 				</a>
 			</div>
